@@ -2113,7 +2113,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1802479440}
   - component: {fileID: 1802479443}
-  - component: {fileID: 1802479442}
   - component: {fileID: 1802479441}
   m_Layer: 14
   m_Name: LevelManager
@@ -2150,10 +2149,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerPrefabs:
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
+  - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
+  - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
+  - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
+  - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
   AutoAttributePlayerIDs: 1
   SceneCharacters: []
   InitialSpawnPoint: {fileID: 1364623527}
@@ -2234,104 +2233,6 @@ MonoBehaviour:
   GroupCameraRig: {fileID: 0}
   SplitCameraRig: {fileID: 0}
   MPGUIManager: {fileID: 0}
---- !u!114 &1802479442
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1802479439}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 167a383168152ae4e96fa26fcaf1ac09, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PlayerPrefabs:
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
-  - {fileID: 114839196621103566, guid: 3ade96277b4cb73419946f2cbc3a13f4, type: 3}
-  AutoAttributePlayerIDs: 1
-  SceneCharacters: []
-  InitialSpawnPoint: {fileID: 1364623527}
-  CurrentCheckpoint: {fileID: 0}
-  PointsOfEntry: []
-  IntroFadeDuration: 1
-  OutroFadeDuration: 1
-  FaderID: 0
-  FadeCurve:
-    MMTweenDefinitionType: 0
-    MMTweenCurve: 6
-    Curve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
-        time: 1
-        value: 1
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-  RespawnDelay: 2
-  DelayBeforeDeathScreen: 1
-  UseLevelBounds: 1
-  LoadingSceneMode: 1
-  LoadingSceneName: LoadingScreen
-  AdditiveLoadingSettings:
-    LoadingSceneName: MMAdditiveLoadingScreen
-    ThreadPriority: 4
-    SecureLoad: 1
-    InterpolateProgress: 1
-    BeforeEntryFadeDelay: 0
-    EntryFadeDuration: 0.25
-    AfterEntryFadeDelay: 0.1
-    BeforeExitFadeDelay: 0.25
-    ExitFadeDuration: 0.2
-    EntryFadeTween:
-      MMTweenDefinitionType: 0
-      MMTweenCurve: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-    ExitFadeTween:
-      MMTweenDefinitionType: 0
-      MMTweenCurve: 0
-      Curve:
-        serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 2
-        m_PostInfinity: 2
-        m_RotationOrder: 4
-    ProgressBarSpeed: 5
-    FadeMode: 0
-    UnloadMethod: 2
-  SpawnPoints:
-  - {fileID: 1364623527}
-  - {fileID: 1541482930}
-  - {fileID: 386958972}
-  - {fileID: 65956787}
-  CameraMode: 1
-  GroupCameraRig: {fileID: 0}
-  SplitCameraRig: {fileID: 0}
-  MPGUIManager: {fileID: 0}
-  GameDuration: 99
 --- !u!65 &1802479443
 BoxCollider:
   m_ObjectHideFlags: 0
