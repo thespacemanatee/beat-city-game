@@ -9,14 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea4dbf742697d4fd29bd2c6d7e100400, type: 3}
-  m_Name: GameConstants
+  m_Script: {fileID: 11500000, guid: 1231f03c3a98b4287952ad56f2323ab9, type: 3}
+  m_Name: OnTimerFiredEvent
   m_EditorClassIdentifier: 
-  tileCols: 20
-  tileRows: 20
-  dropRate: 5
-  startingRowPos: -10
-  startingColPos: -10
-  groundLevel: 0
-  tilePrefabScale: 1.5
-  gameDurationInSeconds: 60

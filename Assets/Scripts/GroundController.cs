@@ -44,26 +44,28 @@ public class GroundController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (dropRound == 0) {
-            // Drop 2 side columns
-            int remainingSideLength = gameConstants.tileRows-(2*dropRound);
-            if (remainingSideLength > 2) {
-                List<int> dropIndex = new List<int>();
-                int startIndex = (dropRound * gameConstants.tileRows) + dropRound;
-                for (int i=startIndex; i<startIndex+remainingSideLength; i++) {
-                    dropIndex.Add(i);
-                    // Drops opposite column -- only works assuming our map is a square, otherwise calculate the other column separately
-                    dropIndex.Add(i+(remainingSideLength-1)*gameConstants.tileCols);
-                }
 
-                // Drop 2 side rows
-                for (int i=startIndex+gameConstants.tileRows; i<startIndex+(remainingSideLength-1)*gameConstants.tileCols; i+=gameConstants.tileRows) {
-                    dropIndex.Add(i);
-                    dropIndex.Add(i+(remainingSideLength-1));
-                }
-                dropRound++;
-                dropTiles.Invoke(dropIndex);
+    }
+
+    public void shrinkMap() {
+        // Drop 2 side columns
+        int remainingSideLength = gameConstants.tileRows-(2*dropRound);
+        if (remainingSideLength > 3) {
+            List<int> dropIndex = new List<int>();
+            int startIndex = (dropRound * gameConstants.tileRows) + dropRound;
+            for (int i=startIndex; i<startIndex+remainingSideLength; i++) {
+                dropIndex.Add(i);
+                // Drops opposite column -- only works assuming our map is a square, otherwise calculate the other column separately
+                dropIndex.Add(i+(remainingSideLength-1)*gameConstants.tileCols);
             }
+
+            // Drop 2 side rows
+            for (int i=startIndex+gameConstants.tileRows; i<startIndex+(remainingSideLength-1)*gameConstants.tileCols; i+=gameConstants.tileRows) {
+                dropIndex.Add(i);
+                dropIndex.Add(i+(remainingSideLength-1));
+            }
+            dropRound++;
+            dropTiles.Invoke(dropIndex);
         }
     }
 }
