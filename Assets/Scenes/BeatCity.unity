@@ -2298,7 +2298,7 @@ GameObject:
   - component: {fileID: 1745941836}
   - component: {fileID: 1745941838}
   m_Layer: 0
-  m_Name: GroundController
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
