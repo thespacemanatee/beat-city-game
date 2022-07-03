@@ -2360,7 +2360,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1745941836}
         m_TargetAssemblyTypeName: GroundController, Assembly-CSharp
-        m_MethodName: shrinkMap
+        m_MethodName: ShrinkMap
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

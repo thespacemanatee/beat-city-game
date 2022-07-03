@@ -8,8 +8,7 @@ public class GameConstants : ScriptableObject
     public float dropRate = 5;
     public float startingRowPos = -10;
     public float startingColPos = -10;
-    public float groundLevel = 0;
+    public float groundLevel;
     public float tilePrefabScale = 1.5f;
     public float gameDurationInSeconds = 60;
-
 }

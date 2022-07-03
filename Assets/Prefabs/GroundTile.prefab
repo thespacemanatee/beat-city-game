@@ -134,7 +134,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -9205288257413402167}
         m_TargetAssemblyTypeName: TileController, Assembly-CSharp
-        m_MethodName: dropTile
+        m_MethodName: DropTile
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

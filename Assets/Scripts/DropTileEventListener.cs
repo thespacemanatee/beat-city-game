@@ -1,9 +1,9 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-[System.Serializable]
+[Serializable]
 public class CustomDropTileEvent : UnityEvent<List<int>>
 {
 }
@@ -12,6 +12,7 @@ public class DropTileEventListener : MonoBehaviour
 {
     public DropTileEvent Event;
     public CustomDropTileEvent Response;
+
     private void OnEnable()
     {
         Event.RegisterListener(this);
