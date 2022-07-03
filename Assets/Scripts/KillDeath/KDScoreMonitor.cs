@@ -38,6 +38,17 @@ public class KDScoreMonitor : MonoBehaviour
                     "Death: " + Player4DeathCount.Value.ToString();
     }
 
+    public void ResetScore(){
+        Player1KillCount.SetValue(0);
+        Player2KillCount.SetValue(0);
+        Player3KillCount.SetValue(0);
+        Player4KillCount.SetValue(0);
+        Player1DeathCount.SetValue(0);
+        Player2DeathCount.SetValue(0);
+        Player3DeathCount.SetValue(0);
+        Player4DeathCount.SetValue(0);
+    }
+
     void UpdateKill(string killer)
     {
       switch (killer)
