@@ -72,6 +72,7 @@ namespace MoreMountains.Tools
             // if we haven't found an inactive object (the pool is empty), and if we can extend it, we add one new object to the pool, and return it		
             if (PoolCanExpand) return AddOneObjectToThePool();
             // if the pool is empty and can't grow, we return nothing.
+            Debug.Log("pool is empty!");
             return null;
         }
 
