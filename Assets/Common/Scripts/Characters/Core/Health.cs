@@ -161,6 +161,10 @@ namespace MoreMountains.TopDownEngine
 		public delegate void OnDeathDelegate();
 		public OnDeathDelegate OnDeath;
 
+		// New death delegate
+		public delegate void NewOnDeathDelegate(GameObject instigator);
+		public NewOnDeathDelegate NewOnDeath;
+
 		protected Vector3 _initialPosition;
 		protected Renderer _renderer;
 		protected Character _character;
@@ -725,5 +729,113 @@ namespace MoreMountains.TopDownEngine
         {
             CancelInvoke();
         }
+		/// <summary>
+        /// NewKill function to support helper functions
+        /// </summary>
+		 public virtual void NewKill(GameObject instigator)
+		{
+			Debug.Log("New Kill Triggered");
+			if (ImmuneToDamage)
+			{
+				return;
+			}
+			
+			if (_character != null)
+			{
+				// we set its dead state to true
+				_character.ConditionState.ChangeState(CharacterStates.CharacterConditions.Dead);
+				_character.Reset();
+
+				if (_character.CharacterType == Character.CharacterTypes.Player)
+				{
+					TopDownEngineEvent.Trigger(TopDownEngineEventTypes.PlayerDeath, _character);
+				}
+			}
+			SetHealth(0);
+
+			// we prevent further damage
+			DamageDisabled();
+
+			DeathMMFeedbacks?.PlayFeedbacks(this.transform.position);
+			
+			// Adds points if needed.
+			if(PointsWhenDestroyed != 0)
+			{
+				// we send a new points event for the GameManager to catch (and other classes that may listen to it too)
+				TopDownEnginePointEvent.Trigger(PointsMethods.Add, PointsWhenDestroyed);
+			}
+
+			if (TargetAnimator != null)
+			{
+				TargetAnimator.SetTrigger("Death");
+			}
+			// we make it ignore the collisions from now on
+			if (DisableCollisionsOnDeath)
+			{
+				if (_collider2D != null)
+				{
+					_collider2D.enabled = false;
+				}
+				if (_collider3D != null)
+				{
+					_collider3D.enabled = false;
+				}
+
+				// if we have a controller, removes collisions, restores parameters for a potential respawn, and applies a death force
+				if (_controller != null)
+				{				
+					_controller.CollisionsOff();						
+				}
+
+				if (DisableChildCollisionsOnDeath)
+				{
+					foreach (Collider2D collider in this.gameObject.GetComponentsInChildren<Collider2D>())
+					{
+						collider.enabled = false;
+					}
+					foreach (Collider collider in this.gameObject.GetComponentsInChildren<Collider>())
+					{
+						collider.enabled = false;
+					}
+				}
+			}
+
+			if (ChangeLayerOnDeath)
+			{
+				gameObject.layer = LayerOnDeath.LayerIndex;
+				if (ChangeLayersRecursivelyOnDeath)
+				{
+					this.transform.ChangeLayersRecursively(LayerOnDeath.LayerIndex);
+				}
+			}
+			
+			NewOnDeath?.Invoke(instigator);
+			MMLifeCycleEvent.Trigger(this, MMLifeCycleEventTypes.Death);
+
+			if (DisableControllerOnDeath && (_controller != null))
+			{
+				_controller.enabled = false;
+			}
+
+			if (DisableControllerOnDeath && (_characterController != null))
+			{
+				_characterController.enabled = false;
+			}
+
+			if (DisableModelOnDeath && (Model != null))
+			{
+				Model.SetActive(false);
+			}
+
+			if (DelayBeforeDestruction > 0f)
+			{
+				Invoke ("DestroyObject", DelayBeforeDestruction);
+			}
+			else
+			{
+				// finally we destroy the object
+				DestroyObject();	
+			}
+		}
 	}
 }

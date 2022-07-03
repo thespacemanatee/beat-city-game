@@ -335,5 +335,11 @@ namespace MoreMountains.TopDownEngine
 				_health.OnDeath -= OnDeath;
 			}			
 		}
+
+		public GameObject Owner{
+			get{
+				return _owner;
+			}
+		}
 	}	
 }
