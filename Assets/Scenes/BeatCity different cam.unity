@@ -304,7 +304,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 202575665}
   m_LocalRotation: {x: 0.58531153, y: 0, z: 0, w: 0.81080854}
-  m_LocalPosition: {x: 0, y: 13.78, z: -18.52}
+  m_LocalPosition: {x: -0.000000834465, y: 6.543016, z: -15.04534}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -448,13 +448,13 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 65
     OrthographicSize: 10
-    NearClipPlane: 1
-    FarClipPlane: 24
+    NearClipPlane: 9.4
+    FarClipPlane: 35.86
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 2.2816753, y: 1}
+    m_SensorSize: {x: 4.6349835, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1602,7 +1602,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 784089128}
   m_LocalRotation: {x: 0.58531153, y: -0, z: -0, w: 0.81080854}
-  m_LocalPosition: {x: 0, y: 13.779999, z: -18.52}
+  m_LocalPosition: {x: -0.000000834465, y: 6.543016, z: -15.04534}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1754,8 +1754,8 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 1
-  far clip plane: 24
+  near clip plane: 9.4
+  far clip plane: 35.86
   field of view: 65
   orthographic: 0
   orthographic size: 10
