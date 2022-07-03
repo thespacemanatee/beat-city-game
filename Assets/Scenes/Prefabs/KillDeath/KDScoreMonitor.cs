@@ -23,7 +23,9 @@ public class KDScoreMonitor : MonoBehaviour
 
     public void UpdateScore(string killer, string victim){
         if (killer != null && victim != null){
-            UpdateKill(killer);
+            if (killer != victim){
+                UpdateKill(killer);
+            }
             UpdateDeath(victim);
         }
         text.text = "Player 1 Kill: " + Player1KillCount.Value.ToString() +

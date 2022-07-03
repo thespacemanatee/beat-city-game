@@ -11,6 +11,7 @@ public class NewCharacter : Character
 {
     public NewHealth NewCharacterHealth;
     public CustomKDEvent onPlayerDeath;
+    private bool dropped=false;
     protected virtual void NewOnDeath(GameObject instigator)
     {
         if (CharacterBrain != null)
@@ -31,6 +32,16 @@ public class NewCharacter : Character
         string victim = GetComponent<Character>().PlayerID;
         onPlayerDeath.Invoke(killer, victim);
     }
+    protected override void Update()
+    {
+        base.Update();
+        if (GetComponent<Transform>().position.y < 0.0f && !dropped){
+            string victim = GetComponent<Character>().PlayerID;
+            onPlayerDeath.Invoke(victim, victim);
+            dropped = true;
+        }
+    }
+
     /// <summary>
     /// OnEnable, we register our OnRevive event
     /// </summary>
