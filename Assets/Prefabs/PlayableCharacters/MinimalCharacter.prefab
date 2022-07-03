@@ -502,7 +502,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
-  InitialWeapon: {fileID: 8737018186235863385, guid: 0b26d672597e3b04e95367301a07d78d,
+  InitialWeapon: {fileID: 114922138254092764, guid: 37675d77e3fee4bbcbcde9f2be695bf6,
     type: 3}
   CanPickupWeapons: 1
   WeaponUseFeedback: {fileID: 0}
@@ -793,10 +793,10 @@ MonoBehaviour:
   onPlayerDeath:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 11400000, guid: 1a911a6f62d662a47857812fa358f3a4, type: 2}
-        m_TargetAssemblyTypeName: KDEvent, Assembly-CSharp
+      - m_Target: {fileID: 11400000, guid: 05cbaf8a56e4a4822827d79a5ec4c3aa, type: 2}
+        m_TargetAssemblyTypeName: GameEvent, Assembly-CSharp
         m_MethodName: Raise
-        m_Mode: 0
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
