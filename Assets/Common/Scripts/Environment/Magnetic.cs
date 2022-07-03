@@ -1,28 +1,37 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
 {
     public class Magnetic : MonoBehaviour
     {
         /// the possible update modes
-        public enum UpdateModes { Update, FixedUpdate, LateUpdate }
+        public enum UpdateModes
+        {
+            Update,
+            FixedUpdate,
+            LateUpdate
+        }
 
-        [Header("Magnetic")]        
+        [Header("Magnetic")]
         /// the layermask this magnetic element is attracted to
         [Tooltip("the layermask this magnetic element is attracted to")]
         public LayerMask TargetLayerMask = LayerManager.PlayerLayerMask;
+
         /// whether or not to start moving when something on the target layer mask enters this magnetic element's trigger
-        [Tooltip("whether or not to start moving when something on the target layer mask enters this magnetic element's trigger")]
+        [Tooltip(
+            "whether or not to start moving when something on the target layer mask enters this magnetic element's trigger")]
         public bool StartMagnetOnEnter = true;
+
         /// whether or not to stop moving when something on the target layer mask exits this magnetic element's trigger
-        [Tooltip("whether or not to stop moving when something on the target layer mask exits this magnetic element's trigger")]
-        public bool StopMagnetOnExit = false;
+        [Tooltip(
+            "whether or not to stop moving when something on the target layer mask exits this magnetic element's trigger")]
+        public bool StopMagnetOnExit;
+
         /// a unique ID for this type of magnetic objects. This can then be used by a MagneticEnabler to target only that specific ID. An ID of 0 will be picked by all MagneticEnablers automatically.
-        [Tooltip("a unique ID for this type of magnetic objects. This can then be used by a MagneticEnabler to target only that specific ID. An ID of 0 will be picked by all MagneticEnablers automatically.")]
-        public int MagneticTypeID = 0;
+        [Tooltip(
+            "a unique ID for this type of magnetic objects. This can then be used by a MagneticEnabler to target only that specific ID. An ID of 0 will be picked by all MagneticEnablers automatically.")]
+        public int MagneticTypeID;
 
         [Header("Follow Position")]
         /// whether or not the object is currently following its target's position
@@ -34,19 +43,21 @@ namespace MoreMountains.TopDownEngine
         [Tooltip("the target to follow, read only, for debug only")]
         [MMReadOnly]
         public Transform Target;
+
         /// the offset to apply to the followed target
-        [Tooltip("the offset to apply to the followed target")]
-        [MMCondition("FollowPosition", true)]
+        [Tooltip("the offset to apply to the followed target")] [MMCondition("FollowPosition", true)]
         public Vector3 Offset;
 
         [Header("Position Interpolation")]
         /// whether or not we need to interpolate the movement
         [Tooltip("whether or not we need to interpolate the movement")]
         public bool InterpolatePosition = true;
+
         /// the speed at which to interpolate the follower's movement
         [MMCondition("InterpolatePosition", true)]
         [Tooltip("the speed at which to interpolate the follower's movement")]
         public float FollowPositionSpeed = 5f;
+
         /// the acceleration to apply to the object once it starts following
         [MMCondition("InterpolatePosition", true)]
         [Tooltip("the acceleration to apply to the object once it starts following")]
@@ -63,38 +74,21 @@ namespace MoreMountains.TopDownEngine
         public GameObject CopyState;
 
         protected Collider2D _collider2D;
-        protected Vector3 _velocity = Vector3.zero;
-        protected Vector3 _newTargetPosition;
-        protected Vector3 _lastTargetPosition;
         protected Vector3 _direction;
+        protected Vector3 _lastTargetPosition;
         protected Vector3 _newPosition;
+        protected Vector3 _newTargetPosition;
         protected float _speed;
+        protected Vector3 _velocity = Vector3.zero;
 
         /// <summary>
-        /// On Awake we initialize our magnet
+        ///     On Awake we initialize our magnet
         /// </summary>
         protected virtual void Awake()
         {
             Initialization();
         }
-        private void OnEnable()
-        {
-            Reset();
-        }
 
-        /// <summary>
-        /// Grabs the collider2D and ensures it's set as trigger, initializes the speed
-        /// </summary>
-        protected virtual void Initialization()
-        {
-            _collider2D = this.gameObject.GetComponent<Collider2D>();
-            if (_collider2D != null)
-            {
-                _collider2D.isTrigger = true;
-            }
-
-            Reset();
-        }
         private void Reset()
         {
             StopFollowing();
@@ -102,25 +96,39 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// When something enters our trigger, if it's a proper target, we start following it
+        ///     At update we follow our target
         /// </summary>
-        /// <param name="collider"></param>
-        protected virtual void OnTriggerEnter2D(Collider2D colliding)
+        protected virtual void Update()
         {
-            OnTriggerEnterInternal(colliding.gameObject);
+            if (CopyState != null) gameObject.SetActive(CopyState.activeInHierarchy);
+
+            if (Target == null) return;
+            if (UpdateMode == UpdateModes.Update) FollowTargetPosition();
         }
 
         /// <summary>
-        /// When something exits our trigger, we stop following it
+        ///     At fixed update we follow our target
         /// </summary>
-        /// <param name="collider"></param>
-        protected virtual void OnTriggerExit2D(Collider2D colliding)
+        protected virtual void FixedUpdate()
         {
-            OnTriggerExitInternal(colliding.gameObject);
+            if (UpdateMode == UpdateModes.FixedUpdate) FollowTargetPosition();
         }
 
         /// <summary>
-        /// When something enters our trigger, if it's a proper target, we start following it
+        ///     At late update we follow our target
+        /// </summary>
+        protected virtual void LateUpdate()
+        {
+            if (UpdateMode == UpdateModes.LateUpdate) FollowTargetPosition();
+        }
+
+        private void OnEnable()
+        {
+            Reset();
+        }
+
+        /// <summary>
+        ///     When something enters our trigger, if it's a proper target, we start following it
         /// </summary>
         /// <param name="collider"></param>
         protected virtual void OnTriggerEnter(Collider colliding)
@@ -129,7 +137,16 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// When something exits our trigger, we stop following it
+        ///     When something enters our trigger, if it's a proper target, we start following it
+        /// </summary>
+        /// <param name="collider"></param>
+        protected virtual void OnTriggerEnter2D(Collider2D colliding)
+        {
+            OnTriggerEnterInternal(colliding.gameObject);
+        }
+
+        /// <summary>
+        ///     When something exits our trigger, we stop following it
         /// </summary>
         /// <param name="collider"></param>
         protected virtual void OnTriggerExit(Collider colliding)
@@ -138,123 +155,83 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Starts following an object we trigger with if conditions are met
+        ///     When something exits our trigger, we stop following it
+        /// </summary>
+        /// <param name="collider"></param>
+        protected virtual void OnTriggerExit2D(Collider2D colliding)
+        {
+            OnTriggerExitInternal(colliding.gameObject);
+        }
+
+        /// <summary>
+        ///     Grabs the collider2D and ensures it's set as trigger, initializes the speed
+        /// </summary>
+        protected virtual void Initialization()
+        {
+            _collider2D = gameObject.GetComponent<Collider2D>();
+            if (_collider2D != null) _collider2D.isTrigger = true;
+
+            Reset();
+        }
+
+        /// <summary>
+        ///     Starts following an object we trigger with if conditions are met
         /// </summary>
         /// <param name="colliding"></param>
         protected virtual void OnTriggerEnterInternal(GameObject colliding)
         {
-            if (!StartMagnetOnEnter)
-            {
-                return;
-            }
+            if (!StartMagnetOnEnter) return;
 
-            if (!TargetLayerMask.MMContains(colliding.layer))
-            {
-                return;
-            }
+            if (!TargetLayerMask.MMContains(colliding.layer)) return;
 
             Target = colliding.transform;
             StartFollowing();
         }
 
         /// <summary>
-        /// Stops following an object we trigger with if conditions are met
+        ///     Stops following an object we trigger with if conditions are met
         /// </summary>
         /// <param name="colliding"></param>
         protected virtual void OnTriggerExitInternal(GameObject colliding)
         {
-            if (!StopMagnetOnExit)
-            {
-                return;
-            }
+            if (!StopMagnetOnExit) return;
 
-            if (!TargetLayerMask.MMContains(colliding.layer))
-            {
-                return;
-            }
+            if (!TargetLayerMask.MMContains(colliding.layer)) return;
 
             StopFollowing();
         }
-        
-        /// <summary>
-        /// At update we follow our target 
-        /// </summary>
-        protected virtual void Update()
-        {
-            if (CopyState != null)
-            {
-                this.gameObject.SetActive(CopyState.activeInHierarchy);
-            }            
-
-            if (Target == null)
-            {
-                return;
-            }
-            if (UpdateMode == UpdateModes.Update)
-            {
-                FollowTargetPosition();
-            }
-        }
 
         /// <summary>
-        /// At fixed update we follow our target 
-        /// </summary>
-        protected virtual void FixedUpdate()
-        {
-            if (UpdateMode == UpdateModes.FixedUpdate)
-            {
-                FollowTargetPosition();
-            }
-        }
-
-        /// <summary>
-        /// At late update we follow our target 
-        /// </summary>
-        protected virtual void LateUpdate()
-        {
-            if (UpdateMode == UpdateModes.LateUpdate)
-            {
-                FollowTargetPosition();
-            }
-        }
-        
-        /// <summary>
-        /// Follows the target, lerping the position or not based on what's been defined in the inspector
+        ///     Follows the target, lerping the position or not based on what's been defined in the inspector
         /// </summary>
         protected virtual void FollowTargetPosition()
         {
-            if (Target == null)
-            {
-                return;
-            }
+            if (Target == null) return;
 
-            if (!FollowPosition)
-            {
-                return;
-            }
+            if (!FollowPosition) return;
 
             _newTargetPosition = Target.position + Offset;
 
-            float trueDistance = 0f;
-            _direction = (_newTargetPosition - this.transform.position).normalized;
-            trueDistance = Vector3.Distance(this.transform.position, _newTargetPosition);
+            var trueDistance = 0f;
+            _direction = (_newTargetPosition - transform.position).normalized;
+            trueDistance = Vector3.Distance(transform.position, _newTargetPosition);
 
-            _speed = (_speed < FollowPositionSpeed) ? _speed + FollowAcceleration * Time.deltaTime : FollowPositionSpeed;
+            _speed = _speed < FollowPositionSpeed ? _speed + FollowAcceleration * Time.deltaTime : FollowPositionSpeed;
 
-            float interpolatedDistance = trueDistance;
+            var interpolatedDistance = trueDistance;
             if (InterpolatePosition)
             {
                 interpolatedDistance = MMMaths.Lerp(0f, trueDistance, _speed, Time.deltaTime);
-                this.transform.Translate(_direction * interpolatedDistance, Space.World);
+                transform.Translate(_direction * interpolatedDistance, Space.World);
             }
             else
             {
-                this.transform.Translate(_direction * interpolatedDistance, Space.World);
+                transform.Translate(_direction * interpolatedDistance, Space.World);
             }
         }
 
         /// <summary>
-        /// Prevents the object from following the target anymore
+        ///     Prevents the object from following the target anymore
         /// </summary>
         public virtual void StopFollowing()
         {
@@ -262,7 +239,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Makes the object follow the target
+        ///     Makes the object follow the target
         /// </summary>
         public virtual void StartFollowing()
         {
@@ -270,7 +247,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Sets a new target for this object to magnet towards
+        ///     Sets a new target for this object to magnet towards
         /// </summary>
         /// <param name="newTarget"></param>
         public virtual void SetTarget(Transform newTarget)

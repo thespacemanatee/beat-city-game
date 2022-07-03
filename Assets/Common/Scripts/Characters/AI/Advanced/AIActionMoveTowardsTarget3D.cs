@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// Requires a CharacterMovement ability. Makes the character move up to the specified MinimumDistance in the direction of the target. 
+    ///     Requires a CharacterMovement ability. Makes the character move up to the specified MinimumDistance in the direction
+    ///     of the target.
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/AI/Actions/AIActionMoveTowardsTarget3D")]
     //[RequireComponent(typeof(CharacterMovement))]
@@ -16,21 +15,22 @@ namespace MoreMountains.TopDownEngine
         [Tooltip("the minimum distance from the target this Character can reach.")]
         public float MinimumDistance = 1f;
 
-        protected Vector3 _directionToTarget;
         protected CharacterMovement _characterMovement;
-        protected int _numberOfJumps = 0;
+
+        protected Vector3 _directionToTarget;
         protected Vector2 _movementVector;
+        protected int _numberOfJumps = 0;
 
         /// <summary>
-        /// On init we grab our CharacterMovement ability
+        ///     On init we grab our CharacterMovement ability
         /// </summary>
         public override void Initialization()
         {
-            _characterMovement = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterMovement>();
+            _characterMovement = gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterMovement>();
         }
 
         /// <summary>
-        /// On PerformAction we move
+        ///     On PerformAction we move
         /// </summary>
         public override void PerformAction()
         {
@@ -38,34 +38,27 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Moves the character towards the target if needed
+        ///     Moves the character towards the target if needed
         /// </summary>
         protected virtual void Move()
         {
-            if (_brain.Target == null)
-            {
-                return;
-            }
-            
-            _directionToTarget = _brain.Target.position - this.transform.position;
+            if (_brain.Target == null) return;
+
+            _directionToTarget = _brain.Target.position - transform.position;
             _movementVector.x = _directionToTarget.x;
             _movementVector.y = _directionToTarget.z;
             _characterMovement.SetMovement(_movementVector);
 
 
-            if (Mathf.Abs(this.transform.position.x - _brain.Target.position.x) < MinimumDistance)
-            {
+            if (Mathf.Abs(transform.position.x - _brain.Target.position.x) < MinimumDistance)
                 _characterMovement.SetHorizontalMovement(0f);
-            }
 
-            if (Mathf.Abs(this.transform.position.z - _brain.Target.position.z) < MinimumDistance)
-            {
+            if (Mathf.Abs(transform.position.z - _brain.Target.position.z) < MinimumDistance)
                 _characterMovement.SetVerticalMovement(0f);
-            }
         }
 
         /// <summary>
-        /// On exit state we stop our movement
+        ///     On exit state we stop our movement
         /// </summary>
         public override void OnExitState()
         {

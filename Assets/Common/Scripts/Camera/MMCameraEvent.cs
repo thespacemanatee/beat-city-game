@@ -1,11 +1,17 @@
 ﻿using MoreMountains.Tools;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
-    public enum MMCameraEventTypes { SetTargetCharacter, SetConfiner, StartFollowing, StopFollowing, RefreshPosition, ResetPriorities }
+    public enum MMCameraEventTypes
+    {
+        SetTargetCharacter,
+        SetConfiner,
+        StartFollowing,
+        StopFollowing,
+        RefreshPosition,
+        ResetPriorities
+    }
 
     public struct MMCameraEvent
     {
@@ -20,8 +26,10 @@ namespace MoreMountains.TopDownEngine
             Bounds = bounds;
         }
 
-        static MMCameraEvent e;
-        public static void Trigger(MMCameraEventTypes eventType, Character targetCharacter = null, Collider bounds = null)
+        private static MMCameraEvent e;
+
+        public static void Trigger(MMCameraEventTypes eventType, Character targetCharacter = null,
+            Collider bounds = null)
         {
             e.EventType = eventType;
             e.Bounds = bounds;

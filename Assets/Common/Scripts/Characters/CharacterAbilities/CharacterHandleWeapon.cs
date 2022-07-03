@@ -1,28 +1,29 @@
-using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using MoreMountains.Feedbacks;
 using System.Collections.Generic;
+using MoreMountains.Feedbacks;
+using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// Add this class to a character so it can use weapons
-    /// Note that this component will trigger animations (if their parameter is present in the Animator), based on 
-    /// the current weapon's Animations
-    /// Animator parameters : defined from the Weapon's inspector
+    ///     Add this class to a character so it can use weapons
+    ///     Note that this component will trigger animations (if their parameter is present in the Animator), based on
+    ///     the current weapon's Animations
+    ///     Animator parameters : defined from the Weapon's inspector
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/Abilities/Character Handle Weapon")]
     public class CharacterHandleWeapon : CharacterAbility
     {
-        /// This method is only used to display a helpbox text at the beginning of the ability's inspector
-        public override string HelpBoxText() { return "This component will allow your character to pickup and use weapons. What the weapon will do is defined in the Weapon classes. This just describes the behaviour of the 'hand' holding the weapon, not the weapon itself. Here you can set an initial weapon for your character to start with, allow weapon pickup, and specify a weapon attachment (a transform inside of your character, could be just an empty child gameobject, or a subpart of your model."; }
+        public delegate void OnWeaponChangeDelegate();
+
+        protected const string _weaponEquippedAnimationParameterName = "WeaponEquipped";
+        protected const string _weaponEquippedIDAnimationParameterName = "WeaponEquippedID";
 
         [Header("Weapon")]
-
         /// the initial weapon owned by the character
         [Tooltip("the initial weapon owned by the character")]
         public Weapon InitialWeapon;
+
         /// if this is set to true, the character can pick up PickableWeapons
         [Tooltip("if this is set to true, the character can pick up PickableWeapons")]
         public bool CanPickupWeapons = true;
@@ -36,15 +37,19 @@ namespace MoreMountains.TopDownEngine
         /// the position the weapon will be attached to. If left blank, will be this.transform.
         [Tooltip("the position the weapon will be attached to. If left blank, will be this.transform.")]
         public Transform WeaponAttachment;
+
         /// the position from which projectiles will be spawned (can be safely left empty)
         [Tooltip("the position from which projectiles will be spawned (can be safely left empty)")]
         public Transform ProjectileSpawn;
+
         /// if this is true this animator will be automatically bound to the weapon
         [Tooltip("if this is true this animator will be automatically bound to the weapon")]
         public bool AutomaticallyBindAnimator = true;
+
         /// the ID of the AmmoDisplay this ability should update
         [Tooltip("the ID of the AmmoDisplay this ability should update")]
-        public int AmmoDisplayID = 0;
+        public int AmmoDisplayID;
+
         /// if this is true, IK will be automatically setup if possible
         [Tooltip("if this is true, IK will be automatically setup if possible")]
         public bool AutoIK = true;
@@ -52,79 +57,87 @@ namespace MoreMountains.TopDownEngine
         [Header("Input")]
         /// if this is true you won't have to release your fire button to auto reload
         [Tooltip("if this is true you won't have to release your fire button to auto reload")]
-        public bool ContinuousPress = false;
+        public bool ContinuousPress;
+
         /// whether or not this character getting hit should interrupt its attack (will only work if the weapon is marked as interruptable)
-        [Tooltip("whether or not this character getting hit should interrupt its attack (will only work if the weapon is marked as interruptable)")]
-        public bool GettingHitInterruptsAttack = false;
+        [Tooltip(
+            "whether or not this character getting hit should interrupt its attack (will only work if the weapon is marked as interruptable)")]
+        public bool GettingHitInterruptsAttack;
+
         /// whether or not pushing the secondary axis above its threshold should cause the weapon to shoot
         [Tooltip("whether or not pushing the secondary axis above its threshold should cause the weapon to shoot")]
-        public bool UseSecondaryAxisThresholdToShoot = false;
-        
+        public bool UseSecondaryAxisThresholdToShoot;
+
         [Header("Buffering")]
         /// whether or not attack input should be buffered, letting you prepare an attack while another is being performed, making it easier to chain them
-        [Tooltip("whether or not attack input should be buffered, letting you prepare an attack while another is being performed, making it easier to chain them")]
+        [Tooltip(
+            "whether or not attack input should be buffered, letting you prepare an attack while another is being performed, making it easier to chain them")]
         public bool BufferInput;
+
         /// if this is true, every new input will prolong the buffer
-        [MMCondition("BufferInput", true)]
-        [Tooltip("if this is true, every new input will prolong the buffer")]
+        [MMCondition("BufferInput", true)] [Tooltip("if this is true, every new input will prolong the buffer")]
         public bool NewInputExtendsBuffer;
+
         /// the maximum duration for the buffer, in seconds
-        [MMCondition("BufferInput", true)]
-        [Tooltip("the maximum duration for the buffer, in seconds")]
+        [MMCondition("BufferInput", true)] [Tooltip("the maximum duration for the buffer, in seconds")]
         public float MaximumBufferDuration = 0.25f;
+
         /// if this is true, and if this character is using GridMovement, then input will only be triggered when on a perfect tile
         [MMCondition("BufferInput", true)]
-        [Tooltip("if this is true, and if this character is using GridMovement, then input will only be triggered when on a perfect tile")]
-        public bool RequiresPerfectTile = false;
-        
-        [Header("Debug")]
+        [Tooltip(
+            "if this is true, and if this character is using GridMovement, then input will only be triggered when on a perfect tile")]
+        public bool RequiresPerfectTile;
 
+        [Header("Debug")]
         /// the weapon currently equipped by the Character
         [MMReadOnly]
         [Tooltip("the weapon currently equipped by the Character")]
         public Weapon CurrentWeapon;
 
-        /// the ID / index of this CharacterHandleWeapon. This will be used to determine what handle weapon ability should equip a weapon.
-        /// If you create more Handle Weapon abilities, make sure to override and increment this  
-        public virtual int HandleWeaponID { get { return 1; } }
-
-        /// an animator to update when the weapon is used
-        public Animator CharacterAnimator { get; set; }
-        /// the weapon's weapon aim component, if it has one
-        public WeaponAim WeaponAimComponent { get { return _weaponAim; } }
-
-        public delegate void OnWeaponChangeDelegate();
-        /// a delegate you can hook to, to be notified of weapon changes
-        public OnWeaponChangeDelegate OnWeaponChange;
+        protected float _bufferEndsAt;
+        protected bool _buffering;
+        protected CharacterGridMovement _characterGridMovement;
 
         protected float _fireTimer = 0f;
+        protected Transform _leftHandTarget = null;
+        protected ProjectileWeapon _projectileWeapon;
+        protected Transform _rightHandTarget = null;
         protected float _secondaryHorizontalMovement;
         protected float _secondaryVerticalMovement;
         protected WeaponAim _weaponAim;
-        protected ProjectileWeapon _projectileWeapon;
-        protected WeaponIK _weaponIK;
-        protected Transform _leftHandTarget = null;
-        protected Transform _rightHandTarget = null;
-        protected float _bufferEndsAt = 0f;
-        protected bool _buffering = false;
-        protected const string _weaponEquippedAnimationParameterName = "WeaponEquipped";
-        protected const string _weaponEquippedIDAnimationParameterName = "WeaponEquippedID";
         protected int _weaponEquippedAnimationParameter;
         protected int _weaponEquippedIDAnimationParameter;
-        protected CharacterGridMovement _characterGridMovement;
+        protected WeaponIK _weaponIK;
         protected List<WeaponModel> _weaponModels;
 
+        /// a delegate you can hook to, to be notified of weapon changes
+        public OnWeaponChangeDelegate OnWeaponChange;
+
+        /// the ID / index of this CharacterHandleWeapon. This will be used to determine what handle weapon ability should equip a weapon.
+        /// If you create more Handle Weapon abilities, make sure to override and increment this
+        public virtual int HandleWeaponID => 1;
+
+        /// an animator to update when the weapon is used
+        public Animator CharacterAnimator { get; set; }
+
+        /// the weapon's weapon aim component, if it has one
+        public WeaponAim WeaponAimComponent => _weaponAim;
+
+        /// This method is only used to display a helpbox text at the beginning of the ability's inspector
+        public override string HelpBoxText()
+        {
+            return
+                "This component will allow your character to pickup and use weapons. What the weapon will do is defined in the Weapon classes. This just describes the behaviour of the 'hand' holding the weapon, not the weapon itself. Here you can set an initial weapon for your character to start with, allow weapon pickup, and specify a weapon attachment (a transform inside of your character, could be just an empty child gameobject, or a subpart of your model.";
+        }
+
         /// <summary>
-        /// Sets the weapon attachment
+        ///     Sets the weapon attachment
         /// </summary>
         protected override void PreInitialization()
         {
             base.PreInitialization();
             // filler if the WeaponAttachment has not been set
-            if (WeaponAttachment == null)
-            {
-                WeaponAttachment = transform;
-            }
+            if (WeaponAttachment == null) WeaponAttachment = transform;
         }
 
         // Initialization
@@ -135,46 +148,35 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Grabs various components and inits stuff
+        ///     Grabs various components and inits stuff
         /// </summary>
         public virtual void Setup()
         {
-            _character = this.gameObject.GetComponentInParent<Character>();
+            _character = gameObject.GetComponentInParent<Character>();
             _characterGridMovement = _character?.FindAbility<CharacterGridMovement>();
             _weaponModels = new List<WeaponModel>();
-            foreach (WeaponModel model in _character.gameObject.GetComponentsInChildren<WeaponModel>())
-            {
+            foreach (var model in _character.gameObject.GetComponentsInChildren<WeaponModel>())
                 _weaponModels.Add(model);
-            }
             CharacterAnimator = _animator;
             // filler if the WeaponAttachment has not been set
-            if (WeaponAttachment == null)
-            {
-                WeaponAttachment = transform;
-            }
-            if ((_animator != null) && (AutoIK))
-            {
-                _weaponIK = _animator.GetComponent<WeaponIK>();
-            }
+            if (WeaponAttachment == null) WeaponAttachment = transform;
+            if (_animator != null && AutoIK) _weaponIK = _animator.GetComponent<WeaponIK>();
             // we set the initial weapon
             if (InitialWeapon != null)
             {
                 if (CurrentWeapon != null)
                 {
-                    if (CurrentWeapon.name != InitialWeapon.name)
-                    {
-                        ChangeWeapon(InitialWeapon, InitialWeapon.WeaponName, false);    
-                    }
+                    if (CurrentWeapon.name != InitialWeapon.name) ChangeWeapon(InitialWeapon, InitialWeapon.WeaponName);
                 }
                 else
                 {
-                    ChangeWeapon(InitialWeapon, InitialWeapon.WeaponName, false);    
+                    ChangeWeapon(InitialWeapon, InitialWeapon.WeaponName);
                 }
             }
         }
 
         /// <summary>
-        /// Every frame we check if it's needed to update the ammo display
+        ///     Every frame we check if it's needed to update the ammo display
         /// </summary>
         public override void ProcessAbility()
         {
@@ -185,129 +187,98 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Triggers the weapon used feedback if needed
+        ///     Triggers the weapon used feedback if needed
         /// </summary>
         protected virtual void HandleFeedbacks()
         {
             if (CurrentWeapon != null)
-            {
                 if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponUse)
-                {
                     WeaponUseFeedback?.PlayFeedbacks();
-                }
-            }
         }
 
         /// <summary>
-        /// Gets input and triggers methods based on what's been pressed
+        ///     Gets input and triggers methods based on what's been pressed
         /// </summary>
         protected override void HandleInput()
         {
             if (!AbilityAuthorized
-                || (_condition.CurrentState != CharacterStates.CharacterConditions.Normal))
-            {
+                || _condition.CurrentState != CharacterStates.CharacterConditions.Normal)
                 return;
-            }
-            if ((_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonDown) || (_inputManager.ShootAxis == MMInput.ButtonStates.ButtonDown))
-            {
-                ShootStart();
-            }
+            if (_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonDown ||
+                _inputManager.ShootAxis == MMInput.ButtonStates.ButtonDown) ShootStart();
 
             if (CurrentWeapon != null)
             {
-                bool buttonPressed =
-                    (_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonPressed) ||
-                    (_inputManager.ShootAxis == MMInput.ButtonStates.ButtonPressed); 
-                
-                if (ContinuousPress && (CurrentWeapon.TriggerMode == Weapon.TriggerModes.Auto) && buttonPressed)
-                {
+                var buttonPressed =
+                    _inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonPressed ||
+                    _inputManager.ShootAxis == MMInput.ButtonStates.ButtonPressed;
+
+                if (ContinuousPress && CurrentWeapon.TriggerMode == Weapon.TriggerModes.Auto && buttonPressed)
                     ShootStart();
-                }
-            }
-            
-            if (_inputManager.ReloadButton.State.CurrentState == MMInput.ButtonStates.ButtonDown)
-            {
-                Reload();
             }
 
-            if ((_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonUp) || (_inputManager.ShootAxis == MMInput.ButtonStates.ButtonUp))
-            {
-                ShootStop();
-            }
+            if (_inputManager.ReloadButton.State.CurrentState == MMInput.ButtonStates.ButtonDown) Reload();
+
+            if (_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.ButtonUp ||
+                _inputManager.ShootAxis == MMInput.ButtonStates.ButtonUp) ShootStop();
 
             if (CurrentWeapon != null)
-            {
-                if ((CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBetweenUses)
-                && ((_inputManager.ShootAxis == MMInput.ButtonStates.Off) && (_inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.Off))
-                && !(UseSecondaryAxisThresholdToShoot && (_inputManager.SecondaryMovement.magnitude > _inputManager.Threshold.magnitude)))
-                {
+                if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBetweenUses
+                    && _inputManager.ShootAxis == MMInput.ButtonStates.Off &&
+                    _inputManager.ShootButton.State.CurrentState == MMInput.ButtonStates.Off
+                    && !(UseSecondaryAxisThresholdToShoot &&
+                         _inputManager.SecondaryMovement.magnitude > _inputManager.Threshold.magnitude))
                     CurrentWeapon.WeaponInputStop();
-                }
-            }
 
-            if (UseSecondaryAxisThresholdToShoot && (_inputManager.SecondaryMovement.magnitude > _inputManager.Threshold.magnitude))
-            {
-                ShootStart();
-            }
+            if (UseSecondaryAxisThresholdToShoot &&
+                _inputManager.SecondaryMovement.magnitude > _inputManager.Threshold.magnitude) ShootStart();
         }
 
         /// <summary>
-        /// Triggers an attack if the weapon is idle and an input has been buffered
+        ///     Triggers an attack if the weapon is idle and an input has been buffered
         /// </summary>
         protected virtual void HandleBuffer()
         {
-            if (CurrentWeapon == null)
-            {
-                return;
-            }
-            
+            if (CurrentWeapon == null) return;
+
             // if we are currently buffering an input and if the weapon is now idle
-            if (_buffering && (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponIdle))
+            if (_buffering && CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponIdle)
             {
                 // and if our buffer is still valid, we trigger an attack
                 if (Time.time < _bufferEndsAt)
-                {
                     ShootStart();
-                }
                 else
-                {
                     _buffering = false;
-                }                
             }
         }
 
         /// <summary>
-        /// Causes the character to start shooting
+        ///     Causes the character to start shooting
         /// </summary>
         public virtual void ShootStart()
         {
             // if the Shoot action is enabled in the permissions, we continue, if not we do nothing.  If the player is dead we do nothing.
             if (!AbilityAuthorized
-                || (CurrentWeapon == null)
-                || (_condition.CurrentState != CharacterStates.CharacterConditions.Normal))
-            {
+                || CurrentWeapon == null
+                || _condition.CurrentState != CharacterStates.CharacterConditions.Normal)
                 return;
-            }
 
             //  if we've decided to buffer input, and if the weapon is in use right now
-            if (BufferInput && (CurrentWeapon.WeaponState.CurrentState != Weapon.WeaponStates.WeaponIdle))
-            {
+            if (BufferInput && CurrentWeapon.WeaponState.CurrentState != Weapon.WeaponStates.WeaponIdle)
                 // if we're not already buffering, or if each new input extends the buffer, we turn our buffering state to true
                 ExtendBuffer();
-            }
 
-            if (BufferInput && RequiresPerfectTile && (_characterGridMovement != null))            
+            if (BufferInput && RequiresPerfectTile && _characterGridMovement != null)
             {
                 if (!_characterGridMovement.PerfectTile)
                 {
                     ExtendBuffer();
                     return;
                 }
-                else
-                {
-                    _buffering = false;
-                }
+
+                _buffering = false;
             }
+
             PlayAbilityStartFeedbacks();
             CurrentWeapon.WeaponInputStart();
         }
@@ -322,73 +293,53 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Causes the character to stop shooting
+        ///     Causes the character to stop shooting
         /// </summary>
         public virtual void ShootStop()
         {
             // if the Shoot action is enabled in the permissions, we continue, if not we do nothing
             if (!AbilityAuthorized
-                || (CurrentWeapon == null))
-            {
+                || CurrentWeapon == null)
                 return;
-            }
 
-            if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponIdle)
-            {
-                return;
-            }
+            if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponIdle) return;
 
-            if ((CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponReload)
-                || (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponReloadStart)
-                || (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponReloadStop))
-            {
+            if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponReload
+                || CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponReloadStart
+                || CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponReloadStop)
                 return;
-            }
 
-            if ((CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBeforeUse) && (!CurrentWeapon.DelayBeforeUseReleaseInterruption))
-            {
-                return;
-            }
+            if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBeforeUse &&
+                !CurrentWeapon.DelayBeforeUseReleaseInterruption) return;
 
-            if ((CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBetweenUses) && (!CurrentWeapon.TimeBetweenUsesReleaseInterruption))
-            {
-                return;
-            }
+            if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponDelayBetweenUses &&
+                !CurrentWeapon.TimeBetweenUsesReleaseInterruption) return;
 
-            if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponUse) 
-            {
-                return;
-            }
+            if (CurrentWeapon.WeaponState.CurrentState == Weapon.WeaponStates.WeaponUse) return;
 
             ForceStop();
         }
 
         /// <summary>
-        /// Forces the weapon to stop 
+        ///     Forces the weapon to stop
         /// </summary>
         public virtual void ForceStop()
         {
             StopStartFeedbacks();
             PlayAbilityStopFeedbacks();
-            if (CurrentWeapon != null)
-            {
-                CurrentWeapon.TurnWeaponOff();    
-            }
+            if (CurrentWeapon != null) CurrentWeapon.TurnWeaponOff();
         }
 
         /// <summary>
-        /// Reloads the weapon
+        ///     Reloads the weapon
         /// </summary>
         public virtual void Reload()
         {
-            if (CurrentWeapon != null)
-            {
-                CurrentWeapon.InitiateReloadWeapon();
-            }
+            if (CurrentWeapon != null) CurrentWeapon.InitiateReloadWeapon();
         }
 
         /// <summary>
-        /// Changes the character's current weapon to the one passed as a parameter
+        ///     Changes the character's current weapon to the one passed as a parameter
         /// </summary>
         /// <param name="newWeapon">The new weapon.</param>
         public virtual void ChangeWeapon(Weapon newWeapon, string weaponID, bool combo = false)
@@ -400,32 +351,25 @@ namespace MoreMountains.TopDownEngine
                 if (!combo)
                 {
                     ShootStop();
-                    if (_weaponAim != null) { _weaponAim.RemoveReticle(); }
+                    if (_weaponAim != null) _weaponAim.RemoveReticle();
                     Destroy(CurrentWeapon.gameObject);
                 }
             }
 
             if (newWeapon != null)
-            {
                 InstantiateWeapon(newWeapon, weaponID, combo);
-            }
             else
-            {
                 CurrentWeapon = null;
-            }
 
-            if (OnWeaponChange != null)
-            {
-                OnWeaponChange();
-            }
+            if (OnWeaponChange != null) OnWeaponChange();
         }
 
         protected virtual void InstantiateWeapon(Weapon newWeapon, string weaponID, bool combo = false)
         {
             if (!combo)
-            {
-                CurrentWeapon = (Weapon)Instantiate(newWeapon, WeaponAttachment.transform.position + newWeapon.WeaponAttachmentOffset, WeaponAttachment.transform.rotation);
-            }
+                CurrentWeapon = Instantiate(newWeapon,
+                    WeaponAttachment.transform.position + newWeapon.WeaponAttachmentOffset,
+                    WeaponAttachment.transform.rotation);
 
             CurrentWeapon.name = newWeapon.name;
             CurrentWeapon.transform.parent = WeaponAttachment.transform;
@@ -434,10 +378,7 @@ namespace MoreMountains.TopDownEngine
             CurrentWeapon.WeaponID = weaponID;
             CurrentWeapon.FlipWeapon();
             _weaponAim = CurrentWeapon.gameObject.MMGetComponentNoAlloc<WeaponAim>();
-            if (_weaponAim != null)
-            {
-                _weaponAim.ApplyAim();
-            }
+            if (_weaponAim != null) _weaponAim.ApplyAim();
 
             // we handle (optional) inverse kinematics (IK) 
             HandleWeaponIK();
@@ -454,29 +395,21 @@ namespace MoreMountains.TopDownEngine
 
         protected virtual void HandleWeaponIK()
         {
-            if (_weaponIK != null)
-            {
-                _weaponIK.SetHandles(CurrentWeapon.LeftHandHandle, CurrentWeapon.RightHandHandle);
-            }
+            if (_weaponIK != null) _weaponIK.SetHandles(CurrentWeapon.LeftHandHandle, CurrentWeapon.RightHandHandle);
             _projectileWeapon = CurrentWeapon.gameObject.MMFGetComponentNoAlloc<ProjectileWeapon>();
-            if (_projectileWeapon != null)
-            {
-                _projectileWeapon.SetProjectileSpawnTransform(ProjectileSpawn);
-            }
+            if (_projectileWeapon != null) _projectileWeapon.SetProjectileSpawnTransform(ProjectileSpawn);
         }
 
-        protected virtual void HandleWeaponModel(Weapon newWeapon, string weaponID, bool combo = false, Weapon weapon = null)
+        protected virtual void HandleWeaponModel(Weapon newWeapon, string weaponID, bool combo = false,
+            Weapon weapon = null)
         {
-            foreach (WeaponModel model in _weaponModels)
+            foreach (var model in _weaponModels)
             {
                 model.Hide();
                 if (model.WeaponID == weaponID)
                 {
                     model.Show();
-                    if (model.UseIK)
-                    {
-                        _weaponIK.SetHandles(model.LeftHandHandle, model.RightHandHandle);
-                    }
+                    if (model.UseIK) _weaponIK.SetHandles(model.LeftHandHandle, model.RightHandHandle);
                     if (weapon != null)
                     {
                         if (model.BindFeedbacks)
@@ -487,32 +420,27 @@ namespace MoreMountains.TopDownEngine
                             weapon.WeaponReloadMMFeedback = model.WeaponReloadMMFeedback;
                             weapon.WeaponReloadNeededMMFeedback = model.WeaponReloadNeededMMFeedback;
                         }
-                        if (model.AddAnimator)
-                        {
-                            weapon.Animators.Add(model.TargetAnimator);
-                        }
-                        if (model.OverrideWeaponUseTransform)
-                        {
-                            weapon.WeaponUseTransform = model.WeaponUseTransform;
-                        }
+
+                        if (model.AddAnimator) weapon.Animators.Add(model.TargetAnimator);
+                        if (model.OverrideWeaponUseTransform) weapon.WeaponUseTransform = model.WeaponUseTransform;
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Flips the current weapon if needed
+        ///     Flips the current weapon if needed
         /// </summary>
         public override void Flip()
         {
         }
 
         /// <summary>
-        /// Updates the ammo display bar and text.
+        ///     Updates the ammo display bar and text.
         /// </summary>
         public virtual void UpdateAmmoDisplay()
         {
-            if ((GUIManager.HasInstance) && (_character.CharacterType == Character.CharacterTypes.Player))
+            if (GUIManager.HasInstance && _character.CharacterType == Character.CharacterTypes.Player)
             {
                 if (CurrentWeapon == null)
                 {
@@ -520,7 +448,7 @@ namespace MoreMountains.TopDownEngine
                     return;
                 }
 
-                if (!CurrentWeapon.MagazineBased && (CurrentWeapon.WeaponAmmo == null))
+                if (!CurrentWeapon.MagazineBased && CurrentWeapon.WeaponAmmo == null)
                 {
                     GUIManager.Instance.SetAmmoDisplays(false, _character.PlayerID, AmmoDisplayID);
                     return;
@@ -529,65 +457,63 @@ namespace MoreMountains.TopDownEngine
                 if (CurrentWeapon.WeaponAmmo == null)
                 {
                     GUIManager.Instance.SetAmmoDisplays(true, _character.PlayerID, AmmoDisplayID);
-                    GUIManager.Instance.UpdateAmmoDisplays(CurrentWeapon.MagazineBased, 0, 0, CurrentWeapon.CurrentAmmoLoaded, CurrentWeapon.MagazineSize, _character.PlayerID, AmmoDisplayID, false);
+                    GUIManager.Instance.UpdateAmmoDisplays(CurrentWeapon.MagazineBased, 0, 0,
+                        CurrentWeapon.CurrentAmmoLoaded, CurrentWeapon.MagazineSize, _character.PlayerID, AmmoDisplayID,
+                        false);
                     return;
                 }
-                else
-                {
-                    GUIManager.Instance.SetAmmoDisplays(true, _character.PlayerID, AmmoDisplayID); 
-                    GUIManager.Instance.UpdateAmmoDisplays(CurrentWeapon.MagazineBased, CurrentWeapon.WeaponAmmo.CurrentAmmoAvailable + CurrentWeapon.CurrentAmmoLoaded, CurrentWeapon.WeaponAmmo.MaxAmmo, CurrentWeapon.CurrentAmmoLoaded, CurrentWeapon.MagazineSize, _character.PlayerID, AmmoDisplayID, true);
-                    return;
-                }
+
+                GUIManager.Instance.SetAmmoDisplays(true, _character.PlayerID, AmmoDisplayID);
+                GUIManager.Instance.UpdateAmmoDisplays(CurrentWeapon.MagazineBased,
+                    CurrentWeapon.WeaponAmmo.CurrentAmmoAvailable + CurrentWeapon.CurrentAmmoLoaded,
+                    CurrentWeapon.WeaponAmmo.MaxAmmo, CurrentWeapon.CurrentAmmoLoaded, CurrentWeapon.MagazineSize,
+                    _character.PlayerID, AmmoDisplayID, true);
             }
         }
 
         /// <summary>
-        /// Adds required animator parameters to the animator parameters list if they exist
+        ///     Adds required animator parameters to the animator parameters list if they exist
         /// </summary>
         protected override void InitializeAnimatorParameters()
         {
-            if (CurrentWeapon == null)
-            { return; }
+            if (CurrentWeapon == null) return;
 
-            RegisterAnimatorParameter(_weaponEquippedAnimationParameterName, AnimatorControllerParameterType.Bool, out _weaponEquippedAnimationParameter);
-            RegisterAnimatorParameter(_weaponEquippedIDAnimationParameterName, AnimatorControllerParameterType.Int, out _weaponEquippedIDAnimationParameter);
+            RegisterAnimatorParameter(_weaponEquippedAnimationParameterName, AnimatorControllerParameterType.Bool,
+                out _weaponEquippedAnimationParameter);
+            RegisterAnimatorParameter(_weaponEquippedIDAnimationParameterName, AnimatorControllerParameterType.Int,
+                out _weaponEquippedIDAnimationParameter);
         }
 
         /// <summary>
-        /// Override this to send parameters to the character's animator. This is called once per cycle, by the Character
-        /// class, after Early, normal and Late process().
+        ///     Override this to send parameters to the character's animator. This is called once per cycle, by the Character
+        ///     class, after Early, normal and Late process().
         /// </summary>
         public override void UpdateAnimator()
         {
-            MMAnimatorExtensions.UpdateAnimatorBool(_animator, _weaponEquippedAnimationParameter, (CurrentWeapon != null), _character._animatorParameters, _character.RunAnimatorSanityChecks);
+            MMAnimatorExtensions.UpdateAnimatorBool(_animator, _weaponEquippedAnimationParameter, CurrentWeapon != null,
+                _character._animatorParameters, _character.RunAnimatorSanityChecks);
             if (CurrentWeapon == null)
             {
-                MMAnimatorExtensions.UpdateAnimatorInteger(_animator, _weaponEquippedIDAnimationParameter, -1, _character._animatorParameters, _character.RunAnimatorSanityChecks);
+                MMAnimatorExtensions.UpdateAnimatorInteger(_animator, _weaponEquippedIDAnimationParameter, -1,
+                    _character._animatorParameters, _character.RunAnimatorSanityChecks);
                 return;
             }
-            else
-            {
-                MMAnimatorExtensions.UpdateAnimatorInteger(_animator, _weaponEquippedIDAnimationParameter, CurrentWeapon.WeaponAnimationID, _character._animatorParameters, _character.RunAnimatorSanityChecks);
-            }
+
+            MMAnimatorExtensions.UpdateAnimatorInteger(_animator, _weaponEquippedIDAnimationParameter,
+                CurrentWeapon.WeaponAnimationID, _character._animatorParameters, _character.RunAnimatorSanityChecks);
         }
 
         protected override void OnHit()
         {
             base.OnHit();
-            if (GettingHitInterruptsAttack && (CurrentWeapon != null))
-            {
-                CurrentWeapon.Interrupt();
-            }
+            if (GettingHitInterruptsAttack && CurrentWeapon != null) CurrentWeapon.Interrupt();
         }
 
         protected override void OnDeath()
         {
             base.OnDeath();
             ShootStop();
-            if (CurrentWeapon != null)
-            {
-                ChangeWeapon(null, "");
-            }
+            if (CurrentWeapon != null) ChangeWeapon(null, "");
         }
 
         protected override void OnRespawn()

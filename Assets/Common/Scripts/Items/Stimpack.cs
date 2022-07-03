@@ -1,11 +1,10 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
+﻿using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// A Stimpack / health bonus, that gives health back when picked
+    ///     A Stimpack / health bonus, that gives health back when picked
     /// </summary>
     [AddComponentMenu("TopDown Engine/Items/Stimpack")]
     public class Stimpack : PickableItem
@@ -13,28 +12,24 @@ namespace MoreMountains.TopDownEngine
         /// The amount of points to add when collected
         [Tooltip("The amount of points to add when collected")]
         public int HealthToGive = 10;
+
         /// if this is true, only player characters can pick this up
         [Tooltip("if this is true, only player characters can pick this up")]
         public bool OnlyForPlayerCharacter = true;
 
         /// <summary>
-        /// Triggered when something collides with the stimpack
+        ///     Triggered when something collides with the stimpack
         /// </summary>
         /// <param name="collider">Other.</param>
         protected override void Pick(GameObject picker)
         {
-            Character character = picker.gameObject.MMGetComponentNoAlloc<Character>();
-            if (OnlyForPlayerCharacter && (character != null) && (_character.CharacterType != Character.CharacterTypes.Player))
-            {
-                return;
-            }
+            var character = picker.gameObject.MMGetComponentNoAlloc<Character>();
+            if (OnlyForPlayerCharacter && character != null &&
+                _character.CharacterType != Character.CharacterTypes.Player) return;
 
-            Health characterHealth = picker.gameObject.MMGetComponentNoAlloc<Health>();
+            var characterHealth = picker.gameObject.MMGetComponentNoAlloc<Health>();
             // else, we give health to the player
-            if (characterHealth != null)
-            {
-                characterHealth.GetHealth(HealthToGive, gameObject);
-            }            
+            if (characterHealth != null) characterHealth.GetHealth(HealthToGive, gameObject);
         }
     }
 }

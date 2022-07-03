@@ -1,9 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using MoreMountains.FeedbacksForThirdParty;
 using MoreMountains.Tools;
-using MoreMountains.Feedbacks;
-using MoreMountains.FeedbacksForThirdParty;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
@@ -16,33 +13,31 @@ namespace MoreMountains.TopDownEngine
         {
             AutoFocus = FindObjectOfType<MMAutoFocus>();
         }
-        
+
+        protected virtual void OnEnable()
+        {
+            this.MMEventStartListening();
+        }
+
+        protected virtual void OnDisable()
+        {
+            this.MMEventStopListening();
+        }
+
         public virtual void OnMMEvent(MMCameraEvent cameraEvent)
         {
             switch (cameraEvent.EventType)
             {
                 case MMCameraEventTypes.StartFollowing:
-                    if (AutoFocus == null)
-                    {
-                        AutoFocus = FindObjectOfType<MMAutoFocus>();
-                    }
+                    if (AutoFocus == null) AutoFocus = FindObjectOfType<MMAutoFocus>();
                     if (AutoFocus != null)
                     {
                         AutoFocus.FocusTargets = new Transform[1];
-                        AutoFocus.FocusTargets[0] = LevelManager.Instance.Players[0].transform; 
+                        AutoFocus.FocusTargets[0] = LevelManager.Instance.Players[0].transform;
                     }
+
                     break;
             }
-        }
-
-        protected virtual void OnEnable()
-        {
-            this.MMEventStartListening<MMCameraEvent>();
-        }
-
-        protected virtual void OnDisable()
-        {
-            this.MMEventStopListening<MMCameraEvent>();
         }
     }
 }

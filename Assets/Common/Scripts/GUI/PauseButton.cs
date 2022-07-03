@@ -1,27 +1,25 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// A simple component meant to be added to the pause button
+    ///     A simple component meant to be added to the pause button
     /// </summary>
     [AddComponentMenu("TopDown Engine/GUI/PauseButton")]
     public class PauseButton : MonoBehaviour
-	{
-		/// <summary>
-        /// Triggers a pause event
+    {
+        /// <summary>
+        ///     Triggers a pause event
         /// </summary>
-	    public virtual void PauseButtonAction()
-	    {
+        public virtual void PauseButtonAction()
+        {
             // we trigger a Pause event for the GameManager and other classes that could be listening to it too
             StartCoroutine(PauseButtonCo());
-
-        }	
+        }
 
         /// <summary>
-        /// Unpauses the game via an UnPause event
+        ///     Unpauses the game via an UnPause event
         /// </summary>
         public virtual void UnPause()
         {
@@ -29,7 +27,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// A coroutine used to trigger the pause event
+        ///     A coroutine used to trigger the pause event
         /// </summary>
         /// <returns></returns>
         protected virtual IEnumerator PauseButtonCo()
@@ -38,6 +36,5 @@ namespace MoreMountains.TopDownEngine
             // we trigger a Pause event for the GameManager and other classes that could be listening to it too
             TopDownEngineEvent.Trigger(TopDownEngineEventTypes.TogglePause, null);
         }
-
     }
 }

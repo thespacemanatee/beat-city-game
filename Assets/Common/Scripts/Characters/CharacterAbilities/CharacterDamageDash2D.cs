@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
@@ -9,11 +7,12 @@ namespace MoreMountains.TopDownEngine
     {
         [Header("Damage Dash")]
         /// the DamageOnTouch object to activate when dashing (usually placed under the Character's model, will require a Collider2D of some form, set to trigger
-        [Tooltip("the DamageOnTouch object to activate when dashing (usually placed under the Character's model, will require a Collider2D of some form, set to trigger")]
+        [Tooltip(
+            "the DamageOnTouch object to activate when dashing (usually placed under the Character's model, will require a Collider2D of some form, set to trigger")]
         public DamageOnTouch TargetDamageOnTouch;
-        
+
         /// <summary>
-        /// On initialization, we disable our damage on touch object
+        ///     On initialization, we disable our damage on touch object
         /// </summary>
         protected override void Initialization()
         {
@@ -22,7 +21,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// When we start to dash, we activate our damage object
+        ///     When we start to dash, we activate our damage object
         /// </summary>
         public override void DashStart()
         {
@@ -31,7 +30,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// When we stop dashing, we disable our damage object
+        ///     When we stop dashing, we disable our damage object
         /// </summary>
         protected override void DashStop()
         {

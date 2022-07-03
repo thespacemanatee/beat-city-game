@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// Requires a CharacterMovement ability. Makes the character move away from the target. 
+    ///     Requires a CharacterMovement ability. Makes the character move away from the target.
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/AI/Actions/AIActionMoveAwayFromTarget2D")]
     //[RequireComponent(typeof(CharacterMovement))]
@@ -19,15 +17,15 @@ namespace MoreMountains.TopDownEngine
         protected CharacterMovement _characterMovement;
 
         /// <summary>
-        /// On init we grab our CharacterMovement ability
+        ///     On init we grab our CharacterMovement ability
         /// </summary>
         public override void Initialization()
         {
-            _characterMovement = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterMovement>();
+            _characterMovement = gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterMovement>();
         }
 
         /// <summary>
-        /// On PerformAction we move
+        ///     On PerformAction we move
         /// </summary>
         public override void PerformAction()
         {
@@ -35,46 +33,31 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Moves the character towards the target if needed
+        ///     Moves the character towards the target if needed
         /// </summary>
         protected virtual void Move()
         {
-            if (_brain.Target == null)
-            {
-                return;
-            }
-            
-            if (this.transform.position.x < _brain.Target.position.x)
-            {
+            if (_brain.Target == null) return;
+
+            if (transform.position.x < _brain.Target.position.x)
                 _characterMovement.SetHorizontalMovement(-1f);
-            }
             else
-            {
                 _characterMovement.SetHorizontalMovement(1f);
-            }
 
-            if (this.transform.position.y < _brain.Target.position.y)
-            {
+            if (transform.position.y < _brain.Target.position.y)
                 _characterMovement.SetVerticalMovement(-1f);
-            }
             else
-            {
                 _characterMovement.SetVerticalMovement(1f);
-            }
-            
-            if (Mathf.Abs(this.transform.position.x - _brain.Target.position.x) > MaximumDistance)
-            {
-                _characterMovement.SetHorizontalMovement(0f);
-            }
 
-            if (Mathf.Abs(this.transform.position.y - _brain.Target.position.y) > MaximumDistance)
-            {
+            if (Mathf.Abs(transform.position.x - _brain.Target.position.x) > MaximumDistance)
+                _characterMovement.SetHorizontalMovement(0f);
+
+            if (Mathf.Abs(transform.position.y - _brain.Target.position.y) > MaximumDistance)
                 _characterMovement.SetVerticalMovement(0f);
-            }
         }
 
         /// <summary>
-        /// On exit state we stop our movement
+        ///     On exit state we stop our movement
         /// </summary>
         public override void OnExitState()
         {

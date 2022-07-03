@@ -1,36 +1,42 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
+﻿using System.Collections;
 using Cinemachine;
+using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// A class that handles camera follow for Cinemachine powered cameras
+    ///     A class that handles camera follow for Cinemachine powered cameras
     /// </summary>
-    public class CinemachineCameraController : MonoBehaviour, MMEventListener<MMCameraEvent>, MMEventListener<TopDownEngineEvent>
+    public class CinemachineCameraController : MonoBehaviour, MMEventListener<MMCameraEvent>,
+        MMEventListener<TopDownEngineEvent>
     {
-        /// True if the camera should follow the player
-        public bool FollowsPlayer { get; set; }
         /// Whether or not this camera should follow a player
         [Tooltip("Whether or not this camera should follow a player")]
         public bool FollowsAPlayer = true;
+
         /// Whether to confine this camera to the level bounds, as defined in the LevelManager
         [Tooltip("Whether to confine this camera to the level bounds, as defined in the LevelManager")]
         public bool ConfineCameraToLevelBounds = true;
+
         /// If this is true, this confiner will listen to set confiner events
         [Tooltip("If this is true, this confiner will listen to set confiner events")]
         public bool ListenToSetConfinerEvents = true;
+
         [MMReadOnly]
         /// the target character this camera should follow
         [Tooltip("the target character this camera should follow")]
         public Character TargetCharacter;
 
-        protected CinemachineVirtualCamera _virtualCamera;
         protected CinemachineConfiner _confiner;
 
+        protected CinemachineVirtualCamera _virtualCamera;
+
+        /// True if the camera should follow the player
+        public bool FollowsPlayer { get; set; }
+
         /// <summary>
-        /// On Awake we grab our components
+        ///     On Awake we grab our components
         /// </summary>
         protected virtual void Awake()
         {
@@ -39,41 +45,24 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// On Start we assign our bounding volume
+        ///     On Start we assign our bounding volume
         /// </summary>
         protected virtual void Start()
         {
-            if ((_confiner != null) && ConfineCameraToLevelBounds)
-            {
+            if (_confiner != null && ConfineCameraToLevelBounds)
                 _confiner.m_BoundingVolume = LevelManager.Instance.BoundsCollider;
-            }
         }
 
-        public virtual void SetTarget(Character character)
+        protected virtual void OnEnable()
         {
-            TargetCharacter = character;
+            this.MMEventStartListening<MMCameraEvent>();
+            this.MMEventStartListening<TopDownEngineEvent>();
         }
 
-        /// <summary>
-        /// Starts following the LevelManager's main player
-        /// </summary>
-        public virtual void StartFollowing()
+        protected virtual void OnDisable()
         {
-            if (!FollowsAPlayer) { return; }
-            FollowsPlayer = true;
-            _virtualCamera.Follow = TargetCharacter.CameraTarget.transform;
-            _virtualCamera.enabled = true;
-        }
-
-        /// <summary>
-        /// Stops following any target
-        /// </summary>
-        public virtual void StopFollowing()
-        {
-            if (!FollowsAPlayer) { return; }
-            FollowsPlayer = false;
-            _virtualCamera.Follow = null;
-            _virtualCamera.enabled = false;
+            this.MMEventStopListening<MMCameraEvent>();
+            this.MMEventStopListening<TopDownEngineEvent>();
         }
 
         public virtual void OnMMEvent(MMCameraEvent cameraEvent)
@@ -84,32 +73,21 @@ namespace MoreMountains.TopDownEngine
                     SetTarget(cameraEvent.TargetCharacter);
                     break;
 
-                case MMCameraEventTypes.SetConfiner:                    
-                    if (_confiner != null && ListenToSetConfinerEvents)
-                    {
-                        _confiner.m_BoundingVolume = cameraEvent.Bounds;
-                    }
+                case MMCameraEventTypes.SetConfiner:
+                    if (_confiner != null && ListenToSetConfinerEvents) _confiner.m_BoundingVolume = cameraEvent.Bounds;
                     break;
 
                 case MMCameraEventTypes.StartFollowing:
                     if (cameraEvent.TargetCharacter != null)
-                    {
                         if (cameraEvent.TargetCharacter != TargetCharacter)
-                        {
                             return;
-                        }
-                    }
                     StartFollowing();
                     break;
 
                 case MMCameraEventTypes.StopFollowing:
                     if (cameraEvent.TargetCharacter != null)
-                    {
                         if (cameraEvent.TargetCharacter != TargetCharacter)
-                        {
                             return;
-                        }
-                    }
                     StopFollowing();
                     break;
 
@@ -121,13 +99,6 @@ namespace MoreMountains.TopDownEngine
                     _virtualCamera.Priority = 0;
                     break;
             }
-        }
-
-        protected virtual IEnumerator RefreshPosition()
-        {
-            _virtualCamera.enabled = false;
-            yield return null;
-            StartFollowing();
         }
 
         public virtual void OnMMEvent(TopDownEngineEvent topdownEngineEvent)
@@ -145,16 +116,38 @@ namespace MoreMountains.TopDownEngine
             }
         }
 
-        protected virtual void OnEnable()
+        public virtual void SetTarget(Character character)
         {
-            this.MMEventStartListening<MMCameraEvent>();
-            this.MMEventStartListening<TopDownEngineEvent>();
+            TargetCharacter = character;
         }
 
-        protected virtual void OnDisable()
+        /// <summary>
+        ///     Starts following the LevelManager's main player
+        /// </summary>
+        public virtual void StartFollowing()
         {
-            this.MMEventStopListening<MMCameraEvent>();
-            this.MMEventStopListening<TopDownEngineEvent>();
+            if (!FollowsAPlayer) return;
+            FollowsPlayer = true;
+            _virtualCamera.Follow = TargetCharacter.CameraTarget.transform;
+            _virtualCamera.enabled = true;
+        }
+
+        /// <summary>
+        ///     Stops following any target
+        /// </summary>
+        public virtual void StopFollowing()
+        {
+            if (!FollowsAPlayer) return;
+            FollowsPlayer = false;
+            _virtualCamera.Follow = null;
+            _virtualCamera.enabled = false;
+        }
+
+        protected virtual IEnumerator RefreshPosition()
+        {
+            _virtualCamera.enabled = false;
+            yield return null;
+            StartFollowing();
         }
     }
 }

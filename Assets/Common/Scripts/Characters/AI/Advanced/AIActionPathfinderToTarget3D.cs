@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// Requires a CharacterMovement ability. Makes the character move up to the specified MinimumDistance in the direction of the target. 
+    ///     Requires a CharacterMovement ability. Makes the character move up to the specified MinimumDistance in the direction
+    ///     of the target.
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/AI/Actions/AIActionPathfinderToTarget3D")]
     //[RequireComponent(typeof(CharacterMovement))]
@@ -17,20 +16,19 @@ namespace MoreMountains.TopDownEngine
         protected CharacterPathfinder3D _characterPathfinder3D;
 
         /// <summary>
-        /// On init we grab our CharacterMovement ability
+        ///     On init we grab our CharacterMovement ability
         /// </summary>
         public override void Initialization()
         {
-            _characterMovement = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterMovement>();
-            _characterPathfinder3D = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterPathfinder3D>();
+            _characterMovement = gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterMovement>();
+            _characterPathfinder3D = gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterPathfinder3D>();
             if (_characterPathfinder3D == null)
-            {
-                Debug.LogWarning(this.name + " : the AIActionPathfinderToTarget3D AI Action requires the CharacterPathfinder3D ability");
-            }
+                Debug.LogWarning(name +
+                                 " : the AIActionPathfinderToTarget3D AI Action requires the CharacterPathfinder3D ability");
         }
 
         /// <summary>
-        /// On PerformAction we move
+        ///     On PerformAction we move
         /// </summary>
         public override void PerformAction()
         {
@@ -38,7 +36,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Moves the character towards the target if needed
+        ///     Moves the character towards the target if needed
         /// </summary>
         protected virtual void Move()
         {
@@ -47,19 +45,17 @@ namespace MoreMountains.TopDownEngine
                 _characterPathfinder3D.SetNewDestination(null);
                 return;
             }
-            else
-            {
-                _characterPathfinder3D.SetNewDestination(_brain.Target.transform);
-            }
+
+            _characterPathfinder3D.SetNewDestination(_brain.Target.transform);
         }
 
         /// <summary>
-        /// On exit state we stop our movement
+        ///     On exit state we stop our movement
         /// </summary>
         public override void OnExitState()
         {
             base.OnExitState();
-            
+
             _characterPathfinder3D?.SetNewDestination(null);
             _characterMovement?.SetHorizontalMovement(0f);
             _characterMovement?.SetVerticalMovement(0f);
