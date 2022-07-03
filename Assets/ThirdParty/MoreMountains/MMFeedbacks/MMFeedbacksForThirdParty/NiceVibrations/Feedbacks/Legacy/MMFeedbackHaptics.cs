@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
-using MoreMountains.Feedbacks;
 
 //#if MOREMOUNTAINS_NICEVIBRATIONS
 //using MoreMountains.NiceVibrations;
@@ -9,33 +7,63 @@ using MoreMountains.Feedbacks;
 namespace MoreMountains.FeedbacksForThirdParty
 {
     /// <summary>
-    /// Add this feedback to be able to trigger haptic feedbacks via the NiceVibration library.
-    /// It'll let you create transient or continuous vibrations, play presets or advanced patterns via AHAP files, and stop any vibration at any time
-    /// This feedback has been deprecated, and is just here to avoid errors in case you were to update from an old version. Use the new haptic feedbacks instead.
+    ///     Add this feedback to be able to trigger haptic feedbacks via the NiceVibration library.
+    ///     It'll let you create transient or continuous vibrations, play presets or advanced patterns via AHAP files, and stop
+    ///     any vibration at any time
+    ///     This feedback has been deprecated, and is just here to avoid errors in case you were to update from an old version.
+    ///     Use the new haptic feedbacks instead.
     /// </summary>
     [AddComponentMenu("")]
     [FeedbackPath("Haptics/Haptics DEPRECATED!")]
-    [FeedbackHelp("This feedback has been deprecated, and is just here to avoid errors in case you were to update from an old version. Use the new haptic feedbacks instead.")]
+    [FeedbackHelp(
+        "This feedback has been deprecated, and is just here to avoid errors in case you were to update from an old version. Use the new haptic feedbacks instead.")]
     public class MMFeedbackHaptics : MMFeedback
     {
+        /// the possible haptic methods for this feedback
+        public enum HapticMethods
+        {
+            NativePreset,
+            Transient,
+            Continuous,
+            AdvancedPattern,
+            Stop,
+            AdvancedTransient,
+            AdvancedContinuous
+        }
+
+        public enum HapticTypes
+        {
+            Selection,
+            Success,
+            Warning,
+            Failure,
+            LightImpact,
+            MediumImpact,
+            HeavyImpact,
+            RigidImpact,
+            SoftImpact,
+            None
+        }
+
+        /// the timescale to operate on
+        public enum Timescales
+        {
+            ScaledTime,
+            UnscaledTime
+        }
+
         /// a static bool used to disable all feedbacks of this type at once
         public static bool FeedbackTypeAuthorized = true;
-        #if UNITY_EDITOR
-        public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.HapticsColor; } }
-        #endif
-        
-        public enum HapticTypes { Selection, Success, Warning, Failure, LightImpact, MediumImpact, HeavyImpact, RigidImpact, SoftImpact, None }
-        
-        /// the possible haptic methods for this feedback
-        public enum HapticMethods { NativePreset, Transient, Continuous, AdvancedPattern, Stop, AdvancedTransient, AdvancedContinuous }
-        /// the timescale to operate on
-        public enum Timescales { ScaledTime, UnscaledTime }
+
+        protected static bool _continuousPlaying = false;
+        protected static float _continuousStartedAt = 0f;
 
         // NATIVE PRESET -----------------------------------------------------------------------------------------------------
         [Header("Haptics")]
         /// the method to use when triggering this haptic feedback
         [Tooltip("the method to use when triggering this haptic feedback")]
         public HapticMethods HapticMethod = HapticMethods.NativePreset;
+
         /// the type of native preset to use
         [Tooltip("the type of native preset to use")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.NativePreset)]
@@ -46,6 +74,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Tooltip("the intensity of the transient haptic")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.Transient)]
         public float TransientIntensity = 1f;
+
         /// the sharpness of the transient haptic
         [Tooltip("the sharpness of the transient haptic")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.Transient)]
@@ -56,42 +85,53 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Tooltip("whether or not to vibrate on iOS when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public bool ATVibrateIOS = true;
+
         /// the intensity on iOS when in AdvancedTransient mode
         [Tooltip("the intensity on iOS when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public float ATIOSIntensity = 1f;
+
         /// the sharpness on iOS when in AdvancedTransient mode
         [Tooltip("the sharpness on iOS when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public float ATIOSSharpness = 1f;
+
         /// whether or not to vibrate on android when in AdvancedTransient mode
         [Tooltip("whether or not to vibrate on android when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public bool ATVibrateAndroid = true;
+
         /// whether or not to vibrate on android if no support for advanced vibrations when in AdvancedTransient mode
-        [Tooltip("whether or not to vibrate on android if no support for advanced vibrations when in AdvancedTransient mode")]
+        [Tooltip(
+            "whether or not to vibrate on android if no support for advanced vibrations when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
-        public bool ATVibrateAndroidIfNoSupport = false;
+        public bool ATVibrateAndroidIfNoSupport;
+
         /// the intensity on android when in AdvancedTransient mode
         [Tooltip("the intensity on android when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public float ATAndroidIntensity = 1f;
+
         /// the sharpness on android when in AdvancedTransient mode
         [Tooltip("the sharpness on android when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public float ATAndroidSharpness = 1f;
+
         /// whether or not to rumble when in AdvancedTransient mode
         [Tooltip("whether or not to rumble when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public bool ATRumble = true;
+
         /// the rumble intensity when in AdvancedTransient mode
         [Tooltip("the rumble intensity when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public float ATRumbleIntensity = 1f;
+
         /// the rumble sharpness when in AdvancedTransient mode
         [Tooltip("the rumble sharpness when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
         public float ATRumbleSharpness = 1f;
+
         /// the controllerID when in AdvancedTransient mode
         [Tooltip("the controllerID when in AdvancedTransient mode")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedTransient)]
@@ -102,18 +142,22 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Tooltip("the intensity that should be used to initialize the continuous haptic")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.Continuous)]
         public float InitialContinuousIntensity = 1f;
+
         /// the curve used to tween the continuous intensity
         [Tooltip("the curve used to tween the continuous intensity")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.Continuous)]
-        public AnimationCurve ContinuousIntensityCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1f, 1f));
+        public AnimationCurve ContinuousIntensityCurve = new(new Keyframe(0, 1), new Keyframe(1f, 1f));
+
         /// the sharpness that should be used to initialize the continuous haptic
         [Tooltip("the sharpness that should be used to initialize the continuous haptic")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.Continuous)]
         public float InitialContinuousSharpness = 1f;
+
         /// the curve used to tween the continuous sharpness
         [Tooltip("the curve used to tween the continuous sharpness")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.Continuous)]
-        public AnimationCurve ContinuousSharpnessCurve = new AnimationCurve(new Keyframe(0, 1), new Keyframe(1f, 1f));
+        public AnimationCurve ContinuousSharpnessCurve = new(new Keyframe(0, 1), new Keyframe(1f, 1f));
+
         /// the duration of the continuous haptic
         [Tooltip("the duration of the continuous haptic")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.Continuous)]
@@ -125,6 +169,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Tooltip("whether or not to trigger advanced patterns on iOS")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         public bool APVibrateIOS = true;
+
         /// the AHAP file to use to trigger a pattern on iOS
         [Tooltip("the AHAP file to use to trigger a pattern on iOS")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
@@ -134,10 +179,11 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Tooltip("whether or not to trigger advanced patterns on Android")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         public bool APVibrateAndroid = true;
+
         /// whether or not to vibrate if there's no haptics support
         [Tooltip("whether or not to vibrate if there's no haptics support")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
-        public bool APVibrateAndroidIfNoSupport = false;
+        public bool APVibrateAndroidIfNoSupport;
         /// the WaveFormFile to use to trigger a pattern on Android
         //[Tooltip("the WaveFormFile to use to trigger a pattern on Android")]
         //[MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
@@ -147,59 +193,62 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Tooltip("whether or not to trigger advanced patterns on rumble")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         public bool APRumble = true;
+
         /// the file to use to trigger a rumble on gamepad
         //[Tooltip("the file to use to trigger a rumble on gamepad")]
         //[MMNVEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         //public MMNVRumbleWaveFormAsset RumbleWaveFormFile;
         /// the amount of times this should repeat on Android (-1 : zero, 0 : infinite, 1 : one time, 2 : twice, etc)
-        [Tooltip("the amount of times this should repeat on Android (-1 : zero, 0 : infinite, 1 : one time, 2 : twice, etc)")]
+        [Tooltip(
+            "the amount of times this should repeat on Android (-1 : zero, 0 : infinite, 1 : one time, 2 : twice, etc)")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         public int AndroidRepeat = -1;
+
         /// the amount of times this should repeat on gamepad
         //[Tooltip("the amount of times this should repeat on gamepad")]
         //[MMNVEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         public int RumbleRepeat = -1;
+
         /// a haptic type to play on older iOS APIs (prior to iOS 13)
         [Tooltip("a haptic type to play on older iOS APIs (prior to iOS 13)")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         public HapticTypes OldIOSFallback;
+
         /// whether to run this on scaled or unscaled time
         [Tooltip("whether to run this on scaled or unscaled time")]
         [MMFEnumCondition("HapticMethod", (int)HapticMethods.AdvancedPattern)]
         public Timescales Timescale = Timescales.UnscaledTime;
-        
+
         // RUMBLE -------------------------------------------------------------------------------------------------------------
         [Header("Rumble")]
         /// whether or not this feedback should trigger a rumble on gamepad
         [Tooltip("whether or not this feedback should trigger a rumble on gamepad")]
         public bool AllowRumble = true;
+
         /// the ID of the controller to rumble (-1 : auto/current, 0 : first controller, 1 : second controller, etc)
-        [Tooltip("the ID of the controller to rumble (-1 : auto/current, 0 : first controller, 1 : second controller, etc)")]
+        [Tooltip(
+            "the ID of the controller to rumble (-1 : auto/current, 0 : first controller, 1 : second controller, etc)")]
         public int ControllerID = -1;
 
-        [Header("Deprecated Feedback")] 
+        [Header("Deprecated Feedback")]
         /// if this is true, this feedback will output a warning when played
         public bool OutputDeprecationWarning = true;
-
-        protected static bool _continuousPlaying = false;
-        protected static float _continuousStartedAt = 0f;
+#if UNITY_EDITOR
+        public override Color FeedbackColor => MMFeedbacksInspectorColors.HapticsColor;
+#endif
 
         /// <summary>
-        /// When this feedback gets played
+        ///     When this feedback gets played
         /// </summary>
         /// <param name="position"></param>
         /// <param name="feedbacksIntensity"></param>
         protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
         {
-            if (!Active || !FeedbackTypeAuthorized)
-            {
-                return;
-            }
+            if (!Active || !FeedbackTypeAuthorized) return;
 
             if (OutputDeprecationWarning)
-            {
-	            Debug.LogWarning(this.name + " : the haptic feedback on this object is using the old version of Nice Vibrations, and won't work anymore. Replace it with any of the new haptic feedbacks.");
-            }
+                Debug.LogWarning(name +
+                                 " : the haptic feedback on this object is using the old version of Nice Vibrations, and won't work anymore. Replace it with any of the new haptic feedbacks.");
 
             /*switch (HapticMethod)
             {

@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace MoreMountains.MMInterface
@@ -8,26 +7,21 @@ namespace MoreMountains.MMInterface
     [RequireComponent(typeof(Image))]
     public class MMScrollviewButton : Button
     {
-        public override void OnPointerClick(UnityEngine.EventSystems.PointerEventData eventData)
+        public override void OnPointerClick(PointerEventData eventData)
         {
-
         }
 
-        public override void OnPointerUp(UnityEngine.EventSystems.PointerEventData eventData)
+        public override void OnPointerUp(PointerEventData eventData)
         {
-            if (this.interactable)
+            if (interactable)
             {
                 base.OnPointerExit(eventData);
-                if (!eventData.dragging)
-                {
-                    base.OnPointerClick(eventData);
-                }
+                if (!eventData.dragging) base.OnPointerClick(eventData);
             }
         }
 
-        public override void OnPointerExit(UnityEngine.EventSystems.PointerEventData eventData)
+        public override void OnPointerExit(PointerEventData eventData)
         {
-
         }
     }
 }

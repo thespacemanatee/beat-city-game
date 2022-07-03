@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Feedbacks;
+using UnityEngine;
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 using Lofelt.NiceVibrations;
 #endif
@@ -7,16 +7,16 @@ using Lofelt.NiceVibrations;
 namespace MoreMountains.FeedbacksForThirdParty
 {
     /// <summary>
-    /// Add this feedback to play a .haptic clip, optionally randomizing its level and frequency
+    ///     Add this feedback to play a .haptic clip, optionally randomizing its level and frequency
     /// </summary>
     [AddComponentMenu("")]
-    #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     [FeedbackPath("Haptics/Haptic Clip")]
-    #endif
+#endif
     [FeedbackHelp("This feedback will let you play a haptic clip, and randomize its level and frequency.")]
     public class MMFeedbackNVClip : MMFeedback
     {
-	    #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
         /// a static bool used to disable all feedbacks of this type at once
         public static bool FeedbackTypeAuthorized = true;
         #if UNITY_EDITOR
@@ -100,8 +100,10 @@ namespace MoreMountains.FeedbacksForThirdParty
             IsPlaying = false;
             HapticController.Stop();
         }
-	    #else
-	    protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f) { }
-	    #endif
-    }    
+#else
+        protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
+        {
+        }
+#endif
+    }
 }

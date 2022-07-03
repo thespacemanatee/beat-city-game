@@ -1,17 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using MoreMountains.Tools;
-using UnityEngine;
+﻿using System;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Generates a simple grid filled with random points 
+    ///     Generates a simple grid filled with random points
     /// </summary>
     public class MMGridGeneratorRandom : MMGridGenerator
     {
         /// <summary>
-        /// Generates a simple grid filled with random points 
+        ///     Generates a simple grid filled with random points
         /// </summary>
         /// <param name="width"></param>
         /// <param name="height"></param>
@@ -20,22 +17,19 @@ namespace MoreMountains.Tools
         /// <returns></returns>
         public static int[,] Generate(int width, int height, int seed, int fillPercentage)
         {
-            int[,] grid = PrepareGrid(ref width, ref height);
-            
-            grid = MMGridGeneratorFull.Generate(width, height, true);
-            System.Random random = new System.Random(seed);
+            var grid = PrepareGrid(ref width, ref height);
 
-            for (int i = 0; i <= width; i ++) 
+            grid = MMGridGeneratorFull.Generate(width, height, true);
+            var random = new Random(seed);
+
+            for (var i = 0; i <= width; i++)
+            for (var j = 0; j <= height; j++)
             {
-                for (int j = 0; j <= height; j ++) 
-                {
-                    int value = (random.Next(0,100) < fillPercentage)? 1: 0;
-                    SetGridCoordinate(grid, i, j, value);
-                }
+                var value = random.Next(0, 100) < fillPercentage ? 1 : 0;
+                SetGridCoordinate(grid, i, j, value);
             }
 
             return grid;
         }
     }
-
 }

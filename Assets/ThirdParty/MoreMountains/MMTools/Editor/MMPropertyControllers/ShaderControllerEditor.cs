@@ -1,70 +1,70 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Custom editor for the ShaderController, conditional hiding 
+    ///     Custom editor for the ShaderController, conditional hiding
     /// </summary>
     [CustomEditor(typeof(ShaderController), true)]
     [CanEditMultipleObjects]
     public class ShaderControllerEditor : Editor
     {
-        protected SerializedProperty _TargetRenderer;
-        protected SerializedProperty _Curve;
-        protected SerializedProperty _MinValue;
-        protected SerializedProperty _MaxValue;
-        protected SerializedProperty _Duration;
-        protected SerializedProperty _PingPongPauseDuration;
+        protected const int _lineHeight = 20;
+        protected const int _lineMargin = 2;
+        protected const int _numberOfLines = 1;
         protected SerializedProperty _Amplitude;
-        protected SerializedProperty _Frequency;
-        protected SerializedProperty _Shift;
-        protected SerializedProperty _RemapNoiseValues;
-        protected SerializedProperty _RemapNoiseZero;
-        protected SerializedProperty _RemapNoiseOne;
-        protected SerializedProperty _OneTimeDuration;
-        protected SerializedProperty _OneTimeAmplitude;
-        protected SerializedProperty _OneTimeRemapMin;
-        protected SerializedProperty _OneTimeRemapMax;
-        protected SerializedProperty _OneTimeCurve;
-        protected SerializedProperty _OneTimeButton;
-        protected SerializedProperty _DisableAfterOneTime;
-        protected SerializedProperty _DisableGameObjectAfterOneTime;
-        protected SerializedProperty _DrivenLevel;
         protected SerializedProperty _AudioAnalyzer;
-        protected SerializedProperty _BeatID;
+        protected SerializedProperty _AudioAnalyzerLerp;
         protected SerializedProperty _AudioAnalyzerMultiplier;
         protected SerializedProperty _AudioAnalyzerOffset;
-        protected SerializedProperty _AudioAnalyzerLerp;
-        protected SerializedProperty _ToDestinationValue;
-        protected SerializedProperty _ToDestinationDuration;
-        protected SerializedProperty _ToDestinationCurve;
-        protected SerializedProperty _ToDestinationButton;
-        protected SerializedProperty _DisableAfterToDestination;
-        protected SerializedProperty _InitialValue;
+
+        protected Rect _barRect;
+        protected SerializedProperty _BeatID;
         protected SerializedProperty _CurrentValue;
         protected SerializedProperty _CurrentValueNormalized;
-        protected SerializedProperty _InitialColor;
-        protected SerializedProperty _PropertyID;
-        protected SerializedProperty _PropertyFound;
-        protected SerializedProperty _TargetMaterial;
+        protected SerializedProperty _Curve;
+        protected SerializedProperty _DisableAfterOneTime;
+        protected SerializedProperty _DisableAfterToDestination;
+        protected SerializedProperty _DisableGameObjectAfterOneTime;
+        protected SerializedProperty _DrivenLevel;
+        protected SerializedProperty _Duration;
+        protected SerializedProperty _Frequency;
         protected SerializedProperty _FromColor;
+        protected SerializedProperty _InitialColor;
+        protected SerializedProperty _InitialValue;
+        protected SerializedProperty _MaxValue;
+        protected SerializedProperty _MinValue;
+        protected Color _mmRed = MMColors.Orangered;
+        protected Color _mmYellow = new(1f, 0.7686275f, 0f);
+        protected SerializedProperty _OneTimeAmplitude;
+        protected SerializedProperty _OneTimeButton;
+        protected SerializedProperty _OneTimeCurve;
+        protected SerializedProperty _OneTimeDuration;
+        protected SerializedProperty _OneTimeRemapMax;
+        protected SerializedProperty _OneTimeRemapMin;
+        protected SerializedProperty _PingPongPauseDuration;
+        protected Color _progressBarBackground = new(0, 0, 0, 0.5f);
+        protected SerializedProperty _PropertyFound;
+        protected SerializedProperty _PropertyID;
+        protected SerializedProperty _RemapNoiseOne;
+        protected SerializedProperty _RemapNoiseValues;
+        protected SerializedProperty _RemapNoiseZero;
+        protected SerializedProperty _Shift;
+        protected SerializedProperty _TargetMaterial;
+        protected SerializedProperty _TargetRenderer;
         protected SerializedProperty _ToColor;
-
-
-        public override bool RequiresConstantRepaint()
-        {
-            return true;
-        }
+        protected SerializedProperty _ToDestinationButton;
+        protected SerializedProperty _ToDestinationCurve;
+        protected SerializedProperty _ToDestinationDuration;
+        protected SerializedProperty _ToDestinationValue;
 
         /// <summary>
-        /// On enable we grab our properties
+        ///     On enable we grab our properties
         /// </summary>
         protected virtual void OnEnable()
         {
-            ShaderController myTarget = (ShaderController)target;
+            var myTarget = (ShaderController)target;
             _TargetRenderer = serializedObject.FindProperty("TargetRenderer");
             _Curve = serializedObject.FindProperty("Curve");
             _MinValue = serializedObject.FindProperty("MinValue");
@@ -107,23 +107,30 @@ namespace MoreMountains.Tools
             _ToColor = serializedObject.FindProperty("ToColor");
         }
 
+
+        public override bool RequiresConstantRepaint()
+        {
+            return true;
+        }
+
         /// <summary>
-        /// Draws a conditional inspector
+        ///     Draws a conditional inspector
         /// </summary>
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
             Undo.RecordObject(target, "Modified ShaderController");
 
-            ShaderController myTarget = (ShaderController)target;
-                        
-            Editor.DrawPropertiesExcluding(serializedObject, new string[] { "m_Script", "Curve", "MinValue", "MaxValue", "Duration", "PingPongPauseDuration",
-                "Amplitude", "Frequency", "Shift", "OneTimeDuration", "OneTimeAmplitude", "OneTimeRemapMin",
-            "OneTimeRemapMax", "OneTimeCurve", "DisableAfterOneTime", "DisableGameObjectAfterOneTime", "OneTimeButton", "AudioAnalyzer",
-                "BeatID", "AudioAnalyzerMultiplier", "AudioAnalyzerOffset",
-                "AudioAnalyzerLerp", "ToDestinationValue", "RemapNoiseValues","RemapNoiseZero","RemapNoiseOne",
-            "ToDestinationDuration", "ToDestinationCurve", "DisableAfterToDestination", "ToDestinationButton", "DrivenLevel", "FromColor", "ToColor",
-            "InitialValue","CurrentValue", "CurrentValueNormalized","InitialColor","PropertyID","PropertyFound","TargetMaterial"});
+            var myTarget = (ShaderController)target;
+
+            DrawPropertiesExcluding(serializedObject, "m_Script", "Curve", "MinValue", "MaxValue", "Duration",
+                "PingPongPauseDuration", "Amplitude", "Frequency", "Shift", "OneTimeDuration", "OneTimeAmplitude",
+                "OneTimeRemapMin", "OneTimeRemapMax", "OneTimeCurve", "DisableAfterOneTime",
+                "DisableGameObjectAfterOneTime", "OneTimeButton", "AudioAnalyzer", "BeatID", "AudioAnalyzerMultiplier",
+                "AudioAnalyzerOffset", "AudioAnalyzerLerp", "ToDestinationValue", "RemapNoiseValues", "RemapNoiseZero",
+                "RemapNoiseOne", "ToDestinationDuration", "ToDestinationCurve", "DisableAfterToDestination",
+                "ToDestinationButton", "DrivenLevel", "FromColor", "ToColor", "InitialValue", "CurrentValue",
+                "CurrentValueNormalized", "InitialColor", "PropertyID", "PropertyFound", "TargetMaterial");
 
             if (myTarget.PropertyType == ShaderController.PropertyTypes.Color)
             {
@@ -138,7 +145,7 @@ namespace MoreMountains.Tools
                 EditorGUILayout.PropertyField(_MaxValue);
                 EditorGUILayout.PropertyField(_Duration);
                 EditorGUILayout.PropertyField(_PingPongPauseDuration);
-    }
+            }
             else if (myTarget.ControlMode == ShaderController.ControlModes.Random)
             {
                 EditorGUILayout.PropertyField(_Amplitude);
@@ -193,52 +200,42 @@ namespace MoreMountains.Tools
             if (Application.isPlaying)
             {
                 _barRect = EditorGUILayout.GetControlRect();
-                DrawLevelProgressBar(_barRect, myTarget.CurrentValueNormalized, _mmYellow, _mmRed);    
+                DrawLevelProgressBar(_barRect, myTarget.CurrentValueNormalized, _mmYellow, _mmRed);
             }
         }
 
-        protected Rect _barRect;
-        protected Color _mmYellow = new Color(1f, 0.7686275f, 0f);
-        protected Color _mmRed = MMColors.Orangered;
-        protected const int _lineHeight = 20;
-        protected const int _lineMargin = 2;
-        protected const int _numberOfLines = 1;
-        protected Color _progressBarBackground = new Color(0, 0, 0, 0.5f);
-        
         protected virtual void DrawLevelProgressBar(Rect position, float level, Color frontColor, Color negativeColor)
         {
-            Rect levelLabelRect = new Rect(position.x, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
-            Rect levelValueRect = new Rect(position.x - 15 + EditorGUIUtility.labelWidth + 4, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
+            var levelLabelRect = new Rect(position.x, position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1),
+                position.width, _lineHeight);
+            var levelValueRect = new Rect(position.x - 15 + EditorGUIUtility.labelWidth + 4,
+                position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1), position.width, _lineHeight);
 
-            float progressX = position.x - 5 + EditorGUIUtility.labelWidth + 60;
-            float progressY = position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1) + 6;
-            float progressHeight = 10f;
-            float fullProgressWidth = position.width - EditorGUIUtility.labelWidth - 60 + 5;
+            var progressX = position.x - 5 + EditorGUIUtility.labelWidth + 60;
+            var progressY = position.y + (_lineHeight + _lineMargin) * (_numberOfLines - 1) + 6;
+            var progressHeight = 10f;
+            var fullProgressWidth = position.width - EditorGUIUtility.labelWidth - 60 + 5;
 
-            bool negative = false;
-            float displayLevel = level;
+            var negative = false;
+            var displayLevel = level;
             if (level < 0f)
             {
                 negative = true;
                 level = -level;
             }
 
-            float progressLevel = Mathf.Clamp01(level);
-            Rect levelProgressBg = new Rect(progressX, progressY, fullProgressWidth, progressHeight);
-            float progressWidth = MMMaths.Remap(progressLevel, 0f, 1f, 0f, fullProgressWidth);
-            Rect levelProgressFront = new Rect(progressX, progressY, progressWidth, progressHeight);
+            var progressLevel = Mathf.Clamp01(level);
+            var levelProgressBg = new Rect(progressX, progressY, fullProgressWidth, progressHeight);
+            var progressWidth = MMMaths.Remap(progressLevel, 0f, 1f, 0f, fullProgressWidth);
+            var levelProgressFront = new Rect(progressX, progressY, progressWidth, progressHeight);
 
             EditorGUI.LabelField(levelLabelRect, new GUIContent("Level"));
             EditorGUI.LabelField(levelValueRect, new GUIContent(displayLevel.ToString("F4")));
             EditorGUI.DrawRect(levelProgressBg, _progressBarBackground);
             if (negative)
-            {
                 EditorGUI.DrawRect(levelProgressFront, negativeColor);
-            }
             else
-            {
                 EditorGUI.DrawRect(levelProgressFront, frontColor);
-            }            
         }
     }
 }

@@ -1,75 +1,81 @@
-﻿using System;
-using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
+﻿using UnityEngine;
 using UnityEngine.Video;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// This feedback lets you control video players in all sorts of ways (Play, Pause, Toggle, Stop, Prepare, StepForward, StepBackward, SetPlaybackSpeed, SetDirectAudioVolume, SetDirectAudioMute, GoToFrame, ToggleLoop)
+    ///     This feedback lets you control video players in all sorts of ways (Play, Pause, Toggle, Stop, Prepare, StepForward,
+    ///     StepBackward, SetPlaybackSpeed, SetDirectAudioVolume, SetDirectAudioMute, GoToFrame, ToggleLoop)
     /// </summary>
     [AddComponentMenu("")]
-    [FeedbackHelp("This feedback lets you control video players in all sorts of ways (Play, Pause, Toggle, Stop, Prepare, StepForward, StepBackward, SetPlaybackSpeed, SetDirectAudioVolume, SetDirectAudioMute, GoToFrame, ToggleLoop)")]
+    [FeedbackHelp(
+        "This feedback lets you control video players in all sorts of ways (Play, Pause, Toggle, Stop, Prepare, StepForward, StepBackward, SetPlaybackSpeed, SetDirectAudioVolume, SetDirectAudioMute, GoToFrame, ToggleLoop)")]
     [FeedbackPath("UI/Video Player")]
     public class MMF_VideoPlayer : MMF_Feedback
     {
+        public enum VideoActions
+        {
+            Play,
+            Pause,
+            Toggle,
+            Stop,
+            Prepare,
+            StepForward,
+            StepBackward,
+            SetPlaybackSpeed,
+            SetDirectAudioVolume,
+            SetDirectAudioMute,
+            GoToFrame,
+            ToggleLoop
+        }
+
         /// a static bool used to disable all feedbacks of this type at once
         public static bool FeedbackTypeAuthorized = true;
-        public enum VideoActions { Play, Pause, Toggle, Stop, Prepare, StepForward, StepBackward, SetPlaybackSpeed, SetDirectAudioVolume, SetDirectAudioMute, GoToFrame, ToggleLoop  }
 
-        /// sets the inspector color for this feedback
-        #if UNITY_EDITOR
-            public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
-            public override bool EvaluateRequiresSetup() { return (TargetVideoPlayer == null); }
-            public override string RequiredTargetText { get { return TargetVideoPlayer != null ? TargetVideoPlayer.name + " " + VideoAction.ToString() : "";  } }
-            public override string RequiresSetupText { get { return "This feedback requires that a TargetVideoPlayer be set to be able to work properly. You can set one below."; } }
-        #endif
-
-        [MMFInspectorGroup("Video Player", true, 58, true)]
-        /// the Video Player to control with this feedback
-        [Tooltip("the Video Player to control with this feedback")]
-        public VideoPlayer TargetVideoPlayer;
-        /// the Video Player to control with this feedback
-        [Tooltip("the Video Player to control with this feedback")]
-        public VideoActions VideoAction = VideoActions.Pause;
-        /// the frame at which to jump when in GoToFrame mode
-        [Tooltip("the frame at which to jump when in GoToFrame mode")]
-        [MMFEnumCondition("VideoAction", (int)VideoActions.GoToFrame)]
-        public long TargetFrame = 10;
-        /// the new playback speed (between 0 and 10)
-        [Tooltip("the new playback speed (between 0 and 10)")]
-        [MMFEnumCondition("VideoAction", (int)VideoActions.SetPlaybackSpeed)]
-        public float PlaybackSpeed = 2f;
-        /// the track index on which to control volume
-        [Tooltip("the track index on which to control volume")]
-        [MMFEnumCondition("VideoAction", (int)VideoActions.SetDirectAudioMute, (int)VideoActions.SetDirectAudioVolume)]
-        public int TrackIndex = 0;
-        /// the new volume for the specified track, between 0 and 1
-        [Tooltip("the new volume for the specified track, between 0 and 1")]
-        [MMFEnumCondition("VideoAction", (int)VideoActions.SetDirectAudioVolume)]
-        public float Volume = 1f;
         /// whether to mute the track or not when that feedback plays
         [Tooltip("whether to mute the track or not when that feedback plays")]
         [MMFEnumCondition("VideoAction", (int)VideoActions.SetDirectAudioMute)]
         public bool Mute = true;
 
+        /// the new playback speed (between 0 and 10)
+        [Tooltip("the new playback speed (between 0 and 10)")]
+        [MMFEnumCondition("VideoAction", (int)VideoActions.SetPlaybackSpeed)]
+        public float PlaybackSpeed = 2f;
+
+        /// the frame at which to jump when in GoToFrame mode
+        [Tooltip("the frame at which to jump when in GoToFrame mode")]
+        [MMFEnumCondition("VideoAction", (int)VideoActions.GoToFrame)]
+        public long TargetFrame = 10;
+
+        [MMFInspectorGroup("Video Player", true, 58, true)]
+        /// the Video Player to control with this feedback
+        [Tooltip("the Video Player to control with this feedback")]
+        public VideoPlayer TargetVideoPlayer;
+
+        /// the track index on which to control volume
+        [Tooltip("the track index on which to control volume")]
+        [MMFEnumCondition("VideoAction", (int)VideoActions.SetDirectAudioMute, (int)VideoActions.SetDirectAudioVolume)]
+        public int TrackIndex = 0;
+
+        /// the Video Player to control with this feedback
+        [Tooltip("the Video Player to control with this feedback")]
+        public VideoActions VideoAction = VideoActions.Pause;
+
+        /// the new volume for the specified track, between 0 and 1
+        [Tooltip("the new volume for the specified track, between 0 and 1")]
+        [MMFEnumCondition("VideoAction", (int)VideoActions.SetDirectAudioVolume)]
+        public float Volume = 1f;
+
         /// <summary>
-        /// On play we apply the selected command to our target video player
+        ///     On play we apply the selected command to our target video player
         /// </summary>
         /// <param name="position"></param>
         /// <param name="feedbacksIntensity"></param>
         protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
         {
-            if (!Active || !FeedbackTypeAuthorized)
-            {
-                return;
-            }
+            if (!Active || !FeedbackTypeAuthorized) return;
 
-            if (TargetVideoPlayer == null)
-            {
-                return;
-            }
+            if (TargetVideoPlayer == null) return;
 
             switch (VideoAction)
             {
@@ -81,13 +87,9 @@ namespace MoreMountains.Feedbacks
                     break;
                 case VideoActions.Toggle:
                     if (TargetVideoPlayer.isPlaying)
-                    {
                         TargetVideoPlayer.Pause();
-                    }
                     else
-                    {
                         TargetVideoPlayer.Play();
-                    }
                     break;
                 case VideoActions.Stop:
                     TargetVideoPlayer.Stop();
@@ -118,7 +120,25 @@ namespace MoreMountains.Feedbacks
                     TargetVideoPlayer.isLooping = !TargetVideoPlayer.isLooping;
                     break;
             }
-
         }
+
+        /// sets the inspector color for this feedback
+#if UNITY_EDITOR
+        public override Color FeedbackColor
+        {
+            get { return MMFeedbacksInspectorColors.UIColor; }
+        }
+
+        public override bool EvaluateRequiresSetup()
+        {
+            return TargetVideoPlayer == null;
+        }
+
+        public override string RequiredTargetText =>
+            TargetVideoPlayer != null ? TargetVideoPlayer.name + " " + VideoAction : "";
+
+        public override string RequiresSetupText =>
+            "This feedback requires that a TargetVideoPlayer be set to be able to work properly. You can set one below.";
+#endif
     }
 }

@@ -1,40 +1,30 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// Custom editor for sequence recorder
+    ///     Custom editor for sequence recorder
     /// </summary>
     [CustomEditor(typeof(MMInputSequenceRecorder), true)]
     [CanEditMultipleObjects]
     public class MMInputSequenceRecorderEditor : Editor
     {
-        protected SerializedProperty _Recording;
-        protected float _inspectorWidth;
-        protected int _externalMargin = 10;
-        protected Rect _rect;
-        protected Color _recordingColor =  Color.red;
-        protected Color _recordingTextColor = Color.white;
         protected Vector2 _boxPosition;
         protected Vector2 _boxSize;
-        protected GUIStyle _recordingStyle;
-        protected MMInputSequenceRecorder _targetRecorder;
         protected Event _currentEvent;
+        protected int _externalMargin = 10;
+        protected float _inspectorWidth;
+        protected SerializedProperty _Recording;
+        protected Color _recordingColor = Color.red;
+        protected GUIStyle _recordingStyle;
+        protected Color _recordingTextColor = Color.white;
+        protected Rect _rect;
+        protected MMInputSequenceRecorder _targetRecorder;
 
         /// <summary>
-        /// Forces constant inspector repaints
-        /// </summary>
-        /// <returns></returns>
-        public override bool RequiresConstantRepaint()
-        {
-            return true;
-        }
-
-        /// <summary>
-        /// On enable we initialize our styles and listen for input in editor mode
+        ///     On enable we initialize our styles and listen for input in editor mode
         /// </summary>
         protected virtual void OnEnable()
         {
@@ -46,36 +36,40 @@ namespace MoreMountains.Feedbacks
             _recordingStyle.alignment = TextAnchor.MiddleCenter;
             _targetRecorder = (MMInputSequenceRecorder)target;
 
-            System.Reflection.FieldInfo info = typeof(EditorApplication).GetField("globalEventHandler", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
-            EditorApplication.CallbackFunction value = (EditorApplication.CallbackFunction)info.GetValue(null);
+            var info = typeof(EditorApplication).GetField("globalEventHandler",
+                BindingFlags.Static | BindingFlags.NonPublic);
+            var value = (EditorApplication.CallbackFunction)info.GetValue(null);
             value += EditorGlobalKeyPress;
             info.SetValue(null, value);
         }
 
         /// <summary>
-        /// Looks for input
+        ///     Forces constant inspector repaints
+        /// </summary>
+        /// <returns></returns>
+        public override bool RequiresConstantRepaint()
+        {
+            return true;
+        }
+
+        /// <summary>
+        ///     Looks for input
         /// </summary>
         protected virtual void EditorGlobalKeyPress()
         {
-            if (Application.isPlaying)
-            {
-                return;
-            }
+            if (Application.isPlaying) return;
 
             HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
             _currentEvent = Event.current;
-            
-            if (_currentEvent == null)
-            {
-                return;
-            }
+
+            if (_currentEvent == null) return;
 
             DetectStartAndEnd();
             EditorDetectRecording();
         }
 
         /// <summary>
-        /// Detects presses on the start or end keys
+        ///     Detects presses on the start or end keys
         /// </summary>
         protected virtual void DetectStartAndEnd()
         {
@@ -83,60 +77,44 @@ namespace MoreMountains.Feedbacks
             {
                 if (!_targetRecorder.Recording)
                 {
-                    if ((_currentEvent.keyCode == _targetRecorder.StartRecordingHotkey) && (_currentEvent.type == EventType.KeyDown))
-                    {
-                        _targetRecorder.StartRecording();
-                    }
+                    if (_currentEvent.keyCode == _targetRecorder.StartRecordingHotkey &&
+                        _currentEvent.type == EventType.KeyDown) _targetRecorder.StartRecording();
                 }
                 else
                 {
-                    if ((_currentEvent.keyCode == _targetRecorder.StopRecordingHotkey) && (_currentEvent.type == EventType.KeyDown))
-                    {
-                        _targetRecorder.StopRecording();
-                    }
+                    if (_currentEvent.keyCode == _targetRecorder.StopRecordingHotkey &&
+                        _currentEvent.type == EventType.KeyDown) _targetRecorder.StopRecording();
                 }
             }
         }
 
         /// <summary>
-        /// Looks for key presses on sequence key bindings
+        ///     Looks for key presses on sequence key bindings
         /// </summary>
         protected virtual void EditorDetectRecording()
         {
-            if (_targetRecorder.Recording && (_targetRecorder.SequenceScriptableObject != null))
-            {
+            if (_targetRecorder.Recording && _targetRecorder.SequenceScriptableObject != null)
                 if (_currentEvent.isKey)
-                {
-                    foreach (MMSequenceTrack track in _targetRecorder.SequenceScriptableObject.SequenceTracks)
-                    {
-                        if (_currentEvent.keyCode == (track.Key))
+                    foreach (var track in _targetRecorder.SequenceScriptableObject.SequenceTracks)
+                        if (_currentEvent.keyCode == track.Key)
                         {
-                            if (track.State == MMSequenceTrackStates.Up)
-                            {
-                                track.State = MMSequenceTrackStates.Idle;
-                            }
+                            if (track.State == MMSequenceTrackStates.Up) track.State = MMSequenceTrackStates.Idle;
                             if (_currentEvent.type == EventType.KeyDown)
                             {
                                 if (track.State != MMSequenceTrackStates.Down)
-                                {
                                     // key is down for the first time
                                     _targetRecorder.AddNoteToTrack(track);
-                                }
                                 track.State = MMSequenceTrackStates.Down;
                             }
+
                             if (_currentEvent.type == EventType.KeyUp)
-                            {
                                 // key is up
                                 track.State = MMSequenceTrackStates.Up;
-                            }
                         }
-                    }
-                }
-            }
         }
 
         /// <summary>
-        /// Draws the custom inspector
+        ///     Draws the custom inspector
         /// </summary>
         public override void OnInspectorGUI()
         {
@@ -156,7 +134,7 @@ namespace MoreMountains.Feedbacks
                 _rect.width = _boxSize.x;
                 _rect.height = _boxSize.y;
                 EditorGUI.DrawRect(_rect, _recordingColor);
-                
+
                 EditorGUI.LabelField(_rect, "RECORDING", _recordingStyle);
             }
 
@@ -169,18 +147,12 @@ namespace MoreMountains.Feedbacks
             if (!_Recording.boolValue)
             {
                 // display start recording button
-                if (GUILayout.Button("Start Recording"))
-                {
-                    _targetRecorder.StartRecording();
-                }
+                if (GUILayout.Button("Start Recording")) _targetRecorder.StartRecording();
             }
             else
             {
                 // display stop recording button
-                if (GUILayout.Button("Stop Recording"))
-                {
-                    _targetRecorder.StopRecording();
-                }
+                if (GUILayout.Button("Stop Recording")) _targetRecorder.StopRecording();
             }
 
             serializedObject.ApplyModifiedProperties();

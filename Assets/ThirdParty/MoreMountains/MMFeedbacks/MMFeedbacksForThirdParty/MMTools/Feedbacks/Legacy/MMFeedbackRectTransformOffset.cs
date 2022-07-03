@@ -4,18 +4,15 @@ using UnityEngine;
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// This feedback lets you control the offset of the lower left corner of the rectangle relative to the lower left anchor, and the offset of the upper right corner of the rectangle relative to the upper right anchor.
+    ///     This feedback lets you control the offset of the lower left corner of the rectangle relative to the lower left
+    ///     anchor, and the offset of the upper right corner of the rectangle relative to the upper right anchor.
     /// </summary>
     [AddComponentMenu("")]
-    [FeedbackHelp("This feedback lets you control the offset of the lower left corner of the rectangle relative to the lower left anchor, and the offset of the upper right corner of the rectangle relative to the upper right anchor.")]
+    [FeedbackHelp(
+        "This feedback lets you control the offset of the lower left corner of the rectangle relative to the lower left anchor, and the offset of the upper right corner of the rectangle relative to the upper right anchor.")]
     [FeedbackPath("UI/RectTransform Offset")]
     public class MMFeedbackRectTransformOffset : MMFeedbackBase
     {
-        /// sets the inspector color for this feedback
-        #if UNITY_EDITOR
-                public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.UIColor; } }
-        #endif
-
         [Header("Target")]
         /// The RectTransform we want to modify
         public RectTransform TargetRectTransform;
@@ -24,45 +21,52 @@ namespace MoreMountains.Feedbacks
         /// whether we should modify the offset min or not
         [Tooltip("whether we should modify the offset min or not")]
         public bool ModifyOffsetMin = true;
+
         /// the curve to animate the min offset on
-        [Tooltip("the curve to animate the min offset on")]
-        [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
-        public MMTweenType OffsetMinCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)));
+        [Tooltip("the curve to animate the min offset on")] [MMFEnumCondition("Mode", (int)Modes.OverTime)]
+        public MMTweenType OffsetMinCurve = new(new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)));
+
         /// the value to remap the min curve's 0 on
-        [Tooltip("the value to remap the min curve's 0 on")]
-        [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
+        [Tooltip("the value to remap the min curve's 0 on")] [MMFEnumCondition("Mode", (int)Modes.OverTime)]
         public Vector2 OffsetMinRemapZero = Vector2.zero;
+
         /// the value to remap the min curve's 1 on
         [Tooltip("the value to remap the min curve's 1 on")]
-        [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime, (int)MMFeedbackBase.Modes.Instant)]
+        [MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.Instant)]
         public Vector2 OffsetMinRemapOne = Vector2.one;
-        
+
         [Header("Offset Max")]
         /// whether we should modify the offset max or not
         [Tooltip("whether we should modify the offset max or not")]
         public bool ModifyOffsetMax = true;
+
         /// the curve to animate the max offset on
-        [Tooltip("the curve to animate the max offset on")]
-        [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
-        public MMTweenType OffsetMaxCurve = new MMTweenType(new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)));
+        [Tooltip("the curve to animate the max offset on")] [MMFEnumCondition("Mode", (int)Modes.OverTime)]
+        public MMTweenType OffsetMaxCurve = new(new AnimationCurve(new Keyframe(0, 0), new Keyframe(1, 1)));
+
         /// the value to remap the max curve's 0 on
-        [Tooltip("the value to remap the max curve's 0 on")]
-        [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime)]
+        [Tooltip("the value to remap the max curve's 0 on")] [MMFEnumCondition("Mode", (int)Modes.OverTime)]
         public Vector2 OffsetMaxRemapZero = Vector2.zero;
+
         /// the value to remap the max curve's 1 on
         [Tooltip("the value to remap the max curve's 1 on")]
-        [MMFEnumCondition("Mode", (int)MMFeedbackBase.Modes.OverTime, (int)MMFeedbackBase.Modes.Instant)]
+        [MMFEnumCondition("Mode", (int)Modes.OverTime, (int)Modes.Instant)]
         public Vector2 OffsetMaxRemapOne = Vector2.one;
-        
+
+        /// sets the inspector color for this feedback
+#if UNITY_EDITOR
+        public override Color FeedbackColor
+        {
+            get { return MMFeedbacksInspectorColors.UIColor; }
+        }
+#endif
+
         protected override void FillTargets()
         {
-            if (TargetRectTransform == null)
-            {
-                return;
-            }
-            
-            MMFeedbackBaseTarget targetMin = new MMFeedbackBaseTarget();
-            MMPropertyReceiver receiverMin = new MMPropertyReceiver();
+            if (TargetRectTransform == null) return;
+
+            var targetMin = new MMFeedbackBaseTarget();
+            var receiverMin = new MMPropertyReceiver();
             receiverMin.TargetObject = TargetRectTransform.gameObject;
             receiverMin.TargetComponent = TargetRectTransform;
             receiverMin.TargetPropertyName = "offsetMin";
@@ -77,9 +81,9 @@ namespace MoreMountains.Feedbacks
             targetMin.InstantLevel = 1f;
 
             _targets.Add(targetMin);
-            
-            MMFeedbackBaseTarget targetMax = new MMFeedbackBaseTarget();
-            MMPropertyReceiver receiverMax = new MMPropertyReceiver();
+
+            var targetMax = new MMFeedbackBaseTarget();
+            var receiverMax = new MMPropertyReceiver();
             receiverMax.TargetObject = TargetRectTransform.gameObject;
             receiverMax.TargetComponent = TargetRectTransform;
             receiverMax.TargetPropertyName = "offsetMax";
@@ -95,6 +99,5 @@ namespace MoreMountains.Feedbacks
 
             _targets.Add(targetMax);
         }
-
     }
 }

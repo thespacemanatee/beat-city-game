@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// Add this to a SpriteRenderer to have it receive MMSpriteRendererShakeEvents from feedbacks or to shake it locally
+    ///     Add this to a SpriteRenderer to have it receive MMSpriteRendererShakeEvents from feedbacks or to shake it locally
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Renderer/MMSpriteRendererShaker")]
     [RequireComponent(typeof(SpriteRenderer))]
@@ -15,6 +13,7 @@ namespace MoreMountains.Feedbacks
         /// the SpriteRenderer to affect when playing the feedback
         [Tooltip("the SpriteRenderer to affect when playing the feedback")]
         public SpriteRenderer BoundSpriteRenderer;
+
         /// whether or not that SpriteRenderer should be turned off on start
         [Tooltip("whether or not that SpriteRenderer should be turned off on start")]
         public bool StartsOff = true;
@@ -23,6 +22,7 @@ namespace MoreMountains.Feedbacks
         /// whether or not this shaker should modify color 
         [Tooltip("whether or not this shaker should modify color")]
         public bool ModifyColor = true;
+
         /// the colors to apply to the SpriteRenderer over time
         [Tooltip("the colors to apply to the SpriteRenderer over time")]
         public Gradient ColorOverTime;
@@ -30,52 +30,51 @@ namespace MoreMountains.Feedbacks
         [Header("Flip")]
         /// whether or not to flip the sprite on X
         [Tooltip("whether or not to flip the sprite on X")]
-        public bool FlipX = false;
+        public bool FlipX;
+
         /// whether or not to flip the sprite on Y
         [Tooltip("whether or not to flip the sprite on Y")]
-        public bool FlipY = false;
+        public bool FlipY;
 
         protected Color _initialColor;
-        protected bool _originalModifyColor;
-        protected float _originalShakeDuration;
         protected Gradient _originalColorOverTime;
         protected bool _originalFlipX;
         protected bool _originalFlipY;
+        protected bool _originalModifyColor;
+        protected float _originalShakeDuration;
 
         /// <summary>
-        /// On init we initialize our values
-        /// </summary>
-        protected override void Initialization()
-        {
-            base.Initialization();
-            if (BoundSpriteRenderer == null)
-            {
-                BoundSpriteRenderer = this.gameObject.GetComponent<SpriteRenderer>();
-            }
-        }
-
-        /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
+        ///     When that shaker gets added, we initialize its shake duration
         /// </summary>
         protected virtual void Reset()
         {
             ShakeDuration = 1f;
         }
-               
+
         /// <summary>
-        /// Shakes values over time
+        ///     On init we initialize our values
+        /// </summary>
+        protected override void Initialization()
+        {
+            base.Initialization();
+            if (BoundSpriteRenderer == null) BoundSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        }
+
+        /// <summary>
+        ///     Shakes values over time
         /// </summary>
         protected override void Shake()
         {
             if (ModifyColor)
             {
-                _remappedTimeSinceStart = MMFeedbacksHelpers.Remap(Time.time - _shakeStartedTimestamp, 0f, ShakeDuration, 0f, 1f);
+                _remappedTimeSinceStart =
+                    MMFeedbacksHelpers.Remap(Time.time - _shakeStartedTimestamp, 0f, ShakeDuration, 0f, 1f);
                 BoundSpriteRenderer.color = ColorOverTime.Evaluate(_remappedTimeSinceStart);
-            }            
+            }
         }
 
         /// <summary>
-        /// Collects initial values on the target
+        ///     Collects initial values on the target
         /// </summary>
         protected override void GrabInitialValues()
         {
@@ -85,7 +84,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the target's values
+        ///     Resets the target's values
         /// </summary>
         protected override void ResetTargetValues()
         {
@@ -96,7 +95,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the shaker's values
+        ///     Resets the shaker's values
         /// </summary>
         protected override void ResetShakerValues()
         {
@@ -107,7 +106,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -116,7 +115,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -126,13 +125,12 @@ namespace MoreMountains.Feedbacks
 
         public virtual void OnMMSpriteRendererShakeEvent(float shakeDuration, bool modifyColor, Gradient colorOverTime,
             bool flipX, bool flipY,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true,
-            bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3))
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true,
+            bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default)
         {
-            if (!CheckEventAllowed(channel, useRange, eventRange, eventOriginPosition) ||  (!Interruptible && Shaking))
-            {
-                return;
-            }
+            if (!CheckEventAllowed(channel, useRange, eventRange, eventOriginPosition) ||
+                (!Interruptible && Shaking)) return;
 
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
@@ -150,48 +148,45 @@ namespace MoreMountains.Feedbacks
             FlipX = flipX;
             FlipY = flipY;
 
-            if (FlipX)
-            {
-                BoundSpriteRenderer.flipX = !BoundSpriteRenderer.flipX;
-            }
-            if (FlipY)
-            {
-                BoundSpriteRenderer.flipY = !BoundSpriteRenderer.flipY;
-            }            
+            if (FlipX) BoundSpriteRenderer.flipX = !BoundSpriteRenderer.flipX;
+            if (FlipY) BoundSpriteRenderer.flipY = !BoundSpriteRenderer.flipY;
 
             Play();
         }
     }
 
     /// <summary>
-    /// An event used (usually from MMFeeedbackSpriteRenderer) to shake the values of a SpriteRenderer
+    ///     An event used (usually from MMFeeedbackSpriteRenderer) to shake the values of a SpriteRenderer
     /// </summary>
     public struct MMSpriteRendererShakeEvent
     {
         public delegate void Delegate(float shakeDuration, bool modifyColor, Gradient colorOverTime,
             bool flipX, bool flipY,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true,
-            bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3));
-        static private event Delegate OnEvent;
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true,
+            bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(float shakeDuration, bool modifyColor, Gradient colorOverTime,
+        public static void Trigger(float shakeDuration, bool modifyColor, Gradient colorOverTime,
             bool flipX, bool flipY,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true,
-            bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3))
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true,
+            bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default)
         {
             OnEvent?.Invoke(shakeDuration, modifyColor, colorOverTime,
                 flipX, flipY,
-                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, 
+                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake,
                 useRange, eventRange, eventOriginPosition);
         }
     }

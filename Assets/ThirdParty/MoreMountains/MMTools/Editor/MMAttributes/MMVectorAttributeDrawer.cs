@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,67 +9,73 @@ namespace MoreMountains.Tools
     [CustomPropertyDrawer(typeof(MMVectorAttribute))]
     public class MMVectorLabelsAttributeDrawer : PropertyDrawer
     {
-        protected static readonly GUIContent[] originalLabels = new GUIContent[] { new GUIContent("X"), new GUIContent("Y"), new GUIContent("Z"), new GUIContent("W") };
         protected const int padding = 375;
+        protected static readonly GUIContent[] originalLabels = { new("X"), new("Y"), new("Z"), new("W") };
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent guiContent)
         {
-            int ratio = (padding > Screen.width) ? 2 : 1;
+            var ratio = padding > Screen.width ? 2 : 1;
             return ratio * base.GetPropertyHeight(property, guiContent);
         }
-        
-        #if  UNITY_EDITOR
+
+#if UNITY_EDITOR
         public override void OnGUI(Rect rect, SerializedProperty property, GUIContent guiContent)
         {
-            MMVectorAttribute vector = (MMVectorAttribute)attribute;
-            
+            var vector = (MMVectorAttribute)attribute;
+
             if (property.propertyType == SerializedPropertyType.Vector2)
             {
-                float[] fieldArray = new float[] { property.vector2Value.x, property.vector2Value.y };
-                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name), EditorGUI.FloatField, vector);
+                float[] fieldArray = { property.vector2Value.x, property.vector2Value.y };
+                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name),
+                    EditorGUI.FloatField, vector);
                 property.vector2Value = new Vector2(fieldArray[0], fieldArray[1]);
             }
             else if (property.propertyType == SerializedPropertyType.Vector3)
             {
-                float[] fieldArray = new float[] { property.vector3Value.x, property.vector3Value.y, property.vector3Value.z };
-                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name), EditorGUI.FloatField, vector);
+                float[] fieldArray = { property.vector3Value.x, property.vector3Value.y, property.vector3Value.z };
+                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name),
+                    EditorGUI.FloatField, vector);
                 property.vector3Value = new Vector3(fieldArray[0], fieldArray[1], fieldArray[2]);
             }
             else if (property.propertyType == SerializedPropertyType.Vector4)
             {
-                float[] fieldArray = new float[] { property.vector4Value.x, property.vector4Value.y, property.vector4Value.z, property.vector4Value.w };
-                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name), EditorGUI.FloatField, vector);
+                float[] fieldArray =
+                {
+                    property.vector4Value.x, property.vector4Value.y, property.vector4Value.z, property.vector4Value.w
+                };
+                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name),
+                    EditorGUI.FloatField, vector);
                 property.vector4Value = new Vector4(fieldArray[0], fieldArray[1], fieldArray[2]);
             }
             else if (property.propertyType == SerializedPropertyType.Vector2Int)
             {
-                int[] fieldArray = new int[] { property.vector2IntValue.x, property.vector2IntValue.y };
-                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name), EditorGUI.IntField, vector);
+                int[] fieldArray = { property.vector2IntValue.x, property.vector2IntValue.y };
+                fieldArray = DrawFields(rect, fieldArray, ObjectNames.NicifyVariableName(property.name),
+                    EditorGUI.IntField, vector);
                 property.vector2IntValue = new Vector2Int(fieldArray[0], fieldArray[1]);
             }
             else if (property.propertyType == SerializedPropertyType.Vector3Int)
             {
-                int[] array = new int[] { property.vector3IntValue.x, property.vector3IntValue.y, property.vector3IntValue.z };
-                array = DrawFields(rect, array, ObjectNames.NicifyVariableName(property.name), EditorGUI.IntField, vector);
+                int[] array = { property.vector3IntValue.x, property.vector3IntValue.y, property.vector3IntValue.z };
+                array = DrawFields(rect, array, ObjectNames.NicifyVariableName(property.name), EditorGUI.IntField,
+                    vector);
                 property.vector3IntValue = new Vector3Int(array[0], array[1], array[2]);
             }
         }
-        #endif
+#endif
 
-        protected T[] DrawFields<T>(Rect rect, T[] vector, string mainLabel, System.Func<Rect, GUIContent, T, T> fieldDrawer, MMVectorAttribute vectors)
+        protected T[] DrawFields<T>(Rect rect, T[] vector, string mainLabel, Func<Rect, GUIContent, T, T> fieldDrawer,
+            MMVectorAttribute vectors)
         {
-            T[] result = vector;
+            var result = vector;
 
-            bool shortSpace = (Screen.width < padding);
+            var shortSpace = Screen.width < padding;
 
-            Rect mainLabelRect = rect;
+            var mainLabelRect = rect;
             mainLabelRect.width = EditorGUIUtility.labelWidth;
-            if (shortSpace)
-            {
-                mainLabelRect.height *= 0.5f;
-            }                
+            if (shortSpace) mainLabelRect.height *= 0.5f;
 
-            Rect fieldRect = rect;
+            var fieldRect = rect;
             if (shortSpace)
             {
                 fieldRect.height *= 0.5f;
@@ -86,10 +90,10 @@ namespace MoreMountains.Tools
 
             EditorGUI.LabelField(mainLabelRect, mainLabel);
 
-            for (int i = 0; i < vector.Length; i++)
+            for (var i = 0; i < vector.Length; i++)
             {
-                GUIContent label = vectors.Labels.Length > i ? new GUIContent(vectors.Labels[i]) : originalLabels[i];
-                Vector2 labelSize = EditorStyles.label.CalcSize(label);
+                var label = vectors.Labels.Length > i ? new GUIContent(vectors.Labels[i]) : originalLabels[i];
+                var labelSize = EditorStyles.label.CalcSize(label);
                 EditorGUIUtility.labelWidth = Mathf.Max(labelSize.x + 5, 0.3f * fieldRect.width);
                 result[i] = fieldDrawer(fieldRect, label, vector[i]);
                 fieldRect.x += fieldRect.width;

@@ -1,21 +1,20 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Quaternion property setter
+    ///     Quaternion property setter
     /// </summary>
     public class MMPropertyLinkQuaternion : MMPropertyLink
     {
+        protected Quaternion _initialValue = Quaternion.identity;
+        protected Quaternion _newValue;
         public Func<Quaternion> GetQuaternionDelegate;
         public Action<Quaternion> SetQuaternionDelegate;
 
-        protected Quaternion _initialValue = Quaternion.identity;
-        protected Quaternion _newValue;
-
         /// <summary>
-        /// On init we grab our initial initialization
+        ///     On init we grab our initial initialization
         /// </summary>
         /// <param name="property"></param>
         public override void Initialization(MMProperty property)
@@ -25,7 +24,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Creates cached getter and setters for properties
+        ///     Creates cached getter and setters for properties
         /// </summary>
         /// <param name="property"></param>
         public override void CreateGettersAndSetters(MMProperty property)
@@ -33,27 +32,25 @@ namespace MoreMountains.Tools
             base.CreateGettersAndSetters(property);
             if (property.MemberType == MMProperty.MemberTypes.Property)
             {
-                object firstArgument = (property.TargetScriptableObject == null) ? (object)property.TargetComponent : (object)property.TargetScriptableObject;
+                object firstArgument = property.TargetScriptableObject == null
+                    ? property.TargetComponent
+                    : property.TargetScriptableObject;
 
                 if (property.MemberPropertyInfo.GetGetMethod() != null)
-                {
                     GetQuaternionDelegate = (Func<Quaternion>)Delegate.CreateDelegate(typeof(Func<Quaternion>),
-                                                                                firstArgument,
-                                                                                property.MemberPropertyInfo.GetGetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetGetMethod());
 
                 if (property.MemberPropertyInfo.GetSetMethod() != null)
-                {
                     SetQuaternionDelegate = (Action<Quaternion>)Delegate.CreateDelegate(typeof(Action<Quaternion>),
-                                                                            firstArgument,
-                                                                            property.MemberPropertyInfo.GetSetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetSetMethod());
                 _getterSetterInitialized = true;
             }
         }
 
         /// <summary>
-        /// Gets the raw value of the property, a normalized float value, caching the operation if possible
+        ///     Gets the raw value of the property, a normalized float value, caching the operation if possible
         /// </summary>
         /// <param name="emitter"></param>
         /// <param name="property"></param>
@@ -64,7 +61,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the raw property value, float normalized, caching the operation if possible
+        ///     Sets the raw property value, float normalized, caching the operation if possible
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -75,7 +72,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Returns this property link's level between 0 and 1
+        ///     Returns this property link's level between 0 and 1
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -83,9 +80,9 @@ namespace MoreMountains.Tools
         /// <returns></returns>
         public override float GetLevel(MMPropertyEmitter emitter, MMProperty property)
         {
-            float axisValue = 0f;
-            Quaternion propertyQuaternion = GetValueOptimized(property);
-            
+            var axisValue = 0f;
+            var propertyQuaternion = GetValueOptimized(property);
+
             switch (emitter.Vector3Option)
             {
                 case MMPropertyEmitter.Vector3Options.X:
@@ -98,16 +95,19 @@ namespace MoreMountains.Tools
                     axisValue = propertyQuaternion.eulerAngles.z;
                     break;
             }
-            axisValue = MMMaths.Clamp(axisValue, emitter.QuaternionRemapMinToZero, emitter.QuaternionRemapMaxToOne, emitter.ClampMin, emitter.ClampMax);
 
-            float returnValue = MMMaths.Remap(axisValue, emitter.QuaternionRemapMinToZero, emitter.QuaternionRemapMaxToOne, 0f, 1f);
+            axisValue = MMMaths.Clamp(axisValue, emitter.QuaternionRemapMinToZero, emitter.QuaternionRemapMaxToOne,
+                emitter.ClampMin, emitter.ClampMax);
+
+            var returnValue = MMMaths.Remap(axisValue, emitter.QuaternionRemapMinToZero,
+                emitter.QuaternionRemapMaxToOne, 0f, 1f);
 
             emitter.Level = returnValue;
             return returnValue;
         }
 
         /// <summary>
-        /// Sets the level, based on remap zero and remap one, angles in degree
+        ///     Sets the level, based on remap zero and remap one, angles in degree
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -116,23 +116,23 @@ namespace MoreMountains.Tools
         {
             base.SetLevel(receiver, property, level);
 
-            _newValue = (receiver.RelativeValue) ? _initialValue : Quaternion.identity;
+            _newValue = receiver.RelativeValue ? _initialValue : Quaternion.identity;
 
             if (receiver.ModifyX)
             {
-                float newX = MMMaths.Remap(level, 0f, 1f, receiver.QuaternionRemapZero.x, receiver.QuaternionRemapOne.x);
+                var newX = MMMaths.Remap(level, 0f, 1f, receiver.QuaternionRemapZero.x, receiver.QuaternionRemapOne.x);
                 _newValue = _newValue * Quaternion.AngleAxis(newX, Vector3.right);
             }
 
             if (receiver.ModifyY)
             {
-                float newY = MMMaths.Remap(level, 0f, 1f, receiver.QuaternionRemapZero.y, receiver.QuaternionRemapOne.y);
+                var newY = MMMaths.Remap(level, 0f, 1f, receiver.QuaternionRemapZero.y, receiver.QuaternionRemapOne.y);
                 _newValue = _newValue * Quaternion.AngleAxis(newY, Vector3.up);
             }
 
             if (receiver.ModifyZ)
             {
-                float newZ = MMMaths.Remap(level, 0f, 1f, receiver.QuaternionRemapZero.z, receiver.QuaternionRemapOne.z);
+                var newZ = MMMaths.Remap(level, 0f, 1f, receiver.QuaternionRemapZero.z, receiver.QuaternionRemapOne.z);
                 _newValue = _newValue * Quaternion.AngleAxis(newZ, Vector3.forward);
             }
 
@@ -140,7 +140,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Gets either the cached value or the raw value
+        ///     Gets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
@@ -150,20 +150,16 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets either the cached value or the raw value
+        ///     Sets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <param name="newValue"></param>
         protected virtual void SetValueOptimized(MMProperty property, Quaternion newValue)
         {
             if (_getterSetterInitialized)
-            {
                 SetQuaternionDelegate(_newValue);
-            }
             else
-            {
                 SetPropertyValue(property, _newValue);
-            }
         }
     }
 }

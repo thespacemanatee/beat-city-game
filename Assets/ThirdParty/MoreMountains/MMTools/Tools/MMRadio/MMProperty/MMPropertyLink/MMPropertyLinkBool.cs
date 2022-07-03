@@ -1,21 +1,19 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Bool property setter
+    ///     Bool property setter
     /// </summary>
     public class MMPropertyLinkBool : MMPropertyLink
     {
+        protected bool _initialValue;
+        protected bool _newValue;
         public Func<bool> GetBoolDelegate;
         public Action<bool> SetBoolDelegate;
 
-        protected bool _initialValue;
-        protected bool _newValue;
-
         /// <summary>
-        /// On init we grab our initial value
+        ///     On init we grab our initial value
         /// </summary>
         /// <param name="property"></param>
         public override void Initialization(MMProperty property)
@@ -25,7 +23,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Creates cached getter and setters for properties
+        ///     Creates cached getter and setters for properties
         /// </summary>
         /// <param name="property"></param>
         public override void CreateGettersAndSetters(MMProperty property)
@@ -33,26 +31,24 @@ namespace MoreMountains.Tools
             base.CreateGettersAndSetters(property);
             if (property.MemberType == MMProperty.MemberTypes.Property)
             {
-                object firstArgument = (property.TargetScriptableObject == null) ? (object)property.TargetComponent : (object)property.TargetScriptableObject;
+                object firstArgument = property.TargetScriptableObject == null
+                    ? property.TargetComponent
+                    : property.TargetScriptableObject;
 
                 if (property.MemberPropertyInfo.GetGetMethod() != null)
-                {
                     GetBoolDelegate = (Func<bool>)Delegate.CreateDelegate(typeof(Func<bool>),
-                                                                                firstArgument,
-                                                                                property.MemberPropertyInfo.GetGetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetGetMethod());
                 if (property.MemberPropertyInfo.GetSetMethod() != null)
-                {
                     SetBoolDelegate = (Action<bool>)Delegate.CreateDelegate(typeof(Action<bool>),
-                                                                            firstArgument,
-                                                                            property.MemberPropertyInfo.GetSetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetSetMethod());
                 _getterSetterInitialized = true;
             }
         }
 
         /// <summary>
-        /// Gets the raw value of the property, a normalized float value, caching the operation if possible
+        ///     Gets the raw value of the property, a normalized float value, caching the operation if possible
         /// </summary>
         /// <param name="emitter"></param>
         /// <param name="property"></param>
@@ -63,7 +59,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the raw property value, float normalized, caching the operation if possible
+        ///     Sets the raw property value, float normalized, caching the operation if possible
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -74,7 +70,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Returns this property link's level between 0 and 1
+        ///     Returns this property link's level between 0 and 1
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -82,14 +78,14 @@ namespace MoreMountains.Tools
         /// <returns></returns>
         public override float GetLevel(MMPropertyEmitter emitter, MMProperty property)
         {
-            bool boolValue = GetValueOptimized(property);
-            float returnValue = (boolValue == true) ? emitter.BoolRemapTrue : emitter.BoolRemapFalse;
+            var boolValue = GetValueOptimized(property);
+            var returnValue = boolValue ? emitter.BoolRemapTrue : emitter.BoolRemapFalse;
             emitter.Level = returnValue;
             return returnValue;
         }
 
         /// <summary>
-        /// Set the level (more than the link's Threshold > true, less > false)
+        ///     Set the level (more than the link's Threshold > true, less > false)
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -97,12 +93,12 @@ namespace MoreMountains.Tools
         public override void SetLevel(MMPropertyReceiver receiver, MMProperty property, float level)
         {
             base.SetLevel(receiver, property, level);
-            _newValue = (level > receiver.Threshold) ? receiver.BoolRemapOne : receiver.BoolRemapZero;            
+            _newValue = level > receiver.Threshold ? receiver.BoolRemapOne : receiver.BoolRemapZero;
             SetValueOptimized(property, _newValue);
         }
 
         /// <summary>
-        /// Gets either the cached value or the raw value
+        ///     Gets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
@@ -112,20 +108,16 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets either the cached value or the raw value
+        ///     Sets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <param name="newValue"></param>
         protected virtual void SetValueOptimized(MMProperty property, bool newValue)
         {
             if (_getterSetterInitialized)
-            {
                 SetBoolDelegate(_newValue);
-            }
             else
-            {
                 SetPropertyValue(property, _newValue);
-            }
         }
     }
 }

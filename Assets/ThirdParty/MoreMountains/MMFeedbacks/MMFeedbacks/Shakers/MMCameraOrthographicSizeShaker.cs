@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// Add this to a camera and it'll let you control its orthographic size over time, can be piloted by a MMFeedbackCameraOrthographicSize
+    ///     Add this to a camera and it'll let you control its orthographic size over time, can be piloted by a
+    ///     MMFeedbackCameraOrthographicSize
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Camera/MMCameraOrthographicSizeShaker")]
     [RequireComponent(typeof(Camera))]
@@ -14,36 +13,32 @@ namespace MoreMountains.Feedbacks
         [Header("Orthographic Size")]
         /// whether or not to add to the initial value
         [Tooltip("whether or not to add to the initial value")]
-        public bool RelativeOrthographicSize = false;
+        public bool RelativeOrthographicSize;
+
         /// the curve used to animate the intensity value on
         [Tooltip("the curve used to animate the intensity value on")]
-        public AnimationCurve ShakeOrthographicSize = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        public AnimationCurve ShakeOrthographicSize =
+            new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
         /// the value to remap the curve's 0 to
         [Tooltip("the value to remap the curve's 0 to")]
         public float RemapOrthographicSizeZero = 5f;
+
         /// the value to remap the curve's 1 to
         [Tooltip("the value to remap the curve's 1 to")]
         public float RemapOrthographicSizeOne = 10f;
 
-        protected Camera _targetCamera;
         protected float _initialOrthographicSize;
-        protected float _originalShakeDuration;
         protected bool _originalRelativeOrthographicSize;
-        protected AnimationCurve _originalShakeOrthographicSize;
-        protected float _originalRemapOrthographicSizeZero;
         protected float _originalRemapOrthographicSizeOne;
+        protected float _originalRemapOrthographicSizeZero;
+        protected float _originalShakeDuration;
+        protected AnimationCurve _originalShakeOrthographicSize;
+
+        protected Camera _targetCamera;
 
         /// <summary>
-        /// On init we initialize our values
-        /// </summary>
-        protected override void Initialization()
-        {
-            base.Initialization();
-            _targetCamera = this.gameObject.GetComponent<Camera>();
-        }
-
-        /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
+        ///     When that shaker gets added, we initialize its shake duration
         /// </summary>
         protected virtual void Reset()
         {
@@ -51,16 +46,26 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Shakes values over time
+        ///     On init we initialize our values
+        /// </summary>
+        protected override void Initialization()
+        {
+            base.Initialization();
+            _targetCamera = gameObject.GetComponent<Camera>();
+        }
+
+        /// <summary>
+        ///     Shakes values over time
         /// </summary>
         protected override void Shake()
         {
-            float newOrthographicSize = ShakeFloat(ShakeOrthographicSize, RemapOrthographicSizeZero, RemapOrthographicSizeOne, RelativeOrthographicSize, _initialOrthographicSize);
+            var newOrthographicSize = ShakeFloat(ShakeOrthographicSize, RemapOrthographicSizeZero,
+                RemapOrthographicSizeOne, RelativeOrthographicSize, _initialOrthographicSize);
             _targetCamera.orthographicSize = newOrthographicSize;
         }
 
         /// <summary>
-        /// Collects initial values on the target
+        ///     Collects initial values on the target
         /// </summary>
         protected override void GrabInitialValues()
         {
@@ -68,7 +73,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// When we get the appropriate event, we trigger a shake
+        ///     When we get the appropriate event, we trigger a shake
         /// </summary>
         /// <param name="distortionCurve"></param>
         /// <param name="duration"></param>
@@ -76,25 +81,21 @@ namespace MoreMountains.Feedbacks
         /// <param name="relativeDistortion"></param>
         /// <param name="feedbacksIntensity"></param>
         /// <param name="channel"></param>
-        public virtual void OnMMCameraOrthographicSizeShakeEvent(AnimationCurve distortionCurve, float duration, float remapMin, float remapMax, bool relativeDistortion = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, bool stop = false)
+        public virtual void OnMMCameraOrthographicSizeShakeEvent(AnimationCurve distortionCurve, float duration,
+            float remapMin, float remapMax, bool relativeDistortion = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true, bool stop = false)
         {
-            if (!CheckEventAllowed(channel))
-            {
-                return;
-            }
-            
+            if (!CheckEventAllowed(channel)) return;
+
             if (stop)
             {
                 Stop();
                 return;
             }
-            
-            if (!Interruptible && Shaking)
-            {
-                return;
-            }
-            
+
+            if (!Interruptible && Shaking) return;
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 
@@ -118,7 +119,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the target's values
+        ///     Resets the target's values
         /// </summary>
         protected override void ResetTargetValues()
         {
@@ -127,7 +128,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the shaker's values
+        ///     Resets the shaker's values
         /// </summary>
         protected override void ResetShakerValues()
         {
@@ -140,7 +141,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -149,7 +150,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -159,30 +160,35 @@ namespace MoreMountains.Feedbacks
     }
 
     /// <summary>
-    /// An event used to trigger vignette shakes
+    ///     An event used to trigger vignette shakes
     /// </summary>
-    public struct MMCameraOrthographicSizeShakeEvent 
+    public struct MMCameraOrthographicSizeShakeEvent
     {
-        public delegate void Delegate(AnimationCurve animCurve, float duration, float remapMin, float remapMax, bool relativeValue = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, bool stop = false);
-        static private event Delegate OnEvent;
+        public delegate void Delegate(AnimationCurve animCurve, float duration, float remapMin, float remapMax,
+            bool relativeValue = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true, bool stop = false);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(AnimationCurve animCurve, float duration, float remapMin, float remapMax, bool relativeValue = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, bool stop = false)
+        public static void Trigger(AnimationCurve animCurve, float duration, float remapMin, float remapMax,
+            bool relativeValue = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true, bool stop = false)
         {
             OnEvent?.Invoke(animCurve, duration, remapMin, remapMax, relativeValue,
-                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, stop);
+                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection,
+                stop);
         }
     }
 }
-

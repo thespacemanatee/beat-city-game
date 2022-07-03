@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-internal class U2DExtrasPlaceholder 
+internal class U2DExtrasPlaceholder
 {
     [Test]
     public void PlaceHolderTest()

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -6,113 +7,23 @@ using UnityEngine;
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// A custom editor displaying a foldable list of MMFeedbacks, a dropdown to add more, as well as test buttons to test your feedbacks at runtime
+    ///     A custom editor displaying a foldable list of MMFeedbacks, a dropdown to add more, as well as test buttons to test
+    ///     your feedbacks at runtime
     /// </summary>
     [CustomEditor(typeof(MMF_Player), true)]
     public class MMF_PlayerEditor : Editor
     {
-        /// <summary>
-        /// A data structure to store types and names
-        /// </summary>
-        public struct FeedbackTypePair
-        {
-            public System.Type FeedbackType;
-            public string FeedbackName;
-        }
-
-        public MMF_Player TargetMmfPlayer;
-        protected SerializedProperty _mmfeedbacksList;
-        protected SerializedProperty _mmfeedbacksInitializationMode;
-        protected SerializedProperty _mmfeedbacksSafeMode;
-        protected SerializedProperty _mmfeedbacksAutoPlayOnStart;
-        protected SerializedProperty _mmfeedbacksAutoPlayOnEnable;
-        protected SerializedProperty _mmfeedbacksDirection;
-        protected SerializedProperty _mmfeedbacksFeedbacksIntensity;
-        protected SerializedProperty _mmfeedbacksAutoChangeDirectionOnEnd;
-        protected SerializedProperty _mmfeedbacksDurationMultiplier;
-        protected SerializedProperty _mmfeedbacksDisplayFullDurationDetails;
-        protected SerializedProperty _mmfeedbacksCooldownDuration;
-        protected SerializedProperty _mmfeedbacksInitialDelay;
-        protected SerializedProperty _mmfeedbacksCanPlayWhileAlreadyPlaying;
-        protected SerializedProperty _mmfeedbacksPerformanceMode;
-        protected SerializedProperty _mmfeedbacksEvents;
-        protected SerializedProperty _keepPlayModeChanges;
-        protected SerializedProperty _mmfeedbacksChanceToPlay;
-
-        protected bool _feedbackListIsExpanded;
-        protected string _feedbackListLabel;
-        protected bool _feedbackListPause;
-        protected SerializedProperty _feedbackListProperty;
-        protected MMF_Feedback _feedbackListFeedback;
-        protected Dictionary<MMF_Feedback, Editor> _editors;
-        protected List<string> _typeNames = new List<string>();
-        public static List<FeedbackTypePair> _typesAndNames = new List<FeedbackTypePair>();
-        public static string[] _typeDisplays;
-        protected int _draggedStartID = -1;
-        protected int _draggedEndID = -1;
-        private static bool _debugView = false;
-        protected Texture2D _scriptDrivenBoxBackgroundTexture;
-        private static bool _settingsMenuDropdown;
-        private static bool _eventsMenuDropdown;
-        protected Rect _helpBoxRect;
-        protected Event _currentEvent;
-        protected bool _cachedGUI = false;
-        
-        // GUI Styles
-        protected GUIStyle _directionButtonStyle = new GUIStyle();
-        protected GUIStyle _playingStyle = new GUIStyle();
-        
-        // Icons
-        protected GUIContent _directionIconUp;
-        protected GUIContent _directionIconDown;
-        
-        // Colors
-        protected Color _scriptDrivenBoxColorFrom = new Color(1f,0f,0f,1f);
-        protected Color _scriptDrivenBoxColorTo = new Color(0.7f,0.1f,0.1f,1f);
-        protected Color _playButtonColor = new Color32(193, 255, 2, 255);
-        protected Color _keepPlaymodeChangesButtonColor = new Color32(255, 97, 33, 255);
-        protected Color _originalBackgroundColor;
-        protected Color _scriptDrivenBoxColor;
-        protected Color _baseColor;
-        protected Color _draggedColor = new Color(0, 1, 1, 0.2f);
-        protected Color _redBackgroundColor = new Color32(255, 97, 33, 255);
-        protected Color _savedTextColor;
-
-        protected Texture2D _whiteTexture;
-        protected Texture2D _redWarningBoxBackgroundTexture;
-        
-        protected float _durationRectWidth = 70f;
-        protected float _playingRectWidth = 70f;
-        protected float _directionRectWidth = 16f;
-        protected Rect _durationRect = new Rect(); 
-        protected Rect _playingRect = new Rect();
-        protected Rect _directionRect = new Rect();
-
-        protected GUIContent _pasteAsNewGUIContent;
-        protected GUIContent _replaceAllGUIContent;
-        protected GUIContent _pasteAllAsNewGUIContent;
-        protected GUIContent _feedbackPlayGUIContent;
-        protected GUIContent _feedbackRemoveGUIContent;
-        protected GUIContent _feedbackCopyGUIContent;
-        protected GUIContent _feedbackPasteGUIContent;
-        
-        protected GUIStyle _helptextStyle;
-        protected GUIStyle _redWarningBoxStyle;
-        protected Texture2D _savedBackground;
-        
-        protected GUILayoutOption _pasteAsNewOption;
-        protected GUILayoutOption _replaceAllOption;
-        protected GUILayoutOption _pasteAllAsNewOption;
-
-        protected Dictionary<int, MMF_FeedbackInspector> MMF_FeedbackInspectors =
-            new Dictionary<int, MMF_FeedbackInspector>();
-
         protected const string _copyAllText = "Copy all";
         protected const string _pasteAsNewText = "Paste as new";
         protected const string _replaceAllText = "Replace all";
         protected const string _pasteAllAsNewText = "Paste all as new";
-        protected const string _inactiveMessage = "All MMFeedbacks, including this one, are currently disabled. This is done via script, by changing the value of the MMFeedbacks.GlobalMMFeedbacksActive boolean. Right now this value has been set to false. Setting it back to true will allow MMFeedbacks to play again.";
-        protected const string _instructionsMessage = "Select Feedbacks from the 'add a feedback' dropdown and customize them. Remember, if you don't use auto initialization (Awake or Start), you'll need to initialize them via script.";
+
+        protected const string _inactiveMessage =
+            "All MMFeedbacks, including this one, are currently disabled. This is done via script, by changing the value of the MMFeedbacks.GlobalMMFeedbacksActive boolean. Right now this value has been set to false. Setting it back to true will allow MMFeedbacks to play again.";
+
+        protected const string _instructionsMessage =
+            "Select Feedbacks from the 'add a feedback' dropdown and customize them. Remember, if you don't use auto initialization (Awake or Start), you'll need to initialize them via script.";
+
         protected const string _initializationText = "Initialization";
         protected const string _directionText = "Direction";
         protected const string _intensityText = "Intensity";
@@ -134,16 +45,126 @@ namespace MoreMountains.Feedbacks
         protected const string _pasteText = "Paste";
         protected const string _skipText = "Skip";
         protected const string _keepPlaymodeChangesText = "Keep Playmode Changes";
-        protected const string _scriptDrivenInProgressText = "Script driven pause in progress, call Resume() to exit pause";
+
+        protected const string _scriptDrivenInProgressText =
+            "Script driven pause in progress, call Resume() to exit pause";
+
         protected const string _resumeText = "Resume";
         protected const string _undoText = "Modified Feedback Manager";
         protected const string _feedbacksSectionTitle = "Feedbacks";
+        public static List<FeedbackTypePair> _typesAndNames = new();
+        public static string[] _typeDisplays;
+        private static readonly bool _debugView = false;
+        private static bool _settingsMenuDropdown;
+        private static bool _eventsMenuDropdown;
+
+        public MMF_Player TargetMmfPlayer;
+        protected Color _baseColor;
+        protected bool _cachedGUI;
+        protected Event _currentEvent;
+
+        // GUI Styles
+        protected GUIStyle _directionButtonStyle = new();
+        protected GUIContent _directionIconDown;
+
+        // Icons
+        protected GUIContent _directionIconUp;
+        protected Rect _directionRect;
+        protected float _directionRectWidth = 16f;
+        protected Color _draggedColor = new(0, 1, 1, 0.2f);
+        protected int _draggedEndID = -1;
+        protected int _draggedStartID = -1;
+        protected Rect _durationRect;
+
+        protected float _durationRectWidth = 70f;
+        protected Dictionary<MMF_Feedback, Editor> _editors;
         protected bool _expandGroupsInInspectors = true;
-        
-        #region Initialization
-        
+        protected GUIContent _feedbackCopyGUIContent;
+        protected MMF_Feedback _feedbackListFeedback;
+
+        protected bool _feedbackListIsExpanded;
+        protected string _feedbackListLabel;
+        protected bool _feedbackListPause;
+        protected SerializedProperty _feedbackListProperty;
+        protected GUIContent _feedbackPasteGUIContent;
+        protected GUIContent _feedbackPlayGUIContent;
+        protected GUIContent _feedbackRemoveGUIContent;
+        protected Rect _helpBoxRect;
+
+        protected GUIStyle _helptextStyle;
+        protected SerializedProperty _keepPlayModeChanges;
+        protected Color _keepPlaymodeChangesButtonColor = new Color32(255, 97, 33, 255);
+        protected SerializedProperty _mmfeedbacksAutoChangeDirectionOnEnd;
+        protected SerializedProperty _mmfeedbacksAutoPlayOnEnable;
+        protected SerializedProperty _mmfeedbacksAutoPlayOnStart;
+        protected SerializedProperty _mmfeedbacksCanPlayWhileAlreadyPlaying;
+        protected SerializedProperty _mmfeedbacksChanceToPlay;
+        protected SerializedProperty _mmfeedbacksCooldownDuration;
+        protected SerializedProperty _mmfeedbacksDirection;
+        protected SerializedProperty _mmfeedbacksDisplayFullDurationDetails;
+        protected SerializedProperty _mmfeedbacksDurationMultiplier;
+        protected SerializedProperty _mmfeedbacksEvents;
+        protected SerializedProperty _mmfeedbacksFeedbacksIntensity;
+        protected SerializedProperty _mmfeedbacksInitialDelay;
+        protected SerializedProperty _mmfeedbacksInitializationMode;
+        protected SerializedProperty _mmfeedbacksList;
+        protected SerializedProperty _mmfeedbacksPerformanceMode;
+        protected SerializedProperty _mmfeedbacksSafeMode;
+        protected Color _originalBackgroundColor;
+        protected GUIContent _pasteAllAsNewGUIContent;
+        protected GUILayoutOption _pasteAllAsNewOption;
+
+        protected GUIContent _pasteAsNewGUIContent;
+
+        protected GUILayoutOption _pasteAsNewOption;
+        protected Color _playButtonColor = new Color32(193, 255, 2, 255);
+        protected Rect _playingRect;
+        protected float _playingRectWidth = 70f;
+        protected GUIStyle _playingStyle = new();
+        protected Color _redBackgroundColor = new Color32(255, 97, 33, 255);
+        protected Texture2D _redWarningBoxBackgroundTexture;
+        protected GUIStyle _redWarningBoxStyle;
+        protected GUIContent _replaceAllGUIContent;
+        protected GUILayoutOption _replaceAllOption;
+        protected Texture2D _savedBackground;
+        protected Color _savedTextColor;
+        protected Texture2D _scriptDrivenBoxBackgroundTexture;
+        protected Color _scriptDrivenBoxColor;
+
+        // Colors
+        protected Color _scriptDrivenBoxColorFrom = new(1f, 0f, 0f, 1f);
+        protected Color _scriptDrivenBoxColorTo = new(0.7f, 0.1f, 0.1f, 1f);
+        protected List<string> _typeNames = new();
+
+        protected Texture2D _whiteTexture;
+
+        protected Dictionary<int, MMF_FeedbackInspector> MMF_FeedbackInspectors = new();
+
+        #region Helpers
+
         /// <summary>
-        /// On Enable, grabs properties and initializes the add feedback dropdown's contents
+        ///     We need to repaint constantly if dragging a feedback around
+        /// </summary>
+        public override bool RequiresConstantRepaint()
+        {
+            return !TargetMmfPlayer.PerformanceMode && TargetMmfPlayer.IsPlaying;
+        }
+
+        #endregion Helpers
+
+        /// <summary>
+        ///     A data structure to store types and names
+        /// </summary>
+        public struct FeedbackTypePair
+        {
+            public Type FeedbackType;
+            public string FeedbackName;
+        }
+
+        #region Initialization
+
+        /// <summary>
+        ///     On Enable, grabs properties and initializes the add feedback dropdown's contents
         /// </summary>
         protected virtual void OnEnable()
         {
@@ -174,74 +195,63 @@ namespace MoreMountains.Feedbacks
             _expandGroupsInInspectors = MMF_PlayerConfiguration.Instance.InspectorGroupsExpandedByDefault;
 
             _mmfeedbacksEvents = serializedObject.FindProperty("Events");
-            
+
             // store GUI bg color
             _originalBackgroundColor = GUI.backgroundColor;
 
             PrepareFeedbackTypeList();
 
-            foreach (KeyValuePair<int, MMF_FeedbackInspector> inspector in MMF_FeedbackInspectors)
-            {
-                inspector.Value.OnEnable();
-            }
+            foreach (var inspector in MMF_FeedbackInspectors) inspector.Value.OnEnable();
 
             // we force the styles to initialize on the next OnInspectorGUI call
             _cachedGUI = false;
         }
 
         /// <summary>
-        /// Lists all feedbacks, builds the dropdown list, and stores it in a static 
+        ///     Lists all feedbacks, builds the dropdown list, and stores it in a static
         protected virtual void PrepareFeedbackTypeList()
         {
-	        if ((_typeDisplays != null) && (_typeDisplays.Length > 0))
-	        {
-		        return;
-	        }
-	        
-	        // Retrieve available feedbacks
-	        List<System.Type> types = (from domainAssembly in System.AppDomain.CurrentDomain.GetAssemblies()
-		        from assemblyType in domainAssembly.GetTypes()
-		        where assemblyType.IsSubclassOf(typeof(MMF_Feedback))
-		        select assemblyType).ToList(); 
-            
-	        // Create display list from types
-	        _typeNames.Clear();
-	        for (int i = 0; i < types.Count; i++)
-	        {
-		        FeedbackTypePair _newType = new FeedbackTypePair();
-		        _newType.FeedbackType = types[i];
-		        _newType.FeedbackName = FeedbackPathAttribute.GetFeedbackDefaultPath(types[i]);
-		        if (_newType.FeedbackName == "MMF_FeedbackBase")
-		        {
-			        continue;
-		        }
-		        _typesAndNames.Add(_newType);
-	        }
+            if (_typeDisplays != null && _typeDisplays.Length > 0) return;
 
-	        _typesAndNames = _typesAndNames.OrderBy(t => t.FeedbackName).ToList(); 
-            
-	        _typeNames.Add("Add new feedback..."); 
-	        for (int i = 0; i < _typesAndNames.Count; i++)
-	        {
-		        _typeNames.Add(_typesAndNames[i].FeedbackName);
-	        }
+            // Retrieve available feedbacks
+            var types = (from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
+                from assemblyType in domainAssembly.GetTypes()
+                where assemblyType.IsSubclassOf(typeof(MMF_Feedback))
+                select assemblyType).ToList();
 
-	        _typeDisplays = _typeNames.ToArray(); 
+            // Create display list from types
+            _typeNames.Clear();
+            for (var i = 0; i < types.Count; i++)
+            {
+                var _newType = new FeedbackTypePair();
+                _newType.FeedbackType = types[i];
+                _newType.FeedbackName = FeedbackPathAttribute.GetFeedbackDefaultPath(types[i]);
+                if (_newType.FeedbackName == "MMF_FeedbackBase") continue;
+                _typesAndNames.Add(_newType);
+            }
+
+            _typesAndNames = _typesAndNames.OrderBy(t => t.FeedbackName).ToList();
+
+            _typeNames.Add("Add new feedback...");
+            for (var i = 0; i < _typesAndNames.Count; i++) _typeNames.Add(_typesAndNames[i].FeedbackName);
+
+            _typeDisplays = _typeNames.ToArray();
         }
-        
+
         #endregion Initialization
 
         #region InspectorMain
-        
+
         /// <summary>
-        /// Draws the inspector, complete with helpbox, init mode selection, list of feedbacks, feedback selection and test buttons 
+        ///     Draws the inspector, complete with helpbox, init mode selection, list of feedbacks, feedback selection and test
+        ///     buttons
         /// </summary>
         public override void OnInspectorGUI()
         {
             _currentEvent = Event.current;
             serializedObject.Update();
             Undo.RecordObject(target, _undoText);
-            
+
             InspectorCaching();
             DrawInspectorActiveWarning();
             DrawHelpBox();
@@ -258,18 +268,15 @@ namespace MoreMountains.Feedbacks
 
         protected virtual void InspectorCaching()
         {
-            if (_cachedGUI)
-            {
-                return;
-            }
+            if (_cachedGUI) return;
 
             MMF_PlayerStyling.CacheStyling();
-            
+
             _directionIconUp = new GUIContent(Resources.Load("FeelArrowUp") as Texture);
             _directionIconDown = new GUIContent(Resources.Load("FeelArrowDown") as Texture);
             _whiteTexture = Texture2D.whiteTexture;
-            
-            _redWarningBoxBackgroundTexture = new Texture2D(2,2);
+
+            _redWarningBoxBackgroundTexture = new Texture2D(2, 2);
             _redWarningBoxBackgroundTexture.CreateColorTexture(_redBackgroundColor);
 
             _directionButtonStyle.border.left = 0;
@@ -278,7 +285,7 @@ namespace MoreMountains.Feedbacks
             _directionButtonStyle.border.bottom = 0;
 
             _playingStyle.normal.textColor = Color.yellow;
-            
+
             _pasteAsNewGUIContent = new GUIContent(_pasteAsNewText);
             _replaceAllGUIContent = new GUIContent(_replaceAllText);
             _pasteAllAsNewGUIContent = new GUIContent(_pasteAllAsNewText);
@@ -287,20 +294,20 @@ namespace MoreMountains.Feedbacks
             _feedbackCopyGUIContent = new GUIContent(_copyText);
             _feedbackPasteGUIContent = new GUIContent(_pasteText);
             _pasteAsNewOption = GUILayout.Width(EditorStyles.miniButton.CalcSize(_pasteAsNewGUIContent).x);
-            _replaceAllOption = GUILayout.Width(EditorStyles.miniButton.CalcSize(_replaceAllGUIContent).x);  
-            _pasteAllAsNewOption = GUILayout.Width(EditorStyles.miniButton.CalcSize(_pasteAllAsNewGUIContent).x);    
-            
+            _replaceAllOption = GUILayout.Width(EditorStyles.miniButton.CalcSize(_replaceAllGUIContent).x);
+            _pasteAllAsNewOption = GUILayout.Width(EditorStyles.miniButton.CalcSize(_pasteAllAsNewGUIContent).x);
+
             _helptextStyle = new GUIStyle(EditorStyles.helpBox);
             _helptextStyle.richText = true;
             _helptextStyle.fontSize = 11;
             _helptextStyle.padding = new RectOffset(8, 8, 8, 8);
         }
-        
+
         protected virtual void DrawInspectorActiveWarning()
         {
             EditorGUILayout.Space();
 
-            if (!MMF_Player.GlobalMMFeedbacksActive)
+            if (!MMFeedbacks.GlobalMMFeedbacksActive)
             {
                 _baseColor = GUI.color;
                 GUI.color = Color.red;
@@ -313,17 +320,16 @@ namespace MoreMountains.Feedbacks
         protected virtual void DrawHelpBox()
         {
             if (MMF_PlayerConfiguration.Instance.ShowInspectorTips)
-            {
-                EditorGUILayout.HelpBox(_instructionsMessage, MessageType.None);    
-            }
+                EditorGUILayout.HelpBox(_instructionsMessage, MessageType.None);
 
             _helpBoxRect = GUILayoutUtility.GetLastRect();
         }
 
-        
+
         protected virtual void DrawSettingsDropDown()
         {
-            _settingsMenuDropdown = EditorGUILayout.Foldout(_settingsMenuDropdown, _settingsText, true, EditorStyles.foldout);
+            _settingsMenuDropdown =
+                EditorGUILayout.Foldout(_settingsMenuDropdown, _settingsText, true, EditorStyles.foldout);
             if (_settingsMenuDropdown)
             {
                 EditorGUILayout.Space(10);
@@ -331,16 +337,16 @@ namespace MoreMountains.Feedbacks
                 EditorGUILayout.PropertyField(_mmfeedbacksInitializationMode);
                 EditorGUILayout.PropertyField(_mmfeedbacksAutoPlayOnStart);
                 EditorGUILayout.PropertyField(_mmfeedbacksAutoPlayOnEnable);
-                
+
                 EditorGUILayout.Space(10);
                 EditorGUILayout.LabelField(_directionText, EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(_mmfeedbacksDirection);
                 EditorGUILayout.PropertyField(_mmfeedbacksAutoChangeDirectionOnEnd);
-                
+
                 EditorGUILayout.Space(10);
                 EditorGUILayout.LabelField(_intensityText, EditorStyles.boldLabel);
-                EditorGUILayout.PropertyField(_mmfeedbacksFeedbacksIntensity);    
-                
+                EditorGUILayout.PropertyField(_mmfeedbacksFeedbacksIntensity);
+
                 EditorGUILayout.Space(10);
                 EditorGUILayout.LabelField(_timingText, EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(_mmfeedbacksDurationMultiplier);
@@ -348,7 +354,7 @@ namespace MoreMountains.Feedbacks
                 EditorGUILayout.PropertyField(_mmfeedbacksCooldownDuration);
                 EditorGUILayout.PropertyField(_mmfeedbacksInitialDelay);
                 EditorGUILayout.PropertyField(_mmfeedbacksChanceToPlay);
-                
+
                 EditorGUILayout.Space(10);
                 EditorGUILayout.LabelField(_playConditionsText, EditorStyles.boldLabel);
                 EditorGUILayout.PropertyField(_mmfeedbacksCanPlayWhileAlreadyPlaying);
@@ -359,7 +365,7 @@ namespace MoreMountains.Feedbacks
                 EditorGUILayout.PropertyField(_mmfeedbacksEvents);
             }
         }
-        
+
         protected virtual void DrawDurationAndDirection()
         {
             _durationRect.x = _helpBoxRect.xMax - _durationRectWidth;
@@ -368,12 +374,12 @@ namespace MoreMountains.Feedbacks
             _durationRect.height = 17f;
             _durationRect.xMin = _helpBoxRect.xMax - _durationRectWidth;
             _durationRect.xMax = _helpBoxRect.xMax;
-            
+
             _playingRect.x = _helpBoxRect.xMax - _playingRectWidth - _durationRectWidth;
             _playingRect.y = _helpBoxRect.yMax + 6;
             _playingRect.width = _playingRectWidth;
             _playingRect.height = 17f;
-            _playingRect.xMin = _helpBoxRect.xMax - _durationRectWidth- _playingRectWidth;
+            _playingRect.xMin = _helpBoxRect.xMax - _durationRectWidth - _playingRectWidth;
             _playingRect.xMax = _helpBoxRect.xMax;
 
             _directionRect.x = _helpBoxRect.xMax - _directionRectWidth;
@@ -383,35 +389,24 @@ namespace MoreMountains.Feedbacks
             _directionRect.xMin = _helpBoxRect.xMax - _directionRectWidth;
             _directionRect.xMax = _helpBoxRect.xMax;
 
-            if ((target as MMF_Player).IsPlaying)
-            {
-                GUI.Label(_playingRect, _playingBracketsText, _playingStyle);    
-            }
-            
-            GUI.Label(_durationRect, "["+TargetMmfPlayer.TotalDuration.ToString("F2")+"s]");
+            if ((target as MMF_Player).IsPlaying) GUI.Label(_playingRect, _playingBracketsText, _playingStyle);
 
-            if (TargetMmfPlayer.Direction == MMF_Player.Directions.BottomToTop)
-            {
+            GUI.Label(_durationRect, "[" + TargetMmfPlayer.TotalDuration.ToString("F2") + "s]");
 
-                if (GUI.Button(_directionRect, _directionIconUp, _directionButtonStyle))
-                {
-                    TargetMmfPlayer.Revert();
-                }
+            if (TargetMmfPlayer.Direction == MMFeedbacks.Directions.BottomToTop)
+            {
+                if (GUI.Button(_directionRect, _directionIconUp, _directionButtonStyle)) TargetMmfPlayer.Revert();
             }
             else
             {
-
-                if (GUI.Button(_directionRect, _directionIconDown, _directionButtonStyle))
-                {
-                    TargetMmfPlayer.Revert();
-                }
+                if (GUI.Button(_directionRect, _directionIconDown, _directionButtonStyle)) TargetMmfPlayer.Revert();
             }
         }
-        
+
         protected virtual void DrawDebugControls()
         {
             MMF_PlayerStyling.DrawSection(_allFeedbacksDebugText);
-            
+
             // Testing buttons
 
             EditorGUI.BeginDisabledGroup(!Application.isPlaying);
@@ -419,69 +414,43 @@ namespace MoreMountains.Feedbacks
             {
                 // initialize button
                 if (GUILayout.Button(_initializeText, EditorStyles.miniButtonLeft))
-                {
                     (target as MMF_Player).Initialization();
-                }
 
                 // play button
                 _originalBackgroundColor = GUI.backgroundColor;
                 GUI.backgroundColor = _playButtonColor;
-                if (GUILayout.Button(_playText, EditorStyles.miniButtonMid))
-                {
-                    (target as MMF_Player).PlayFeedbacks();
-                }
+                if (GUILayout.Button(_playText, EditorStyles.miniButtonMid)) (target as MMF_Player).PlayFeedbacks();
                 GUI.backgroundColor = _originalBackgroundColor;
-                
+
                 // pause button
                 if ((target as MMF_Player).ContainsLoop)
-                {
                     if (GUILayout.Button(_pauseText, EditorStyles.miniButtonMid))
-                    {
                         (target as MMF_Player).PauseFeedbacks();
-                    }   
-                }
-                
+
                 // stop button
-                if (GUILayout.Button(_stopText, EditorStyles.miniButtonMid))
-                {
-                    (target as MMF_Player).StopFeedbacks();
-                }
-                
+                if (GUILayout.Button(_stopText, EditorStyles.miniButtonMid)) (target as MMF_Player).StopFeedbacks();
+
                 // skip button
-                if (GUILayout.Button(_skipText, EditorStyles.miniButtonMid))
-                {
-                    (target as MMF_Player).SkipToTheEnd();
-                }
-                
+                if (GUILayout.Button(_skipText, EditorStyles.miniButtonMid)) (target as MMF_Player).SkipToTheEnd();
+
                 // reset button
-                if (GUILayout.Button(_resetText, EditorStyles.miniButtonMid))
-                {
-                    (target as MMF_Player).ResetFeedbacks();
-                }
+                if (GUILayout.Button(_resetText, EditorStyles.miniButtonMid)) (target as MMF_Player).ResetFeedbacks();
                 EditorGUI.EndDisabledGroup();
-                
+
                 // reverse button
-                if (GUILayout.Button(_revertText, EditorStyles.miniButtonMid))
-                {
-                    (target as MMF_Player).Revert();
-                }
+                if (GUILayout.Button(_revertText, EditorStyles.miniButtonMid)) (target as MMF_Player).Revert();
             }
             EditorGUILayout.EndHorizontal();
-            
+
             // keep runtime changes button
             _originalBackgroundColor = GUI.backgroundColor;
-            if (_keepPlayModeChanges.boolValue)
-            {
-                GUI.backgroundColor = _keepPlaymodeChangesButtonColor;    
-            }
+            if (_keepPlayModeChanges.boolValue) GUI.backgroundColor = _keepPlaymodeChangesButtonColor;
             if (GUILayout.Button(_keepPlaymodeChangesText))
-            {
                 _keepPlayModeChanges.boolValue = !_keepPlayModeChanges.boolValue;
-            }
             GUI.backgroundColor = _originalBackgroundColor;
 
-            float pingPong = Mathf.PingPong(Time.unscaledTime, 0.25f);
-            
+            var pingPong = Mathf.PingPong(Time.unscaledTime, 0.25f);
+
             // if in pause, we display additional controls
             if (TargetMmfPlayer.InScriptDrivenPause)
             {
@@ -492,24 +461,18 @@ namespace MoreMountains.Feedbacks
                 GUI.skin.box.normal.textColor = Color.black;
                 GUILayout.Box(_scriptDrivenInProgressText, GUILayout.ExpandWidth(true));
                 GUI.backgroundColor = _originalBackgroundColor;
-                GUI.skin.box.normal.background = _scriptDrivenBoxBackgroundTexture; 
-                
+                GUI.skin.box.normal.background = _scriptDrivenBoxBackgroundTexture;
+
                 // draws resume button
-                if (GUILayout.Button(_resumeText))
-                {
-                    TargetMmfPlayer.ResumeFeedbacks();
-                }
+                if (GUILayout.Button(_resumeText)) TargetMmfPlayer.ResumeFeedbacks();
             }
         }
-        
+
         protected virtual void DrawBottomBar()
         {
             // Draw add new item
 
-            if (_mmfeedbacksList.arraySize > 0)
-            {
-                MMF_PlayerStyling.DrawSplitter();
-            }
+            if (_mmfeedbacksList.arraySize > 0) MMF_PlayerStyling.DrawSplitter();
 
             EditorGUILayout.Space();
 
@@ -517,7 +480,7 @@ namespace MoreMountains.Feedbacks
             {
                 // Feedback list
 
-                int newItem = EditorGUILayout.Popup(0, _typeDisplays) - 1;
+                var newItem = EditorGUILayout.Popup(0, _typeDisplays) - 1;
                 if (newItem >= 0)
                 {
                     serializedObject.Update();
@@ -530,33 +493,20 @@ namespace MoreMountains.Feedbacks
                 // Paste feedback copy as new
 
                 if (MMF_PlayerCopy.HasCopy())
-                {
                     if (GUILayout.Button(_pasteAsNewText, EditorStyles.miniButton, _pasteAsNewOption))
-                    {
                         PasteAsNew();
-                    }                        
-                }
 
                 if (MMF_PlayerCopy.HasMultipleCopies())
                 {
-                    if (GUILayout.Button(_replaceAllText, EditorStyles.miniButton, _replaceAllOption))
-                    {
-                        ReplaceAll();
-                    }  
+                    if (GUILayout.Button(_replaceAllText, EditorStyles.miniButton, _replaceAllOption)) ReplaceAll();
                     if (GUILayout.Button(_pasteAllAsNewText, EditorStyles.miniButton, _pasteAllAsNewOption))
-                    {
                         PasteAllAsNew();
-                    }                        
                 }
             }
 
             if (!MMF_PlayerCopy.HasMultipleCopies())
-            {
                 if (GUILayout.Button(_copyAllText, EditorStyles.miniButton, _pasteAsNewOption))
-                {
                     CopyAll();
-                }
-            }                
 
             EditorGUILayout.EndHorizontal();
         }
@@ -574,7 +524,6 @@ namespace MoreMountains.Feedbacks
         protected virtual void HandleReordering()
         {
             if (_draggedStartID >= 0 && _draggedEndID >= 0)
-            {
                 if (_draggedEndID != _draggedStartID)
                 {
                     if (_draggedEndID > _draggedStartID)
@@ -583,10 +532,8 @@ namespace MoreMountains.Feedbacks
                     _draggedStartID = _draggedEndID;
                     MMF_FeedbackInspectors.Clear();
                 }
-            }
 
             if (_draggedStartID >= 0 || _draggedEndID >= 0)
-            {
                 switch (_currentEvent.type)
                 {
                     case EventType.MouseUp:
@@ -594,10 +541,7 @@ namespace MoreMountains.Feedbacks
                         _draggedEndID = -1;
                         _currentEvent.Use();
                         break;
-                    default:
-                        break;
                 }
-            }
         }
 
         #endregion InspectorMain
@@ -609,10 +553,10 @@ namespace MoreMountains.Feedbacks
         protected virtual void DrawFeedbacksList()
         {
             MMF_PlayerStyling.DrawSection(_feedbacksSectionTitle);
-            for (int i = 0; i < _mmfeedbacksList.arraySize; i++)
+            for (var i = 0; i < _mmfeedbacksList.arraySize; i++)
             {
                 DrawFeedbackHeader(i);
-                
+
                 // If expanded, draw feedback editor
                 _feedbackListProperty.isExpanded = _feedbackListIsExpanded;
                 if (_feedbackListIsExpanded)
@@ -623,25 +567,27 @@ namespace MoreMountains.Feedbacks
                     DrawFeedbackHelp();
 
                     EditorGUILayout.Space();
-                    
+
                     // ---------------------------------------------------------------------------------------------------------------------------------
-                    
-                    SerializedProperty currentProperty = _feedbackListProperty;
+
+                    var currentProperty = _feedbackListProperty;
 
                     if (_feedbackListProperty.isExpanded)
                     {
-                        if(MMF_FeedbackInspectors.TryGetValue(_feedbackListFeedback.UniqueID, out _mmfFeedbackInspector))
+                        if (MMF_FeedbackInspectors.TryGetValue(_feedbackListFeedback.UniqueID,
+                                out _mmfFeedbackInspector))
                         {
                             _mmfFeedbackInspector.DrawInspector(currentProperty, _feedbackListFeedback);
                         }
                         else
                         {
-	                        MMF_FeedbackInspector newInspector = new MMF_FeedbackInspector(); 
+                            var newInspector = new MMF_FeedbackInspector();
                             MMF_FeedbackInspectors.Add(_feedbackListFeedback.UniqueID, newInspector);
-                            newInspector.Initialization(currentProperty, _feedbackListFeedback, _expandGroupsInInspectors);
+                            newInspector.Initialization(currentProperty, _feedbackListFeedback,
+                                _expandGroupsInInspectors);
                         }
                     }
-                    
+
                     // ---------------------------------------------------------------------------------------------------------------------------------
 
                     EditorGUI.EndDisabledGroup();
@@ -654,18 +600,13 @@ namespace MoreMountains.Feedbacks
         protected virtual bool DrawCustomInspectors(SerializedProperty currentProperty)
         {
             if (_feedbackListFeedback.HasCustomInspectors)
-            {
                 switch (currentProperty.type)
                 {
                     case "MMF_Button":
-                        MMF_Button myButton = (MMF_Button)(currentProperty.MMFGetObjectValue());
-                        if (GUILayout.Button(myButton.ButtonText))
-                        {
-                            myButton.TargetMethod();
-                        }
+                        var myButton = (MMF_Button)currentProperty.MMFGetObjectValue();
+                        if (GUILayout.Button(myButton.ButtonText)) myButton.TargetMethod();
                         return true;
                 }
-            }
 
             return false;
         }
@@ -678,38 +619,29 @@ namespace MoreMountains.Feedbacks
             // Retrieve feedback
             _feedbackListFeedback = TargetMmfPlayer.FeedbacksList[i];
 
-            if (_feedbackListFeedback == null)
-            {
-	            return;
-            }
-            
+            if (_feedbackListFeedback == null) return;
+
             // Draw header
             _feedbackListIsExpanded = _feedbackListProperty.isExpanded;
             _feedbackListLabel = _feedbackListFeedback.Label;
             _feedbackListPause = false;
 
-            if (_feedbackListFeedback.Pause != null)
-            {
-                _feedbackListPause = true;
-            }
-            if ((_feedbackListFeedback.LooperPause == true) && (Application.isPlaying))
+            if (_feedbackListFeedback.Pause != null) _feedbackListPause = true;
+            if (_feedbackListFeedback.LooperPause && Application.isPlaying)
             {
                 if ((_feedbackListFeedback as MMF_Looper).InfiniteLoop)
-                {
                     _feedbackListLabel = _feedbackListLabel + _infiniteLoopText;
-                }
                 else
-                {
-                    _feedbackListLabel = _feedbackListLabel + "[ " + (_feedbackListFeedback as MMF_Looper).NumberOfLoopsLeft + " loops left ] ";
-                }                  
+                    _feedbackListLabel = _feedbackListLabel + "[ " +
+                                         (_feedbackListFeedback as MMF_Looper).NumberOfLoopsLeft + " loops left ] ";
             }
 
-            Rect headerRect = MMF_PlayerStyling.DrawHeader(
+            var headerRect = MMF_PlayerStyling.DrawHeader(
                 ref _feedbackListIsExpanded,
                 ref _feedbackListFeedback.Active,
                 _feedbackListLabel,
                 _feedbackListFeedback.FeedbackColor,
-                (GenericMenu menu) =>
+                menu =>
                 {
                     if (Application.isPlaying)
                         menu.AddItem(_feedbackPlayGUIContent, false, () => PlayFeedback(i));
@@ -727,13 +659,13 @@ namespace MoreMountains.Feedbacks
                 _feedbackListFeedback.FeedbackStartedAt,
                 _feedbackListFeedback.FeedbackDuration,
                 _feedbackListFeedback.TotalDuration,
-                    _feedbackListFeedback.Timing,
-                    _feedbackListPause,
-                    _feedbackListFeedback.RequiresSetup,
-                    _feedbackListFeedback.RequiredTarget,
-                    _feedbackListFeedback.DisplayColor,
-                    TargetMmfPlayer 
-                    );
+                _feedbackListFeedback.Timing,
+                _feedbackListPause,
+                _feedbackListFeedback.RequiresSetup,
+                _feedbackListFeedback.RequiredTarget,
+                _feedbackListFeedback.DisplayColor,
+                TargetMmfPlayer
+            );
 
             // Check if we start dragging this feedback
 
@@ -745,41 +677,34 @@ namespace MoreMountains.Feedbacks
                         _draggedStartID = i;
                         _currentEvent.Use();
                     }
+
                     break;
             }
 
             // Draw blue rect if feedback is being dragged
 
-            if (_draggedStartID == i && headerRect != Rect.zero)
-            {
-                EditorGUI.DrawRect(headerRect, _draggedColor);
-            }
+            if (_draggedStartID == i && headerRect != Rect.zero) EditorGUI.DrawRect(headerRect, _draggedColor);
 
             // If hovering at the top of the feedback while dragging one, check where the feedback should be dropped : top or bottom
 
             if (headerRect.Contains(_currentEvent.mousePosition))
-            {
                 if (_draggedStartID >= 0)
                 {
                     _draggedEndID = i;
-                    Rect headerSplit = headerRect;
+                    var headerSplit = headerRect;
                     headerSplit.height *= 0.5f;
                     headerSplit.y += headerSplit.height;
-                    if (headerSplit.Contains(_currentEvent.mousePosition))
-                    {
-                        _draggedEndID = i + 1;
-                    }
+                    if (headerSplit.Contains(_currentEvent.mousePosition)) _draggedEndID = i + 1;
                 }
-            }
         }
 
         protected virtual void DrawFeedbackHelp()
         {
-            string helpText = FeedbackHelpAttribute.GetFeedbackHelpText(_feedbackListFeedback.GetType());
-                    
-            if ( (!string.IsNullOrEmpty(helpText)) && (MMF_PlayerConfiguration.Instance.ShowInspectorTips))
+            var helpText = FeedbackHelpAttribute.GetFeedbackHelpText(_feedbackListFeedback.GetType());
+
+            if (!string.IsNullOrEmpty(helpText) && MMF_PlayerConfiguration.Instance.ShowInspectorTips)
             {
-                float newHeight = _helptextStyle.CalcHeight(new GUIContent(helpText), EditorGUIUtility.currentViewWidth);
+                var newHeight = _helptextStyle.CalcHeight(new GUIContent(helpText), EditorGUIUtility.currentViewWidth);
                 EditorGUILayout.LabelField(helpText, _helptextStyle);
             }
 
@@ -806,14 +731,8 @@ namespace MoreMountains.Feedbacks
             EditorGUI.BeginDisabledGroup(!Application.isPlaying);
             EditorGUILayout.BeginHorizontal();
             {
-                if (GUILayout.Button(_playText, EditorStyles.miniButtonMid))
-                {
-                    PlayFeedback(i);
-                }
-                if (GUILayout.Button(_stopText, EditorStyles.miniButtonMid))
-                {
-                    StopFeedback(i);
-                }
+                if (GUILayout.Button(_playText, EditorStyles.miniButtonMid)) PlayFeedback(i);
+                if (GUILayout.Button(_stopText, EditorStyles.miniButtonMid)) StopFeedback(i);
             }
             EditorGUILayout.EndHorizontal();
             EditorGUI.EndDisabledGroup();
@@ -824,90 +743,78 @@ namespace MoreMountains.Feedbacks
 
         #endregion InspectorList
 
-        #region Helpers
-        
-        /// <summary>
-        /// We need to repaint constantly if dragging a feedback around
-        /// </summary>
-        public override bool RequiresConstantRepaint()
-        {
-            return !TargetMmfPlayer.PerformanceMode && TargetMmfPlayer.IsPlaying;
-        }
-
-        #endregion Helpers
-
         #region FeedbacksControls
-        
+
         /// <summary>
-        /// Add a feedback to the list
+        ///     Add a feedback to the list
         /// </summary>
-        protected virtual MMF_Feedback AddFeedback(System.Type type)
+        protected virtual MMF_Feedback AddFeedback(Type type)
         {
             return (target as MMF_Player).AddFeedback(type);
         }
 
         /// <summary>
-        /// Remove the selected feedback
+        ///     Remove the selected feedback
         /// </summary>
         protected virtual void RemoveFeedback(int id)
         {
-	        MMF_FeedbackInspectors.Remove(TargetMmfPlayer.FeedbacksList[id].UniqueID);
+            MMF_FeedbackInspectors.Remove(TargetMmfPlayer.FeedbacksList[id].UniqueID);
             (target as MMF_Player).RemoveFeedback(id);
         }
 
         /// <summary>
-        /// Play the selected feedback
+        ///     Play the selected feedback
         /// </summary>
         protected virtual void InitializeFeedback(int id)
         {
-            MMF_Feedback feedback = TargetMmfPlayer.FeedbacksList[id];
+            var feedback = TargetMmfPlayer.FeedbacksList[id];
             feedback.Initialization(TargetMmfPlayer);
         }
 
         /// <summary>
-        /// Play the selected feedback
+        ///     Play the selected feedback
         /// </summary>
         protected virtual void PlayFeedback(int id)
         {
-            MMF_Feedback feedback = TargetMmfPlayer.FeedbacksList[id];
+            var feedback = TargetMmfPlayer.FeedbacksList[id];
             feedback.Play(TargetMmfPlayer.transform.position, TargetMmfPlayer.FeedbacksIntensity);
         }
 
         /// <summary>
-        /// Play the selected feedback
+        ///     Play the selected feedback
         /// </summary>
         protected virtual void StopFeedback(int id)
         {
-            MMF_Feedback feedback = TargetMmfPlayer.FeedbacksList[id];
+            var feedback = TargetMmfPlayer.FeedbacksList[id];
             feedback.Stop(TargetMmfPlayer.transform.position);
         }
 
         /// <summary>
-        /// Resets the selected feedback
+        ///     Resets the selected feedback
         /// </summary>
         /// <param name="id"></param>
         protected virtual void ResetFeedback(int id)
         {
-            MMF_Feedback feedback = TargetMmfPlayer.FeedbacksList[id];
+            var feedback = TargetMmfPlayer.FeedbacksList[id];
             feedback.ResetFeedback();
         }
-        
+
         #endregion
 
         #region FeedbacksCopy
 
         /// <summary>
-        /// Copy the selected feedback
+        ///     Copy the selected feedback
         /// </summary>
         protected virtual void CopyFeedback(int id)
         {
-            MMF_Feedback feedback = TargetMmfPlayer.FeedbacksList[id];
+            var feedback = TargetMmfPlayer.FeedbacksList[id];
 
             MMF_PlayerCopy.Copy(feedback);
         }
 
         /// <summary>
-        /// Asks for a full copy of the source
+        ///     Asks for a full copy of the source
         /// </summary>
         protected virtual void CopyAll()
         {
@@ -915,7 +822,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Creates a new feedback and applies the previoulsy copied feedback values
+        ///     Creates a new feedback and applies the previoulsy copied feedback values
         /// </summary>
         protected virtual void PasteAsNew()
         {
@@ -926,7 +833,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Asks for a paste of all feedbacks in the source
+        ///     Asks for a paste of all feedbacks in the source
         /// </summary>
         protected virtual void PasteAllAsNew()
         {
@@ -951,10 +858,7 @@ namespace MoreMountains.Feedbacks
 
         protected void OnDisable()
         {
-            foreach (KeyValuePair<int, MMF_FeedbackInspector> inspector in MMF_FeedbackInspectors)
-            {
-                inspector.Value.OnDisable();
-            }
+            foreach (var inspector in MMF_FeedbackInspectors) inspector.Value.OnDisable();
             EditorApplication.playModeStateChanged -= ModeChanged;
         }
 
@@ -966,25 +870,28 @@ namespace MoreMountains.Feedbacks
                     if (_keepPlayModeChanges.boolValue)
                     {
                         MMF_PlayerCopy.ShouldKeepChanges.Add(TargetMmfPlayer);
-                        CopyAll();    
+                        CopyAll();
                     }
+
                     break;
-                
+
                 case PlayModeStateChange.EnteredEditMode:
-                    
+
                     if (MMF_PlayerCopy.ShouldKeepChanges.Contains(TargetMmfPlayer))
                     {
                         ReplaceAll();
                         if (MMF_PlayerConfiguration.Instance.AutoDisableKeepPlaymodeChanges)
                         {
                             serializedObject.Update();
-                            _keepPlayModeChanges.boolValue = false;    
+                            _keepPlayModeChanges.boolValue = false;
                             serializedObject.ApplyModifiedProperties();
                         }
+
                         MMF_PlayerCopy.ShouldKeepChanges.Remove(TargetMmfPlayer);
                     }
+
                     ForceRepaint();
-                    
+
                     break;
             }
         }
@@ -995,14 +902,12 @@ namespace MoreMountains.Feedbacks
             Initialization();
             Repaint();
         }
-        
-        void Reset()
+
+        private void Reset()
         {
             ForceRepaint();
         }
 
         #endregion
-        
-        
     }
 }

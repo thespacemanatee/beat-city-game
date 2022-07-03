@@ -1,14 +1,12 @@
-﻿﻿using Cinemachine;
-using MoreMountains.Tools;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// A class used to store gyro properties per camera
+    ///     A class used to store gyro properties per camera
     /// </summary>
     [Serializable]
     [AddComponentMenu("More Mountains/Tools/Cinemachine/MMGyroCam")]
@@ -16,39 +14,43 @@ namespace MoreMountains.Tools
     {
         /// the bound cinemachine camera
         public CinemachineVirtualCamera Cam;
+
         /// the transform this camera should look at
         public Transform LookAt;
+
         /// the transform this camera should rotate around
         public Transform RotationCenter;
+
         /// the minimum rotation to apply to this camera (in degrees)
-        public Vector2 MinRotation = new Vector2(-2f, -2f);
+        public Vector2 MinRotation = new(-2f, -2f);
+
         /// the maximum rotation to apply to this camera (in degrees)
-        public Vector2 MaxRotation = new Vector2(2f, 2f);
+        public Vector2 MaxRotation = new(2f, 2f);
+
         /// a transform to follow if the camera is animated
         public Transform AnimatedPosition;
-        
+
         /// the camera's initial angles
-        [MMReadOnly]
-        public Vector3 InitialAngles;
+        [MMReadOnly] public Vector3 InitialAngles;
+
         /// the camera's initial position
-        [MMReadOnly]
-        public Vector3 InitialPosition;
+        [MMReadOnly] public Vector3 InitialPosition;
     }
 
     /// <summary>
-    /// Add this class to a camera rig (an empty object), bind some Cinemachine virtual cameras to it, and they'll move around the specified object as your gyro powered device moves
+    ///     Add this class to a camera rig (an empty object), bind some Cinemachine virtual cameras to it, and they'll move
+    ///     around the specified object as your gyro powered device moves
     /// </summary>
     public class MMGyroParallax : MMGyroscope
     {
-
         [Header("Cameras")]
         /// the list of cameras to move as the gyro moves
         public List<MMGyroCam> Cams;
-        
+
         protected Vector3 _newAngles;
 
         /// <summary>
-        /// On start we initialize our rig
+        ///     On start we initialize our rig
         /// </summary>
         protected override void Start()
         {
@@ -57,19 +59,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Grabs the cameras and stores their position
-        /// </summary>
-        public virtual void Initialization()
-        {
-            foreach (MMGyroCam cam in Cams)
-            {
-                cam.InitialAngles = cam.Cam.transform.localEulerAngles;
-                cam.InitialPosition = cam.Cam.transform.position;
-            }
-        }
-
-        /// <summary>
-        /// On Update we move our cameras
+        ///     On Update we move our cameras
         /// </summary>
         protected override void Update()
         {
@@ -78,32 +68,36 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Moves cameras around based on gyro input
+        ///     Grabs the cameras and stores their position
+        /// </summary>
+        public virtual void Initialization()
+        {
+            foreach (var cam in Cams)
+            {
+                cam.InitialAngles = cam.Cam.transform.localEulerAngles;
+                cam.InitialPosition = cam.Cam.transform.position;
+            }
+        }
+
+        /// <summary>
+        ///     Moves cameras around based on gyro input
         /// </summary>
         protected virtual void MoveCameras()
         {
-            foreach (MMGyroCam cam in Cams)
+            foreach (var cam in Cams)
             {
-                float newX = 0f;
-                float newY = 0f;
+                var newX = 0f;
+                var newY = 0f;
 
                 var gyroGravity = LerpedCalibratedGyroscopeGravity;
                 if (gyroGravity.x > 0)
-                {
                     newX = MMMaths.Remap(LerpedCalibratedGyroscopeGravity.x, 0.5f, 0, cam.MinRotation.x, 0);
-                }
                 if (gyroGravity.x < 0)
-                {
                     newX = MMMaths.Remap(LerpedCalibratedGyroscopeGravity.x, 0, -.5f, 0, cam.MaxRotation.x);
-                }
                 if (gyroGravity.y > 0)
-                {
                     newY = MMMaths.Remap(LerpedCalibratedGyroscopeGravity.y, 0.5f, 0, cam.MinRotation.y, 0f);
-                }
                 if (gyroGravity.y < 0)
-                {
                     newY = MMMaths.Remap(LerpedCalibratedGyroscopeGravity.y, 0f, -0.5f, 0f, cam.MaxRotation.y);
-                }
 
                 var camTransform = cam.Cam.transform;
 
@@ -121,7 +115,7 @@ namespace MoreMountains.Tools
                     _newAngles = cam.InitialAngles;
                     _newAngles.x += newX;
                     _newAngles.z += newY;
-                    
+
                     camTransform.position = cam.InitialPosition;
                     camTransform.localEulerAngles = cam.InitialAngles;
                 }
@@ -133,13 +127,9 @@ namespace MoreMountains.Tools
                 if (cam.Cam.LookAt == null) // cinemachine is not tracking a target
                 {
                     if (cam.LookAt != null) // local lookout target
-                    {
                         camTransform.LookAt(cam.LookAt);
-                    }
                     else
-                    {
                         camTransform.LookAt(cam.RotationCenter);
-                    }
                 }
             }
         }

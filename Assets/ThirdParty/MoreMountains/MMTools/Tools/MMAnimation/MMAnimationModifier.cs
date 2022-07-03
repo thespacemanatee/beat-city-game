@@ -1,27 +1,26 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Add this script to an animation in Mecanim and you'll be able to control its start position and speed
+    ///     Add this script to an animation in Mecanim and you'll be able to control its start position and speed
     /// </summary>
     [AddComponentMenu("More Mountains/Tools/Animation/MMAnimationModifier")]
     public class MMAnimationModifier : StateMachineBehaviour
     {
         [MMVectorAttribute("Min", "Max")]
         /// the min and max values for the start position of the animation (between 0 and 1)
-        public Vector2 StartPosition = new Vector2(0, 0);
+        public Vector2 StartPosition = new(0, 0);
 
         [MMVectorAttribute("Min", "Max")]
         /// the min and max values for the animation speed (1 is normal)
-        public Vector2 AnimationSpeed = new Vector2(1, 1);
+        public Vector2 AnimationSpeed = new(1, 1);
 
-        protected bool _enteredState = false;
+        protected bool _enteredState;
         protected float _initialSpeed;
 
         /// <summary>
-        /// On state enter, we modify our speed and start position
+        ///     On state enter, we modify our speed and start position
         /// </summary>
         /// <param name="animator"></param>
         /// <param name="stateInfo"></param>
@@ -36,14 +35,12 @@ namespace MoreMountains.Tools
 
             // handle start position
             if (!_enteredState)
-            {
                 animator.Play(stateInfo.fullPathHash, layerIndex, Random.Range(StartPosition.x, StartPosition.y));
-            }
             _enteredState = !_enteredState;
         }
 
         /// <summary>
-        /// On state exit, we restore our speed
+        ///     On state exit, we restore our speed
         /// </summary>
         /// <param name="animator"></param>
         /// <param name="stateInfo"></param>
@@ -51,7 +48,7 @@ namespace MoreMountains.Tools
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             base.OnStateExit(animator, stateInfo, layerIndex);
-            animator.speed = _initialSpeed;            
+            animator.speed = _initialSpeed;
         }
     }
 }

@@ -1,22 +1,21 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Vector3 property setter
+    ///     Vector3 property setter
     /// </summary>
     public class MMPropertyLinkVector3 : MMPropertyLink
     {
-        public Func<Vector3> GetVector3Delegate;
-        public Action<Vector3> SetVector3Delegate;
-
         protected Vector3 _initialValue;
         protected Vector3 _newValue;
         protected Vector3 _vector3;
-        
+        public Func<Vector3> GetVector3Delegate;
+        public Action<Vector3> SetVector3Delegate;
+
         /// <summary>
-        /// On init we grab our initial value
+        ///     On init we grab our initial value
         /// </summary>
         /// <param name="property"></param>
         public override void Initialization(MMProperty property)
@@ -26,7 +25,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Creates cached getter and setters for properties
+        ///     Creates cached getter and setters for properties
         /// </summary>
         /// <param name="property"></param>
         public override void CreateGettersAndSetters(MMProperty property)
@@ -34,25 +33,23 @@ namespace MoreMountains.Tools
             base.CreateGettersAndSetters(property);
             if (property.MemberType == MMProperty.MemberTypes.Property)
             {
-                object firstArgument = (property.TargetScriptableObject == null) ? (object)property.TargetComponent : (object)property.TargetScriptableObject;
+                object firstArgument = property.TargetScriptableObject == null
+                    ? property.TargetComponent
+                    : property.TargetScriptableObject;
                 if (property.MemberPropertyInfo.GetGetMethod() != null)
-                {
                     GetVector3Delegate = (Func<Vector3>)Delegate.CreateDelegate(typeof(Func<Vector3>),
-                                                                                firstArgument,
-                                                                                property.MemberPropertyInfo.GetGetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetGetMethod());
                 if (property.MemberPropertyInfo.GetSetMethod() != null)
-                {
                     SetVector3Delegate = (Action<Vector3>)Delegate.CreateDelegate(typeof(Action<Vector3>),
-                                                                            firstArgument,
-                                                                            property.MemberPropertyInfo.GetSetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetSetMethod());
                 _getterSetterInitialized = true;
             }
         }
 
         /// <summary>
-        /// Gets the raw value of the property, a normalized float value, caching the operation if possible
+        ///     Gets the raw value of the property, a normalized float value, caching the operation if possible
         /// </summary>
         /// <param name="emitter"></param>
         /// <param name="property"></param>
@@ -63,7 +60,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the raw property value, float normalized, caching the operation if possible
+        ///     Sets the raw property value, float normalized, caching the operation if possible
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -74,7 +71,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Returns this property link's level between 0 and 1
+        ///     Returns this property link's level between 0 and 1
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -84,7 +81,7 @@ namespace MoreMountains.Tools
         {
             _vector3 = GetValueOptimized(property);
 
-            float newValue = 0f;
+            var newValue = 0f;
 
             switch (emitter.Vector3Option)
             {
@@ -99,8 +96,9 @@ namespace MoreMountains.Tools
                     break;
             }
 
-            float returnValue = newValue;
-            returnValue = MMMaths.Clamp(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne, emitter.ClampMin, emitter.ClampMax);
+            var returnValue = newValue;
+            returnValue = MMMaths.Clamp(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne,
+                emitter.ClampMin, emitter.ClampMax);
             returnValue = MMMaths.Remap(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne, 0f, 1f);
 
             emitter.Level = returnValue;
@@ -108,7 +106,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the level
+        ///     Sets the level
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -117,20 +115,23 @@ namespace MoreMountains.Tools
         {
             base.SetLevel(receiver, property, level);
 
-            _newValue.x = receiver.ModifyX ? MMMaths.Remap(level, 0f, 1f, receiver.Vector3RemapZero.x, receiver.Vector3RemapOne.x) : 0f;
-            _newValue.y = receiver.ModifyY ? MMMaths.Remap(level, 0f, 1f, receiver.Vector3RemapZero.y, receiver.Vector3RemapOne.y) : 0f;
-            _newValue.z = receiver.ModifyZ ? MMMaths.Remap(level, 0f, 1f, receiver.Vector3RemapZero.z, receiver.Vector3RemapOne.z) : 0f;
+            _newValue.x = receiver.ModifyX
+                ? MMMaths.Remap(level, 0f, 1f, receiver.Vector3RemapZero.x, receiver.Vector3RemapOne.x)
+                : 0f;
+            _newValue.y = receiver.ModifyY
+                ? MMMaths.Remap(level, 0f, 1f, receiver.Vector3RemapZero.y, receiver.Vector3RemapOne.y)
+                : 0f;
+            _newValue.z = receiver.ModifyZ
+                ? MMMaths.Remap(level, 0f, 1f, receiver.Vector3RemapZero.z, receiver.Vector3RemapOne.z)
+                : 0f;
 
-            if (receiver.RelativeValue)
-            {
-                _newValue = _initialValue + _newValue;
-            }
+            if (receiver.RelativeValue) _newValue = _initialValue + _newValue;
 
             SetValueOptimized(property, _newValue);
         }
 
         /// <summary>
-        /// Gets either the cached value or the raw value
+        ///     Gets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
@@ -140,20 +141,16 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets either the cached value or the raw value
+        ///     Sets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <param name="newValue"></param>
         protected virtual void SetValueOptimized(MMProperty property, Vector3 newValue)
         {
             if (_getterSetterInitialized)
-            {
                 SetVector3Delegate(_newValue);
-            }
             else
-            {
                 SetPropertyValue(property, _newValue);
-            }
         }
     }
 }

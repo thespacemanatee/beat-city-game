@@ -1,30 +1,27 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
+﻿using System;
+using UnityEngine;
 #if UNITY_EDITOR
-using UnityEditor;
 #endif
 
 namespace MoreMountains.Tools
 {
-    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class | AttributeTargets.Struct, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Class |
+                    AttributeTargets.Struct)]
     public class MMConditionAttribute : PropertyAttribute
     {
         public string ConditionBoolean = "";
-        public bool Hidden = false;
+        public bool Hidden;
 
         public MMConditionAttribute(string conditionBoolean)
         {
-            this.ConditionBoolean = conditionBoolean;
-            this.Hidden = false;
+            ConditionBoolean = conditionBoolean;
+            Hidden = false;
         }
 
         public MMConditionAttribute(string conditionBoolean, bool hideInInspector)
         {
-            this.ConditionBoolean = conditionBoolean;
-            this.Hidden = hideInInspector;
+            ConditionBoolean = conditionBoolean;
+            Hidden = hideInInspector;
         }
-
     }
 }

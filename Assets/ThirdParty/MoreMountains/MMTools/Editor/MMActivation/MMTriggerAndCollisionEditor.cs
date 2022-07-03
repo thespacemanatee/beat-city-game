@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace MoreMountains.Tools
 {
@@ -9,34 +6,32 @@ namespace MoreMountains.Tools
     [CanEditMultipleObjects]
     public class MMTriggerAndCollisionEditor : Editor
     {
+        protected SerializedProperty _Collision2DLayerMask;
         protected SerializedProperty _CollisionLayerMask;
+        protected SerializedProperty _OnCollision2DEnterEvent;
+        protected SerializedProperty _OnCollision2DExitEvent;
+        protected SerializedProperty _OnCollision2DStayEvent;
         protected SerializedProperty _OnCollisionEnterEvent;
         protected SerializedProperty _OnCollisionExitEvent;
         protected SerializedProperty _OnCollisionStayEvent;
-
-        protected SerializedProperty _TriggerLayerMask;
+        protected SerializedProperty _OnTrigger2DEnterEvent;
+        protected SerializedProperty _OnTrigger2DExitEvent;
+        protected SerializedProperty _OnTrigger2DStayEvent;
         protected SerializedProperty _OnTriggerEnterEvent;
         protected SerializedProperty _OnTriggerExitEvent;
         protected SerializedProperty _OnTriggerStayEvent;
 
-        protected SerializedProperty _Collision2DLayerMask;
-        protected SerializedProperty _OnCollision2DEnterEvent;
-        protected SerializedProperty _OnCollision2DExitEvent;
-        protected SerializedProperty _OnCollision2DStayEvent;
-
         protected SerializedProperty _Trigger2DLayerMask;
-        protected SerializedProperty _OnTrigger2DEnterEvent;
-        protected SerializedProperty _OnTrigger2DExitEvent;
-        protected SerializedProperty _OnTrigger2DStayEvent;
+
+        protected SerializedProperty _TriggerLayerMask;
 
         protected bool OnCollision;
-        protected bool OnTrigger;
         protected bool OnCollision2D;
+        protected bool OnTrigger;
         protected bool OnTrigger2D;
 
         protected virtual void OnEnable()
         {
-
             _CollisionLayerMask = serializedObject.FindProperty("CollisionLayerMask");
             _OnCollisionEnterEvent = serializedObject.FindProperty("OnCollisionEnterEvent");
             _OnCollisionExitEvent = serializedObject.FindProperty("OnCollisionExitEvent");

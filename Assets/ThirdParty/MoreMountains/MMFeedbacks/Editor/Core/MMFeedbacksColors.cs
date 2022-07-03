@@ -1,14 +1,27 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// Color helpers
+    ///     Color helpers
     /// </summary>
     public static class MMFeedbacksColors
     {
+        /// <summary>
+        ///     Tint : Uses HSV color conversions, keeps the original values, multiplies alpha
+        ///     Multiply : The whole color, including alpha, is multiplied over the original
+        ///     Replace : completely replaces the original with the target color
+        ///     ReplaceKeepAlpha : color is replaced but the original alpha channel is ignored
+        ///     Add : target color gets added (including its alpha)
+        /// </summary>
+        public enum ColoringMode
+        {
+            Tint,
+            Multiply,
+            Replace,
+            ReplaceKeepAlpha,
+            Add
+        }
         // via https://gist.github.com/LotteMakesStuff/f7ce43f11e545a151b95b5e87f76304c
         // NOTE: The follwing color names come from the CSS3 specification, Section 4.3 Extended Color Keywords
         // http://www.w3.org/TR/css3-color/#svg-color
@@ -158,7 +171,7 @@ namespace MoreMountains.Feedbacks
 
         public static Color RandomColor()
         {
-            int random = Random.Range(0, 140);
+            var random = Random.Range(0, 140);
             return GetColorAt(random);
         }
 
@@ -307,11 +320,12 @@ namespace MoreMountains.Feedbacks
                 case 138: return Yellow;
                 case 139: return YellowGreen;
             }
+
             return White;
         }
 
         /// <summary>
-        /// Returns a random color between the two min/max specified
+        ///     Returns a random color between the two min/max specified
         /// </summary>
         /// <param name="color"></param>
         /// <param name="min"></param>
@@ -319,40 +333,31 @@ namespace MoreMountains.Feedbacks
         /// <returns></returns>
         public static Color MMRandomColor(this Color color, Color min, Color max)
         {
-            Color c = new Color()
+            var c = new Color
             {
-                r = UnityEngine.Random.Range(min.r, max.r),
-                g = UnityEngine.Random.Range(min.g, max.g),
-                b = UnityEngine.Random.Range(min.b, max.b),
-                a = UnityEngine.Random.Range(min.a, max.a)
+                r = Random.Range(min.r, max.r),
+                g = Random.Range(min.g, max.g),
+                b = Random.Range(min.b, max.b),
+                a = Random.Range(min.a, max.a)
             };
 
             return c;
         }
 
-
-        /// <summary>
-        /// Tint : Uses HSV color conversions, keeps the original values, multiplies alpha
-        /// Multiply : The whole color, including alpha, is multiplied over the original 
-        /// Replace : completely replaces the original with the target color
-        /// ReplaceKeepAlpha : color is replaced but the original alpha channel is ignored
-        /// Add : target color gets added (including its alpha)
-        /// </summary>
-        public enum ColoringMode { Tint, Multiply, Replace, ReplaceKeepAlpha, Add }
-
-        public static Color MMColorize(this Color originalColor, Color targetColor, ColoringMode coloringMode, float lerpAmount = 1.0f)
+        public static Color MMColorize(this Color originalColor, Color targetColor, ColoringMode coloringMode,
+            float lerpAmount = 1.0f)
         {
-            Color resultColor = Color.white;
+            var resultColor = Color.white;
             switch (coloringMode)
             {
                 case ColoringMode.Tint:
-                    {
-                        float s_h, s_s, s_v, t_h, t_s, t_v;
-                        Color.RGBToHSV(originalColor, out s_h, out s_s, out s_v);
-                        Color.RGBToHSV(targetColor, out t_h, out t_s, out t_v);
-                        resultColor = Color.HSVToRGB(t_h, t_s, s_v * t_v);
-                        resultColor.a = originalColor.a * targetColor.a;
-                    }
+                {
+                    float s_h, s_s, s_v, t_h, t_s, t_v;
+                    Color.RGBToHSV(originalColor, out s_h, out s_s, out s_v);
+                    Color.RGBToHSV(targetColor, out t_h, out t_s, out t_v);
+                    resultColor = Color.HSVToRGB(t_h, t_s, s_v * t_v);
+                    resultColor.a = originalColor.a * targetColor.a;
+                }
                     break;
                 case ColoringMode.Multiply:
                     resultColor = originalColor * targetColor;
@@ -367,9 +372,8 @@ namespace MoreMountains.Feedbacks
                 case ColoringMode.Add:
                     resultColor = originalColor + targetColor;
                     break;
-                default:
-                    break;
             }
+
             return Color.Lerp(originalColor, resultColor, lerpAmount);
         }
     }

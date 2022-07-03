@@ -1,21 +1,19 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Int property setter
+    ///     Int property setter
     /// </summary>
     public class MMPropertyLinkInt : MMPropertyLink
     {
+        protected int _initialValue;
+        protected int _newValue;
         public Func<int> GetIntDelegate;
         public Action<int> SetIntDelegate;
 
-        protected int _initialValue;
-        protected int _newValue;
-
         /// <summary>
-        /// On init we grab our initial value
+        ///     On init we grab our initial value
         /// </summary>
         /// <param name="property"></param>
         public override void Initialization(MMProperty property)
@@ -25,7 +23,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Creates cached getter and setters for properties
+        ///     Creates cached getter and setters for properties
         /// </summary>
         /// <param name="property"></param>
         public override void CreateGettersAndSetters(MMProperty property)
@@ -33,27 +31,25 @@ namespace MoreMountains.Tools
             base.CreateGettersAndSetters(property);
             if (property.MemberType == MMProperty.MemberTypes.Property)
             {
-                object firstArgument = (property.TargetScriptableObject == null) ? (object)property.TargetComponent : (object)property.TargetScriptableObject;
+                object firstArgument = property.TargetScriptableObject == null
+                    ? property.TargetComponent
+                    : property.TargetScriptableObject;
 
                 if (property.MemberPropertyInfo.GetGetMethod() != null)
-                {
                     GetIntDelegate = (Func<int>)Delegate.CreateDelegate(typeof(Func<int>),
-                                                                                firstArgument,
-                                                                                property.MemberPropertyInfo.GetGetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetGetMethod());
 
                 if (property.MemberPropertyInfo.GetSetMethod() != null)
-                {
                     SetIntDelegate = (Action<int>)Delegate.CreateDelegate(typeof(Action<int>),
-                                                                            firstArgument,
-                                                                            property.MemberPropertyInfo.GetSetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetSetMethod());
                 _getterSetterInitialized = true;
             }
         }
 
         /// <summary>
-        /// Gets the raw value of the property, a normalized float value, caching the operation if possible
+        ///     Gets the raw value of the property, a normalized float value, caching the operation if possible
         /// </summary>
         /// <param name="emitter"></param>
         /// <param name="property"></param>
@@ -64,7 +60,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the raw property value, float normalized, caching the operation if possible
+        ///     Sets the raw property value, float normalized, caching the operation if possible
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -75,7 +71,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Returns this property link's level between 0 and 1
+        ///     Returns this property link's level between 0 and 1
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -85,7 +81,8 @@ namespace MoreMountains.Tools
         {
             float returnValue = GetValueOptimized(property);
 
-            returnValue = MMMaths.Clamp(returnValue, emitter.IntRemapMinToZero, emitter.IntRemapMaxToOne, emitter.ClampMin, emitter.ClampMax);
+            returnValue = MMMaths.Clamp(returnValue, emitter.IntRemapMinToZero, emitter.IntRemapMaxToOne,
+                emitter.ClampMin, emitter.ClampMax);
             returnValue = MMMaths.Remap(returnValue, emitter.IntRemapMinToZero, emitter.IntRemapMaxToOne, 0f, 1f);
 
             emitter.Level = returnValue;
@@ -93,7 +90,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the specified level
+        ///     Sets the specified level
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -104,16 +101,13 @@ namespace MoreMountains.Tools
 
             _newValue = (int)MMMaths.Remap(level, 0f, 1f, receiver.IntRemapZero, receiver.IntRemapOne);
 
-            if (receiver.RelativeValue)
-            {
-                _newValue = _initialValue + _newValue;
-            }
+            if (receiver.RelativeValue) _newValue = _initialValue + _newValue;
 
             SetValueOptimized(property, _newValue);
         }
 
         /// <summary>
-        /// Gets either the cached value or the raw value
+        ///     Gets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
@@ -123,20 +117,16 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets either the cached value or the raw value
+        ///     Sets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <param name="newValue"></param>
         protected virtual void SetValueOptimized(MMProperty property, int newValue)
         {
             if (_getterSetterInitialized)
-            {
                 SetIntDelegate(_newValue);
-            }
             else
-            {
                 SetPropertyValue(property, _newValue);
-            }
         }
     }
 }

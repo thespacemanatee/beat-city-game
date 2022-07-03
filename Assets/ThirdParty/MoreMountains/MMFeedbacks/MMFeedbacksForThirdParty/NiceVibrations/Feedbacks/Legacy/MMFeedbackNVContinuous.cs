@@ -1,6 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Feedbacks;
+using UnityEngine;
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 using Lofelt.NiceVibrations;
 #endif
@@ -8,22 +7,25 @@ using Lofelt.NiceVibrations;
 namespace MoreMountains.FeedbacksForThirdParty
 {
     /// <summary>
-    /// Add this feedback to play a continuous haptic of the specified amplitude and frequency over a certain duration. This feedback will also let you randomize these, and modulate them over time.
+    ///     Add this feedback to play a continuous haptic of the specified amplitude and frequency over a certain duration.
+    ///     This feedback will also let you randomize these, and modulate them over time.
     /// </summary>
     [AddComponentMenu("")]
-	#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     [FeedbackPath("Haptics/Haptic Continuous")]
-	#endif
-    [FeedbackHelp("Add this feedback to play a continuous haptic of the specified amplitude and frequency over a certain duration. This feedback will also let you randomize these, and modulate them over time.")]
+#endif
+    [FeedbackHelp(
+        "Add this feedback to play a continuous haptic of the specified amplitude and frequency over a certain duration. This feedback will also let you randomize these, and modulate them over time.")]
     public class MMFeedbackNVContinuous : MMFeedback
     {
-		#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
         /// a static bool used to disable all feedbacks of this type at once
         public static bool FeedbackTypeAuthorized = true;
         #if UNITY_EDITOR
             public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.HapticsColor; } }
         #endif
-        public override float FeedbackDuration { get { return ApplyTimeMultiplier(_duration); } set { _duration = value; } }
+        public override float FeedbackDuration { get { return ApplyTimeMultiplier(_duration); } set { _duration =
+ value; } }
         
         [Header("Haptic Amplitude")]
         /// the minimum amplitude at which this clip should play (amplitude will be randomized between MinAmplitude and MaxAmplitude)
@@ -61,11 +63,13 @@ namespace MoreMountains.FeedbacksForThirdParty
         /// if UseRealTimeModulation:true, the curve along which to modulate amplitude for this continuous haptic, over its total duration
         [Tooltip("if UseRealTimeModulation:true, the curve along which to modulate amplitude for this continuous haptic, over its total duration")]
         [MMFCondition("UseRealTimeModulation", true)]
-        public AnimationCurve AmplitudeMultiplication = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
+        public AnimationCurve AmplitudeMultiplication =
+ new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
         /// if UseRealTimeModulation:true, the curve along which to modulate frequency for this continuous haptic, over its total duration
         [Tooltip("if UseRealTimeModulation:true, the curve along which to modulate frequency for this continuous haptic, over its total duration")]
         [MMFCondition("UseRealTimeModulation", true)]
-        public AnimationCurve ShiftFrequency = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
+        public AnimationCurve ShiftFrequency =
+ new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
 
         [Header("Settings")] 
         /// a set of settings you can tweak to specify how and when exactly this haptic should play
@@ -146,8 +150,10 @@ namespace MoreMountains.FeedbacksForThirdParty
                 _coroutine = null;
             }
         }
-		#else
-		protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f) { }
-		#endif
-    }    
+#else
+        protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
+        {
+        }
+#endif
+    }
 }

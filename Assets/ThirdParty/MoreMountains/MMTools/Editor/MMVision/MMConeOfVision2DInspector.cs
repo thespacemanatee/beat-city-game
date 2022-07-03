@@ -1,8 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
@@ -17,16 +14,21 @@ namespace MoreMountains.Tools
             _coneOfVision = (MMConeOfVision2D)target;
 
             Handles.color = Color.yellow;
-            Handles.DrawWireArc(_coneOfVision.transform.position, -Vector3.forward, Vector3.up, 360f, _coneOfVision.VisionRadius);
+            Handles.DrawWireArc(_coneOfVision.transform.position, -Vector3.forward, Vector3.up, 360f,
+                _coneOfVision.VisionRadius);
 
             // draws two lines to mark the vision angle
-            Vector3 visionAngleLeft = MMMaths.DirectionFromAngle2D(-_coneOfVision.VisionAngle / 2f, _coneOfVision.EulerAngles.y);
-            Vector3 visionAngleRight = MMMaths.DirectionFromAngle2D(_coneOfVision.VisionAngle / 2f, _coneOfVision.EulerAngles.y);
+            var visionAngleLeft =
+                MMMaths.DirectionFromAngle2D(-_coneOfVision.VisionAngle / 2f, _coneOfVision.EulerAngles.y);
+            var visionAngleRight =
+                MMMaths.DirectionFromAngle2D(_coneOfVision.VisionAngle / 2f, _coneOfVision.EulerAngles.y);
 
-            Handles.DrawLine(_coneOfVision.transform.position, _coneOfVision.transform.position + visionAngleLeft * _coneOfVision.VisionRadius);
-            Handles.DrawLine(_coneOfVision.transform.position, _coneOfVision.transform.position + visionAngleRight * _coneOfVision.VisionRadius);
+            Handles.DrawLine(_coneOfVision.transform.position,
+                _coneOfVision.transform.position + visionAngleLeft * _coneOfVision.VisionRadius);
+            Handles.DrawLine(_coneOfVision.transform.position,
+                _coneOfVision.transform.position + visionAngleRight * _coneOfVision.VisionRadius);
 
-            foreach (Transform visibleTarget in _coneOfVision.VisibleTargets)
+            foreach (var visibleTarget in _coneOfVision.VisibleTargets)
             {
                 Handles.color = MMColors.Orange;
                 Handles.DrawLine(_coneOfVision.transform.position, visibleTarget.position);

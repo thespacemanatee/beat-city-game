@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// This very simple class simply exposes a method to toggle the GameObject it's on (or a target one if left empty in the inspector) active or inactive
+    ///     This very simple class simply exposes a method to toggle the GameObject it's on (or a target one if left empty in
+    ///     the inspector) active or inactive
     /// </summary>
     public class MMToggleActive : MonoBehaviour
     {
@@ -14,22 +13,18 @@ namespace MoreMountains.Tools
         public GameObject TargetGameObject;
 
         /// a test button
-        [MMInspectorButton("ToggleActive")]        
-        public bool ToggleActiveButton;
+        [MMInspectorButton("ToggleActive")] public bool ToggleActiveButton;
 
         /// <summary>
-        /// On awake, grabs self if needed
+        ///     On awake, grabs self if needed
         /// </summary>
         protected virtual void Awake()
         {
-            if (TargetGameObject == null)
-            {
-                TargetGameObject = this.gameObject;
-            }
+            if (TargetGameObject == null) TargetGameObject = gameObject;
         }
 
         /// <summary>
-        /// Toggles the target gameobject's active state
+        ///     Toggles the target gameobject's active state
         /// </summary>
         public virtual void ToggleActive()
         {

@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// Add this to an audio distortion filter to shake its values remapped along a curve 
+    ///     Add this to an audio distortion filter to shake its values remapped along a curve
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Audio/MMAudioFilterDistortionShaker")]
     [RequireComponent(typeof(AudioDistortionFilter))]
@@ -14,39 +12,32 @@ namespace MoreMountains.Feedbacks
         [Header("Distortion")]
         /// whether or not to add to the initial value
         [Tooltip("whether or not to add to the initial value")]
-        public bool RelativeDistortion = false;
+        public bool RelativeDistortion;
+
         /// the curve used to animate the intensity value on
         [Tooltip("the curve used to animate the intensity value on")]
-        public AnimationCurve ShakeDistortion = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        public AnimationCurve ShakeDistortion = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
         /// the value to remap the curve's 0 to
-        [Tooltip("the value to remap the curve's 0 to")]
-        [Range(0f, 1f)]
-        public float RemapDistortionZero = 0f;
+        [Tooltip("the value to remap the curve's 0 to")] [Range(0f, 1f)]
+        public float RemapDistortionZero;
+
         /// the value to remap the curve's 1 to
-        [Tooltip("the value to remap the curve's 1 to")]
-        [Range(0f, 1f)]
+        [Tooltip("the value to remap the curve's 1 to")] [Range(0f, 1f)]
         public float RemapDistortionOne = 1f;
+
+        protected float _initialDistortion;
+        protected bool _originalRelativeDistortion;
+        protected float _originalRemapDistortionOne;
+        protected float _originalRemapDistortionZero;
+        protected AnimationCurve _originalShakeDistortion;
+        protected float _originalShakeDuration;
 
         /// the audio source to pilot
         protected AudioDistortionFilter _targetAudioDistortionFilter;
-        protected float _initialDistortion;
-        protected float _originalShakeDuration;
-        protected bool _originalRelativeDistortion;
-        protected AnimationCurve _originalShakeDistortion;
-        protected float _originalRemapDistortionZero;
-        protected float _originalRemapDistortionOne;
 
         /// <summary>
-        /// On init we initialize our values
-        /// </summary>
-        protected override void Initialization()
-        {
-            base.Initialization();
-            _targetAudioDistortionFilter = this.gameObject.GetComponent<AudioDistortionFilter>();
-        }
-
-        /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
+        ///     When that shaker gets added, we initialize its shake duration
         /// </summary>
         protected virtual void Reset()
         {
@@ -54,16 +45,26 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Shakes values over time
+        ///     On init we initialize our values
+        /// </summary>
+        protected override void Initialization()
+        {
+            base.Initialization();
+            _targetAudioDistortionFilter = gameObject.GetComponent<AudioDistortionFilter>();
+        }
+
+        /// <summary>
+        ///     Shakes values over time
         /// </summary>
         protected override void Shake()
         {
-            float newDistortionLevel = ShakeFloat(ShakeDistortion, RemapDistortionZero, RemapDistortionOne, RelativeDistortion, _initialDistortion);
+            var newDistortionLevel = ShakeFloat(ShakeDistortion, RemapDistortionZero, RemapDistortionOne,
+                RelativeDistortion, _initialDistortion);
             _targetAudioDistortionFilter.distortionLevel = newDistortionLevel;
         }
 
         /// <summary>
-        /// Collects initial values on the target
+        ///     Collects initial values on the target
         /// </summary>
         protected override void GrabInitialValues()
         {
@@ -71,7 +72,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// When we get the appropriate event, we trigger a shake
+        ///     When we get the appropriate event, we trigger a shake
         /// </summary>
         /// <param name="distortionCurve"></param>
         /// <param name="duration"></param>
@@ -79,20 +80,20 @@ namespace MoreMountains.Feedbacks
         /// <param name="relativeDistortion"></param>
         /// <param name="feedbacksIntensity"></param>
         /// <param name="channel"></param>
-        public virtual void OnMMAudioFilterDistortionShakeEvent(AnimationCurve distortionCurve, float duration, float remapMin, float remapMax, bool relativeDistortion = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
+        public virtual void OnMMAudioFilterDistortionShakeEvent(AnimationCurve distortionCurve, float duration,
+            float remapMin, float remapMax, bool relativeDistortion = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
-            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking))
-            {
-                return;
-            }
-            
+            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking)) return;
+
             if (stop)
             {
                 Stop();
                 return;
             }
-            
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 
@@ -117,7 +118,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the target's values
+        ///     Resets the target's values
         /// </summary>
         protected override void ResetTargetValues()
         {
@@ -126,7 +127,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the shaker's values
+        ///     Resets the shaker's values
         /// </summary>
         protected override void ResetShakerValues()
         {
@@ -139,7 +140,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -148,7 +149,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -158,29 +159,37 @@ namespace MoreMountains.Feedbacks
     }
 
     /// <summary>
-    /// An event used to trigger vignette shakes
+    ///     An event used to trigger vignette shakes
     /// </summary>
     public struct MMAudioFilterDistortionShakeEvent
     {
-        public delegate void Delegate(AnimationCurve distortionCurve, float duration, float remapMin, float remapMax, bool relativeDistortion = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false);
-        static private event Delegate OnEvent;
+        public delegate void Delegate(AnimationCurve distortionCurve, float duration, float remapMin, float remapMax,
+            bool relativeDistortion = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(AnimationCurve distortionCurve, float duration, float remapMin, float remapMax, bool relativeDistortion = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
+        public static void Trigger(AnimationCurve distortionCurve, float duration, float remapMin, float remapMax,
+            bool relativeDistortion = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
             OnEvent?.Invoke(distortionCurve, duration, remapMin, remapMax, relativeDistortion,
-                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop);
+                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection,
+                timescaleMode, stop);
         }
     }
 }

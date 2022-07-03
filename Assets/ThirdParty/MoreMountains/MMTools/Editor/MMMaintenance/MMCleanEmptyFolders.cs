@@ -1,24 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using System.IO;
-using System.Text;
-using System.Linq;
-using System;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// A maintenance class that removes all empty directories from a project via a menu item
+    ///     A maintenance class that removes all empty directories from a project via a menu item
     /// </summary>
     public class MMCleanEmptyFolders : MonoBehaviour
     {
-        static string _consoleLog = "";
-        static List<DirectoryInfo> _listOfEmptyDirectories = new List<DirectoryInfo>();
+        private static string _consoleLog = "";
+        private static readonly List<DirectoryInfo> _listOfEmptyDirectories = new();
 
         /// <summary>
-        /// Parses the project for empty directories and removes them, as well as their associated meta file
+        ///     Parses the project for empty directories and removes them, as well as their associated meta file
         /// </summary>
         [MenuItem("Tools/More Mountains/Cleanup empty folders", false, 504)]
         protected static void CleanupMissingScripts()
@@ -29,12 +26,13 @@ namespace MoreMountains.Tools
 
             if (0 < _listOfEmptyDirectories.Count)
             {
-                _consoleLog = "[MMCleanEmptyFolders] Removed "+ _listOfEmptyDirectories.Count + " empty directories:\n";
+                _consoleLog = "[MMCleanEmptyFolders] Removed " + _listOfEmptyDirectories.Count +
+                              " empty directories:\n";
                 foreach (var d in _listOfEmptyDirectories)
                 {
-                    _consoleLog += "· "+ d.FullName.Replace(assetsDir, "") + "\n";
+                    _consoleLog += "· " + d.FullName.Replace(assetsDir, "") + "\n";
                     FileUtil.DeleteFileOrDirectory(d.FullName);
-                    FileUtil.DeleteFileOrDirectory(d.FullName+".meta");
+                    FileUtil.DeleteFileOrDirectory(d.FullName + ".meta");
                 }
 
                 Debug.Log(_consoleLog);
@@ -45,21 +43,20 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Returns true if a directory is empty and updates a list of empty directories
+        ///     Returns true if a directory is empty and updates a list of empty directories
         /// </summary>
         /// <param name="directory"></param>
         /// <param name="listOfEmptyDirectories"></param>
         /// <returns></returns>
-        static bool GetEmptyDirectories(DirectoryInfo directory, List<DirectoryInfo> listOfEmptyDirectories)
+        private static bool GetEmptyDirectories(DirectoryInfo directory, List<DirectoryInfo> listOfEmptyDirectories)
         {
-            bool directoryIsEmpty = true;
-            directoryIsEmpty = (directory.GetDirectories().Count(x => !GetEmptyDirectories(x, listOfEmptyDirectories)) == 0) && (directory.GetFiles("*.*").All(x => x.Extension == ".meta"));
+            var directoryIsEmpty = true;
+            directoryIsEmpty =
+                directory.GetDirectories().Count(x => !GetEmptyDirectories(x, listOfEmptyDirectories)) == 0 &&
+                directory.GetFiles("*.*").All(x => x.Extension == ".meta");
 
-            if (directoryIsEmpty)
-            {
-                listOfEmptyDirectories.Add(directory);
-            }      
-            
+            if (directoryIsEmpty) listOfEmptyDirectories.Add(directory);
+
             return directoryIsEmpty;
         }
     }

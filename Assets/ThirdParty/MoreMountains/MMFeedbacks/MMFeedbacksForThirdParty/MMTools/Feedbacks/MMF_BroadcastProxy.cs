@@ -4,28 +4,30 @@ using UnityEngine;
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// This component will be automatically added by the MMF_Broadcast feedback
+    ///     This component will be automatically added by the MMF_Broadcast feedback
     /// </summary>
     public class MMF_BroadcastProxy : MonoBehaviour
     {
         /// the channel on which to broadcast
-        [Tooltip("the channel on which to broadcast")]
-        [MMReadOnly]
+        [Tooltip("the channel on which to broadcast")] [MMReadOnly]
         public int Channel;
-        /// a debug view of the current level being broadcasted
-        [Tooltip("a debug view of the current level being broadcasted")]
-        [MMReadOnly]
-        public float DebugLevel;
-        /// whether or not a broadcast is in progress (will be false while the value is not changing, and thus not broadcasting)
-        [Tooltip("whether or not a broadcast is in progress (will be false while the value is not changing, and thus not broadcasting)")]
-        [MMReadOnly]
-        public bool BroadcastInProgress = false;
 
-        public float ThisLevel { get; set; }
+        /// a debug view of the current level being broadcasted
+        [Tooltip("a debug view of the current level being broadcasted")] [MMReadOnly]
+        public float DebugLevel;
+
+        /// whether or not a broadcast is in progress (will be false while the value is not changing, and thus not broadcasting)
+        [Tooltip(
+            "whether or not a broadcast is in progress (will be false while the value is not changing, and thus not broadcasting)")]
+        [MMReadOnly]
+        public bool BroadcastInProgress;
+
         protected float _levelLastFrame;
 
+        public float ThisLevel { get; set; }
+
         /// <summary>
-        /// On Update we process our broadcast
+        ///     On Update we process our broadcast
         /// </summary>
         protected virtual void Update()
         {
@@ -33,7 +35,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Broadcasts the value if needed
+        ///     Broadcasts the value if needed
         /// </summary>
         protected virtual void ProcessBroadcast()
         {
@@ -43,9 +45,9 @@ namespace MoreMountains.Feedbacks
                 MMRadioLevelEvent.Trigger(Channel, ThisLevel);
                 BroadcastInProgress = true;
             }
+
             DebugLevel = ThisLevel;
             _levelLastFrame = ThisLevel;
         }
-    }    
+    }
 }
-

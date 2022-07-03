@@ -1,37 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Audio;
 
 namespace MoreMountains.Tools
 {
-    public class MMAudioEvents 
+    public class MMAudioEvents
     {
-        
     }
-    
+
     /// <summary>
-    /// A struct used to trigger sounds
+    ///     A struct used to trigger sounds
     /// </summary>
     public struct MMSfxEvent
     {
-        public delegate void Delegate(AudioClip clipToPlay, AudioMixerGroup audioGroup = null, float volume = 1f, float pitch = 1f); 
-        static private event Delegate OnEvent;
+        public delegate void Delegate(AudioClip clipToPlay, AudioMixerGroup audioGroup = null, float volume = 1f,
+            float pitch = 1f);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(AudioClip clipToPlay, AudioMixerGroup audioGroup = null, float volume = 1f, float pitch = 1f)
+        public static void Trigger(AudioClip clipToPlay, AudioMixerGroup audioGroup = null, float volume = 1f,
+            float pitch = 1f)
         {
             OnEvent?.Invoke(clipToPlay, audioGroup, volume, pitch);
         }
     }
 }
-

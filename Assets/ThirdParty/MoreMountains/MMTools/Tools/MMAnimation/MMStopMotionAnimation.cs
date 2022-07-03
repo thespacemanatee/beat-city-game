@@ -1,73 +1,70 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     [AddComponentMenu("More Mountains/Tools/Animation/MMStopMotionAnimation")]
     public class MMStopMotionAnimation : MonoBehaviour
     {
-        public enum FramerateModes { Manual, Automatic }
+        public enum FramerateModes
+        {
+            Manual,
+            Automatic
+        }
 
-        [Header("General Settings")]
-        public bool StopMotionEnabled = true;
-        public int AnimationLayerID = 0;
+        [Header("General Settings")] public bool StopMotionEnabled = true;
 
-        [Header("Framerate")]
-        public FramerateModes FramerateMode = FramerateModes.Automatic;
+        public int AnimationLayerID;
+
+        [Header("Framerate")] public FramerateModes FramerateMode = FramerateModes.Automatic;
 
         [MMEnumCondition("FramerateMode", (int)FramerateModes.Automatic)]
         public float FramesPerSecond = 4f;
+
         [MMEnumCondition("FramerateMode", (int)FramerateModes.Automatic)]
         public float PollFrequency = 1f;
 
         [MMEnumCondition("FramerateMode", (int)FramerateModes.Manual)]
         public float ManualTimeBetweenFrames = 0.125f;
+
         [MMEnumCondition("FramerateMode", (int)FramerateModes.Manual)]
         public float ManualAnimatorSpeed = 2;
 
-        public float timet = 0;
-
-        protected float _currentClipFPS = 0;
-        protected float _currentClipLength = 0f;
-        protected float _lastPollAt = -10f;
+        public float timet;
         protected Animator _animator;
         protected AnimationClip _currentClip;
 
+        protected float _currentClipFPS;
+        protected float _currentClipLength;
+        protected float _lastPollAt = -10f;
+
         protected virtual void Awake()
         {
-            _animator = this.gameObject.GetComponent<Animator>();            
+            _animator = gameObject.GetComponent<Animator>();
         }
 
         protected virtual void Update()
         {
             StopMotion();
 
-            if (Time.time - _lastPollAt > PollFrequency)
-            {
-                Poll();
-            }
+            if (Time.time - _lastPollAt > PollFrequency) Poll();
         }
 
         protected virtual void StopMotion()
         {
-            if (!StopMotionEnabled)
-            {
-                return;
-            }
+            if (!StopMotionEnabled) return;
 
-            float timeBetweenFrames = 0f;
-            float animatorSpeed = 0f;
+            var timeBetweenFrames = 0f;
+            var animatorSpeed = 0f;
 
-            switch(FramerateMode)
+            switch (FramerateMode)
             {
                 case FramerateModes.Manual:
                     timeBetweenFrames = ManualTimeBetweenFrames;
                     animatorSpeed = ManualAnimatorSpeed;
                     break;
                 case FramerateModes.Automatic:
-                    timeBetweenFrames = (1 / FramesPerSecond);
-                    animatorSpeed = (1 / (FramesPerSecond - 1)) * 2f * _currentClipFPS;
+                    timeBetweenFrames = 1 / FramesPerSecond;
+                    animatorSpeed = 1 / (FramesPerSecond - 1) * 2f * _currentClipFPS;
                     break;
             }
 

@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -10,30 +10,27 @@ namespace MoreMountains.Tools
     [CustomPropertyDrawer(typeof(MMEnumConditionAttribute))]
     public class MMEnumConditionAttributeDrawer : PropertyDrawer
     {
-        #if  UNITY_EDITOR
+        private static readonly Dictionary<string, string> cachedPaths = new();
+#if UNITY_EDITOR
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            MMEnumConditionAttribute enumConditionAttribute = (MMEnumConditionAttribute)attribute;
-            bool enabled = GetConditionAttributeResult(enumConditionAttribute, property);
-            bool previouslyEnabled = GUI.enabled;
+            var enumConditionAttribute = (MMEnumConditionAttribute)attribute;
+            var enabled = GetConditionAttributeResult(enumConditionAttribute, property);
+            var previouslyEnabled = GUI.enabled;
             GUI.enabled = enabled;
-            if (!enumConditionAttribute.Hidden || enabled)
-            {
-                EditorGUI.PropertyField(position, property, label, true);
-            }
+            if (!enumConditionAttribute.Hidden || enabled) EditorGUI.PropertyField(position, property, label, true);
             GUI.enabled = previouslyEnabled;
         }
-        #endif
+#endif
 
-        private static Dictionary<string, string> cachedPaths = new Dictionary<string, string>();
-
-        private bool GetConditionAttributeResult(MMEnumConditionAttribute enumConditionAttribute, SerializedProperty property)
+        private bool GetConditionAttributeResult(MMEnumConditionAttribute enumConditionAttribute,
+            SerializedProperty property)
         {
-            bool enabled = true;
+            var enabled = true;
 
             SerializedProperty enumProp;
-            string enumPropPath = string.Empty;
-            string propertyPath = property.propertyPath;
+            var enumPropPath = string.Empty;
+            var propertyPath = property.propertyPath;
 
             if (!cachedPaths.TryGetValue(propertyPath, out enumPropPath))
             {
@@ -45,12 +42,13 @@ namespace MoreMountains.Tools
 
             if (enumProp != null)
             {
-                int currentEnum = enumProp.enumValueIndex;
+                var currentEnum = enumProp.enumValueIndex;
                 enabled = enumConditionAttribute.ContainsBitFlag(currentEnum);
             }
             else
             {
-                Debug.LogWarning("No matching boolean found for ConditionAttribute in object: " + enumConditionAttribute.ConditionEnum);
+                Debug.LogWarning("No matching boolean found for ConditionAttribute in object: " +
+                                 enumConditionAttribute.ConditionEnum);
             }
 
             return enabled;
@@ -58,17 +56,12 @@ namespace MoreMountains.Tools
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            MMEnumConditionAttribute enumConditionAttribute = (MMEnumConditionAttribute)attribute;
-            bool enabled = GetConditionAttributeResult(enumConditionAttribute, property);
+            var enumConditionAttribute = (MMEnumConditionAttribute)attribute;
+            var enabled = GetConditionAttributeResult(enumConditionAttribute, property);
 
             if (!enumConditionAttribute.Hidden || enabled)
-            {
                 return EditorGUI.GetPropertyHeight(property, label);
-            }
-            else
-            {
-                return -EditorGUIUtility.standardVerticalSpacing;
-            }
+            return -EditorGUIUtility.standardVerticalSpacing;
         }
     }
 }

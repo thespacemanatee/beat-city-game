@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// Add this to an audio reverb filter to shake its values remapped along a curve 
+    ///     Add this to an audio reverb filter to shake its values remapped along a curve
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Audio/MMAudioFilterReverbShaker")]
     [RequireComponent(typeof(AudioReverbFilter))]
@@ -14,39 +12,32 @@ namespace MoreMountains.Feedbacks
         [Header("Reverb")]
         /// whether or not to add to the initial value
         [Tooltip("whether or not to add to the initial value")]
-        public bool RelativeReverb = false;
+        public bool RelativeReverb;
+
         /// the curve used to animate the intensity value on
         [Tooltip("the curve used to animate the intensity value on")]
-        public AnimationCurve ShakeReverb = new AnimationCurve(new Keyframe(0, 0f), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
+        public AnimationCurve ShakeReverb = new(new Keyframe(0, 0f), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
+
         /// the value to remap the curve's 0 to
-        [Tooltip("the value to remap the curve's 0 to")]
-        [Range(-10000f, 2000f)]
+        [Tooltip("the value to remap the curve's 0 to")] [Range(-10000f, 2000f)]
         public float RemapReverbZero = -10000f;
+
         /// the value to remap the curve's 1 to
-        [Tooltip("the value to remap the curve's 1 to")]
-        [Range(-10000f, 2000f)]
+        [Tooltip("the value to remap the curve's 1 to")] [Range(-10000f, 2000f)]
         public float RemapReverbOne = 2000f;
+
+        protected float _initialReverb;
+        protected bool _originalRelativeReverb;
+        protected float _originalRemapReverbOne;
+        protected float _originalRemapReverbZero;
+        protected float _originalShakeDuration;
+        protected AnimationCurve _originalShakeReverb;
 
         /// the audio source to pilot
         protected AudioReverbFilter _targetAudioReverbFilter;
-        protected float _initialReverb;
-        protected float _originalShakeDuration;
-        protected bool _originalRelativeReverb;
-        protected AnimationCurve _originalShakeReverb;
-        protected float _originalRemapReverbZero;
-        protected float _originalRemapReverbOne;
 
         /// <summary>
-        /// On init we initialize our values
-        /// </summary>
-        protected override void Initialization()
-        {
-            base.Initialization();
-            _targetAudioReverbFilter = this.gameObject.GetComponent<AudioReverbFilter>();
-        }
-
-        /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
+        ///     When that shaker gets added, we initialize its shake duration
         /// </summary>
         protected virtual void Reset()
         {
@@ -54,16 +45,26 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Shakes values over time
+        ///     On init we initialize our values
+        /// </summary>
+        protected override void Initialization()
+        {
+            base.Initialization();
+            _targetAudioReverbFilter = gameObject.GetComponent<AudioReverbFilter>();
+        }
+
+        /// <summary>
+        ///     Shakes values over time
         /// </summary>
         protected override void Shake()
         {
-            float newReverbLevel = ShakeFloat(ShakeReverb, RemapReverbZero, RemapReverbOne, RelativeReverb, _initialReverb);
+            var newReverbLevel =
+                ShakeFloat(ShakeReverb, RemapReverbZero, RemapReverbOne, RelativeReverb, _initialReverb);
             _targetAudioReverbFilter.reverbLevel = newReverbLevel;
         }
 
         /// <summary>
-        /// Collects initial values on the target
+        ///     Collects initial values on the target
         /// </summary>
         protected override void GrabInitialValues()
         {
@@ -71,7 +72,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// When we get the appropriate event, we trigger a shake
+        ///     When we get the appropriate event, we trigger a shake
         /// </summary>
         /// <param name="reverbCurve"></param>
         /// <param name="duration"></param>
@@ -79,20 +80,20 @@ namespace MoreMountains.Feedbacks
         /// <param name="relativeReverb"></param>
         /// <param name="feedbacksIntensity"></param>
         /// <param name="channel"></param>
-        public virtual void OnMMAudioFilterReverbShakeEvent(AnimationCurve reverbCurve, float duration, float remapMin, float remapMax, bool relativeReverb = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
+        public virtual void OnMMAudioFilterReverbShakeEvent(AnimationCurve reverbCurve, float duration, float remapMin,
+            float remapMax, bool relativeReverb = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
-            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking))
-            {
-                return;
-            }
-            
+            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking)) return;
+
             if (stop)
             {
                 Stop();
                 return;
             }
-            
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 
@@ -117,7 +118,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the target's values
+        ///     Resets the target's values
         /// </summary>
         protected override void ResetTargetValues()
         {
@@ -126,7 +127,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the shaker's values
+        ///     Resets the shaker's values
         /// </summary>
         protected override void ResetShakerValues()
         {
@@ -139,7 +140,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -148,7 +149,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -158,29 +159,37 @@ namespace MoreMountains.Feedbacks
     }
 
     /// <summary>
-    /// An event used to trigger vignette shakes
+    ///     An event used to trigger vignette shakes
     /// </summary>
     public struct MMAudioFilterReverbShakeEvent
     {
-        public delegate void Delegate(AnimationCurve reverbCurve, float duration, float remapMin, float remapMax, bool relativeReverb = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false);
-        static private event Delegate OnEvent;
+        public delegate void Delegate(AnimationCurve reverbCurve, float duration, float remapMin, float remapMax,
+            bool relativeReverb = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(AnimationCurve reverbCurve, float duration, float remapMin, float remapMax, bool relativeReverb = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
+        public static void Trigger(AnimationCurve reverbCurve, float duration, float remapMin, float remapMax,
+            bool relativeReverb = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
             OnEvent?.Invoke(reverbCurve, duration, remapMin, remapMax, relativeReverb,
-                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop);
+                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection,
+                timescaleMode, stop);
         }
     }
 }

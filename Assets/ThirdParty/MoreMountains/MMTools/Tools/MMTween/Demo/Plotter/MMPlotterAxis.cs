@@ -1,10 +1,5 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System;
-using System.Reflection;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace MoreMountains.Tools
 {
@@ -18,7 +13,7 @@ namespace MoreMountains.Tools
         public Transform PositionPointVertical;
         public Transform RotationPoint;
         public Transform ScalePoint;
-        
+
         public virtual void SetLabel(string newLabel)
         {
             Label.text = newLabel;

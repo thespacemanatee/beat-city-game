@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 
-namespace  MoreMountains.Tools
+namespace MoreMountains.Tools
 {
     /// <summary>
-    /// A scriptable object containing a MMLootTable definition for game objects
+    ///     A scriptable object containing a MMLootTable definition for game objects
     /// </summary>
-    [CreateAssetMenu(fileName="LootDefinition",menuName="MoreMountains/Loot Definition")]
+    [CreateAssetMenu(fileName = "LootDefinition", menuName = "MoreMountains/Loot Definition")]
     public class MMLootTableGameObjectSO : ScriptableObject
     {
-        /// the loot table 
+        /// the loot table
         public MMLootTableGameObject LootTable;
 
         /// returns an object from the loot table
@@ -16,9 +16,9 @@ namespace  MoreMountains.Tools
         {
             return LootTable.GetLoot()?.Loot;
         }
-        
+
         /// <summary>
-        /// computes the loot table's weights
+        ///     computes the loot table's weights
         /// </summary>
         public virtual void ComputeWeights()
         {

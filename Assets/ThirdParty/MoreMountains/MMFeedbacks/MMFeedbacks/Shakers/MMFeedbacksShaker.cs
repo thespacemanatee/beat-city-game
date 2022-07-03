@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using MoreMountains.Feedbacks;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
@@ -12,20 +9,27 @@ namespace MoreMountains.Feedbacks
         protected MMFeedbacks _mmFeedbacks;
 
         /// <summary>
-        /// On init we initialize our values
+        ///     When that shaker gets added, we initialize its shake duration
+        /// </summary>
+        protected virtual void Reset()
+        {
+            ShakeDuration = 0.01f;
+        }
+
+        /// <summary>
+        ///     On init we initialize our values
         /// </summary>
         protected override void Initialization()
         {
             base.Initialization();
-            _mmFeedbacks = this.gameObject.GetComponent<MMFeedbacks>();
+            _mmFeedbacks = gameObject.GetComponent<MMFeedbacks>();
         }
 
-        public virtual void OnMMFeedbacksShakeEvent(int channel = 0, bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3))
+        public virtual void OnMMFeedbacksShakeEvent(int channel = 0, bool useRange = false, float eventRange = 0f,
+            Vector3 eventOriginPosition = default)
         {
-            if (!CheckEventAllowed(channel, useRange, eventRange, eventOriginPosition) || (!Interruptible && Shaking))
-            {
-                return;
-            }
+            if (!CheckEventAllowed(channel, useRange, eventRange, eventOriginPosition) ||
+                (!Interruptible && Shaking)) return;
             Play();
         }
 
@@ -35,15 +39,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
-        /// </summary>
-        protected virtual void Reset()
-        {
-            ShakeDuration = 0.01f;
-        }
-
-        /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -52,7 +48,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -63,20 +59,23 @@ namespace MoreMountains.Feedbacks
 
     public struct MMFeedbacksShakeEvent
     {
-        public delegate void Delegate(int channel = 0, bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3));
-        static private event Delegate OnEvent;
+        public delegate void Delegate(int channel = 0, bool useRange = false, float eventRange = 0f,
+            Vector3 eventOriginPosition = default);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(int channel = 0, bool useRange = false, float eventRange = 0f, Vector3 eventOriginPosition = default(Vector3))
+        public static void Trigger(int channel = 0, bool useRange = false, float eventRange = 0f,
+            Vector3 eventOriginPosition = default)
         {
             OnEvent?.Invoke(channel, useRange, eventRange, eventOriginPosition);
         }

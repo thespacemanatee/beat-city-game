@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace MoreMountains.Tools
 {
@@ -9,16 +6,16 @@ namespace MoreMountains.Tools
     [CustomEditor(typeof(AIBrain))]
     public class AIBrainEditor : Editor
     {
-        protected MMReorderableList _list;
-        protected SerializedProperty _brainActive;
-        protected SerializedProperty _timeInThisState;
-        protected SerializedProperty _target;
-        protected SerializedProperty _owner;
         protected SerializedProperty _actionsFrequency;
+        protected SerializedProperty _brainActive;
         protected SerializedProperty _decisionFrequency;
-        protected SerializedProperty _randomizeFrequencies;
+        protected MMReorderableList _list;
+        protected SerializedProperty _owner;
         protected SerializedProperty _randomActionFrequency;
         protected SerializedProperty _randomDecisionFrequency;
+        protected SerializedProperty _randomizeFrequencies;
+        protected SerializedProperty _target;
+        protected SerializedProperty _timeInThisState;
 
         protected virtual void OnEnable()
         {
@@ -32,7 +29,7 @@ namespace MoreMountains.Tools
             _owner = serializedObject.FindProperty("Owner");
             _actionsFrequency = serializedObject.FindProperty("ActionsFrequency");
             _decisionFrequency = serializedObject.FindProperty("DecisionFrequency");
-            
+
             _randomizeFrequencies = serializedObject.FindProperty("RandomizeFrequencies");
             _randomActionFrequency = serializedObject.FindProperty("RandomActionFrequency");
             _randomDecisionFrequency = serializedObject.FindProperty("RandomDecisionFrequency");
@@ -55,9 +52,10 @@ namespace MoreMountains.Tools
                 EditorGUILayout.PropertyField(_randomActionFrequency);
                 EditorGUILayout.PropertyField(_randomDecisionFrequency);
             }
+
             serializedObject.ApplyModifiedProperties();
 
-            AIBrain brain = (AIBrain)target;
+            var brain = (AIBrain)target;
             if (brain.CurrentState != null)
             {
                 EditorGUILayout.Space();

@@ -1,33 +1,32 @@
-﻿using UnityEngine;
+﻿using System;
 using UnityEditor;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// A class used to regroup most of the styling options for the MMFeedback editors
+    ///     A class used to regroup most of the styling options for the MMFeedback editors
     /// </summary>
     public static class MMFeedbackStyling
     {
-        public static readonly GUIStyle SmallTickbox = new GUIStyle("ShurikenToggle");
+        public static readonly GUIStyle SmallTickbox = new("ShurikenToggle");
 
-        static readonly Color _splitterdark = new Color(0.12f, 0.12f, 0.12f, 1.333f);
-        static readonly Color _splitterlight = new Color(0.6f, 0.6f, 0.6f, 1.333f);
-        public static Color Splitter { get { return EditorGUIUtility.isProSkin ? _splitterdark : _splitterlight; } }
+        private static readonly Color _splitterdark = new(0.12f, 0.12f, 0.12f, 1.333f);
+        private static readonly Color _splitterlight = new(0.6f, 0.6f, 0.6f, 1.333f);
 
-        static readonly Color _headerbackgrounddark = new Color(0.1f, 0.1f, 0.1f, 0.2f);
-        static readonly Color _headerbackgroundlight = new Color(1f, 1f, 1f, 0.4f);
-        public static Color HeaderBackground { get { return EditorGUIUtility.isProSkin ? _headerbackgrounddark : _headerbackgroundlight; } }
+        private static readonly Color _headerbackgrounddark = new(0.1f, 0.1f, 0.1f, 0.2f);
+        private static readonly Color _headerbackgroundlight = new(1f, 1f, 1f, 0.4f);
 
-        static readonly Color _reorderdark = new Color(1f, 1f, 1f, 0.2f);
-        static readonly Color _reorderlight = new Color(0.1f, 0.1f, 0.1f, 0.2f);
-        public static Color Reorder { get { return EditorGUIUtility.isProSkin ? _reorderdark : _reorderlight; } }
+        private static readonly Color _reorderdark = new(1f, 1f, 1f, 0.2f);
+        private static readonly Color _reorderlight = new(0.1f, 0.1f, 0.1f, 0.2f);
 
-        static readonly Color _timingDark = new Color(1f, 1f, 1f, 0.5f);
-        static readonly Color _timingLight = new Color(0f, 0f, 0f, 0.5f);
-        
-        static readonly Texture2D _paneoptionsicondark;
-        static readonly Texture2D _paneoptionsiconlight;
-        public static Texture2D PaneOptionsIcon { get { return EditorGUIUtility.isProSkin ? _paneoptionsicondark : _paneoptionsiconlight; } }
+        private static readonly Color _timingDark = new(1f, 1f, 1f, 0.5f);
+        private static readonly Color _timingLight = new(0f, 0f, 0f, 0.5f);
+
+        private static readonly Texture2D _paneoptionsicondark;
+        private static readonly Texture2D _paneoptionsiconlight;
+
+        private static readonly GUIStyle _timingStyle = new();
 
         static MMFeedbackStyling()
         {
@@ -35,12 +34,20 @@ namespace MoreMountains.Feedbacks
             _paneoptionsiconlight = (Texture2D)EditorGUIUtility.Load("Builtin Skins/LightSkin/Images/pane options.png");
         }
 
-        private static GUIStyle _timingStyle = new GUIStyle();
+        public static Color Splitter => EditorGUIUtility.isProSkin ? _splitterdark : _splitterlight;
+
+        public static Color HeaderBackground =>
+            EditorGUIUtility.isProSkin ? _headerbackgrounddark : _headerbackgroundlight;
+
+        public static Color Reorder => EditorGUIUtility.isProSkin ? _reorderdark : _reorderlight;
+
+        public static Texture2D PaneOptionsIcon =>
+            EditorGUIUtility.isProSkin ? _paneoptionsicondark : _paneoptionsiconlight;
 
         /// <summary>
-        /// Simply drow a splitter line and a title bellow
+        ///     Simply drow a splitter line and a title bellow
         /// </summary>
-        static public void DrawSection(string title)
+        public static void DrawSection(string title)
         {
             EditorGUILayout.Space();
 
@@ -53,9 +60,9 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Draw a separator line
+        ///     Draw a separator line
         /// </summary>
-        static public void DrawSplitter()
+        public static void DrawSplitter()
         {
             // Helper to draw a separator line
 
@@ -71,16 +78,16 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Draw a header similar to the one used for the post-process stack
+        ///     Draw a header similar to the one used for the post-process stack
         /// </summary>
-        static public Rect DrawSimpleHeader(ref bool expanded, ref bool activeField, string title)
+        public static Rect DrawSimpleHeader(ref bool expanded, ref bool activeField, string title)
         {
             var e = Event.current;
 
             // Initialize Rects
 
             var backgroundRect = GUILayoutUtility.GetRect(1f, 17f);
-            
+
             var reorderRect = backgroundRect;
             reorderRect.xMin -= 8f;
             reorderRect.y += 5f;
@@ -104,7 +111,7 @@ namespace MoreMountains.Feedbacks
 
             var menuIcon = PaneOptionsIcon;
             var menuRect = new Rect(labelRect.xMax + 4f, labelRect.y + 4f, menuIcon.width, menuIcon.height);
-            
+
             // Background rect should be full-width
             backgroundRect.xMin = 0f;
             backgroundRect.width += 4f;
@@ -120,9 +127,9 @@ namespace MoreMountains.Feedbacks
 
             // Active checkbox
             activeField = GUI.Toggle(toggleRect, activeField, GUIContent.none, SmallTickbox);
-            
+
             // Handle events
-            
+
             if (e.type == EventType.MouseDown && labelRect.Contains(e.mousePosition) && e.button == 0)
             {
                 expanded = !expanded;
@@ -133,14 +140,15 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Draw a header similar to the one used for the post-process stack
+        ///     Draw a header similar to the one used for the post-process stack
         /// </summary>
-        static public Rect DrawHeader(ref bool expanded, ref bool activeField, string title, Color feedbackColor, System.Action<GenericMenu> fillGenericMenu, 
+        public static Rect DrawHeader(ref bool expanded, ref bool activeField, string title, Color feedbackColor,
+            Action<GenericMenu> fillGenericMenu,
             float startedAt, float duration, float totalDuration, MMFeedbackTiming timing, bool pause, MMFeedbacks host)
         {
-            float thisTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
-            float thisDeltaTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
-            
+            var thisTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
+            var thisDeltaTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+
             var e = Event.current;
 
             // Initialize Rects
@@ -191,18 +199,14 @@ namespace MoreMountains.Feedbacks
             progressRect.xMin = 0f;
             progressRect.width += 4f;
 
-            Color headerBackgroundColor = Color.white;
+            var headerBackgroundColor = Color.white;
             // Background - if color is white we draw the default color
             if (!pause)
-            {
                 headerBackgroundColor = HeaderBackground;
-            }
             else
-            {
                 headerBackgroundColor = feedbackColor;
-            }
             EditorGUI.DrawRect(backgroundRect, headerBackgroundColor);
-            
+
             // Foldout
             expanded = GUI.Toggle(foldoutRect, expanded, GUIContent.none, EditorStyles.foldout);
 
@@ -215,34 +219,36 @@ namespace MoreMountains.Feedbacks
 
             // Direction ----------------------------------------------------------------------------------------------
 
-            float directionRectWidth = 70f;
+            var directionRectWidth = 70f;
             var directionRect = new Rect(labelRect.xMax - directionRectWidth, labelRect.yMin, directionRectWidth, 17f);
             directionRect.xMin = labelRect.xMax - directionRectWidth;
             directionRect.xMax = labelRect.xMax;
 
-            if (timing.MMFeedbacksDirectionCondition == MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenBackwards)
+            if (timing.MMFeedbacksDirectionCondition ==
+                MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenBackwards)
             {
-                Texture arrowUpIcon = Resources.Load("FeelArrowUp") as Texture;
-                GUIContent directionIcon = new GUIContent(arrowUpIcon);
+                var arrowUpIcon = Resources.Load("FeelArrowUp") as Texture;
+                var directionIcon = new GUIContent(arrowUpIcon);
                 EditorGUI.LabelField(directionRect, directionIcon);
             }
 
-            if (timing.MMFeedbacksDirectionCondition == MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenForwards)
+            if (timing.MMFeedbacksDirectionCondition ==
+                MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenForwards)
             {
-                Texture arrowDownIcon = Resources.Load("FeelArrowDown") as Texture;
-                GUIContent directionIcon = new GUIContent(arrowDownIcon);
+                var arrowDownIcon = Resources.Load("FeelArrowDown") as Texture;
+                var directionIcon = new GUIContent(arrowDownIcon);
                 EditorGUI.LabelField(directionRect, directionIcon);
             }
 
             // Time -----------------------------------------------------------------------------------------------------
 
-            string timingInfo = "";
-            bool displayTotal = false;
+            var timingInfo = "";
+            var displayTotal = false;
             if (host.DisplayFullDurationDetails)
             {
                 if (timing.InitialDelay != 0)
                 {
-                    timingInfo += host.ApplyTimeMultiplier(timing.InitialDelay).ToString() + "s + ";
+                    timingInfo += host.ApplyTimeMultiplier(timing.InitialDelay) + "s + ";
                     displayTotal = true;
                 }
 
@@ -250,25 +256,17 @@ namespace MoreMountains.Feedbacks
 
                 if (timing.NumberOfRepeats != 0)
                 {
-                    float delayBetweenRepeats = host.ApplyTimeMultiplier(timing.DelayBetweenRepeats); 
-                    
-                    timingInfo += " + "+ timing.NumberOfRepeats.ToString() + " x ";
-                    if (timing.DelayBetweenRepeats > 0)
-                    {
-                        timingInfo += "(";
-                    }
+                    var delayBetweenRepeats = host.ApplyTimeMultiplier(timing.DelayBetweenRepeats);
+
+                    timingInfo += " + " + timing.NumberOfRepeats + " x ";
+                    if (timing.DelayBetweenRepeats > 0) timingInfo += "(";
                     timingInfo += duration + "s";
                     if (timing.DelayBetweenRepeats > 0)
-                    {
                         timingInfo += " + " + host.ApplyTimeMultiplier(timing.DelayBetweenRepeats) + "s )";
-                    }
                     displayTotal = true;
                 }
 
-                if (displayTotal)
-                {
-                    timingInfo += " = " + totalDuration.ToString("F2") + "s";
-                }
+                if (displayTotal) timingInfo += " = " + totalDuration.ToString("F2") + "s";
             }
             else
             {
@@ -277,33 +275,24 @@ namespace MoreMountains.Feedbacks
 
             //"[ 2s + 3 x (4s + 1s) ]"
 
-            float timingRectWidth = 150f;
+            var timingRectWidth = 150f;
             var timingRect = new Rect(labelRect.xMax - timingRectWidth, labelRect.yMin, timingRectWidth, 17f);
             timingRect.xMin = labelRect.xMax - timingRectWidth;
             timingRect.xMax = labelRect.xMax;
             EditorGUI.LabelField(timingRect, timingInfo, _timingStyle);
 
             // Progress bar
-            if (totalDuration == 0f)
-            {
-                totalDuration = 0.1f;
-            }
+            if (totalDuration == 0f) totalDuration = 0.1f;
 
-            if (startedAt == 0f)
+            if (startedAt == 0f) startedAt = 0.001f;
+            if (startedAt > 0f && thisTime - startedAt < totalDuration + 0.05f)
             {
-                startedAt = 0.001f;
-            }
-            if ((startedAt > 0f) && (thisTime - startedAt < totalDuration + 0.05f))
-            {
-                float fullWidth = progressRect.width;
-                if (totalDuration == 0f) { totalDuration = 0.1f; }
-                float percent = ((thisTime - startedAt) / totalDuration) * 100f;
+                var fullWidth = progressRect.width;
+                if (totalDuration == 0f) totalDuration = 0.1f;
+                var percent = (thisTime - startedAt) / totalDuration * 100f;
                 progressRect.width = percent * fullWidth / 100f;
-                Color barColor = Color.white;
-                if (thisTime - startedAt > totalDuration)
-                {
-                    barColor = Color.yellow;
-                }
+                var barColor = Color.white;
+                if (thisTime - startedAt > totalDuration) barColor = Color.yellow;
                 EditorGUI.DrawRect(progressRect, barColor);
             }
             else
@@ -317,9 +306,9 @@ namespace MoreMountains.Feedbacks
             // Dropdown menu icon
             GUI.DrawTexture(menuRect, menuIcon);
 
-            for(int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
-                Rect r = reorderRect;
+                var r = reorderRect;
                 r.height = 1;
                 r.y = reorderRect.y + reorderRect.height * (i / 3.0f);
                 EditorGUI.DrawRect(r, Reorder);
@@ -329,7 +318,6 @@ namespace MoreMountains.Feedbacks
             // Handle events
 
             if (e.type == EventType.MouseDown)
-            {
                 if (menuRect.Contains(e.mousePosition))
                 {
                     var menu = new GenericMenu();
@@ -337,8 +325,7 @@ namespace MoreMountains.Feedbacks
                     menu.DropDown(new Rect(new Vector2(menuRect.x, menuRect.yMax), Vector2.zero));
                     e.Use();
                 }
-            }
-            
+
             if (e.type == EventType.MouseDown && labelRect.Contains(e.mousePosition) && e.button == 0)
             {
                 expanded = !expanded;

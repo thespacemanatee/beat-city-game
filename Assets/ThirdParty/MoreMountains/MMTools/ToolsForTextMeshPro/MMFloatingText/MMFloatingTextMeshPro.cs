@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using TMPro;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using Random = System.Random;
-using TMPro;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// A floating text variant using TextMeshPro instead of regular TextMesh
+    ///     A floating text variant using TextMeshPro instead of regular TextMesh
     /// </summary>
     public class MMFloatingTextMeshPro : MMFloatingText
     {
         [Header("TextMeshPro")]
         /// the TextMeshPro object to use to display values
         public TextMeshPro TargetTextMeshPro;
-        
+
         /// <summary>
-        /// On init we grab our TMP's color
+        ///     On init we grab our TMP's color
         /// </summary>
         protected override void Initialization()
         {
             base.Initialization();
             _initialTextColor = TargetTextMeshPro.color;
         }
-                
+
         /// <summary>
-        /// Sets the TMP's value
+        ///     Sets the TMP's value
         /// </summary>
         /// <param name="newValue"></param>
         public override void SetText(string newValue)
@@ -36,7 +31,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the color of the target TMP
+        ///     Sets the color of the target TMP
         /// </summary>
         /// <param name="newColor"></param>
         public override void SetColor(Color newColor)
@@ -45,7 +40,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the opacity of the target TMP
+        ///     Sets the opacity of the target TMP
         /// </summary>
         /// <param name="newOpacity"></param>
         public override void SetOpacity(float newOpacity)

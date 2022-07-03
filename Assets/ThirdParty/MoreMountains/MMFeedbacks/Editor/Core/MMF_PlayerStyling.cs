@@ -1,45 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
 using UnityEditor;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// A class used to regroup most of the styling options for the MMFeedback editors
+    ///     A class used to regroup most of the styling options for the MMFeedback editors
     /// </summary>
     public static class MMF_PlayerStyling
     {
-        public static readonly GUIStyle SmallTickbox = new GUIStyle("ShurikenToggle");
+        public static readonly GUIStyle SmallTickbox = new("ShurikenToggle");
 
-        static readonly Color _splitterdark = new Color(0.12f, 0.12f, 0.12f, 1.333f);
-        static readonly Color _splitterlight = new Color(0.6f, 0.6f, 0.6f, 1.333f);
-        public static Color Splitter { get { return EditorGUIUtility.isProSkin ? _splitterdark : _splitterlight; } }
+        private static readonly Color _splitterdark = new(0.12f, 0.12f, 0.12f, 1.333f);
+        private static readonly Color _splitterlight = new(0.6f, 0.6f, 0.6f, 1.333f);
 
-        static readonly Color _headerbackgrounddark = new Color(0.1f, 0.1f, 0.1f, 0.2f);
-        static readonly Color _headerbackgroundlight = new Color(1f, 1f, 1f, 0.4f);
-        public static Color HeaderBackground { get { return EditorGUIUtility.isProSkin ? _headerbackgrounddark : _headerbackgroundlight; } }
+        private static readonly Color _headerbackgrounddark = new(0.1f, 0.1f, 0.1f, 0.2f);
+        private static readonly Color _headerbackgroundlight = new(1f, 1f, 1f, 0.4f);
 
-        static readonly Color _reorderdark = new Color(1f, 1f, 1f, 0.2f);
-        static readonly Color _reorderlight = new Color(0.1f, 0.1f, 0.1f, 0.2f);
-        public static Color Reorder { get { return EditorGUIUtility.isProSkin ? _reorderdark : _reorderlight; } }
+        private static readonly Color _reorderdark = new(1f, 1f, 1f, 0.2f);
+        private static readonly Color _reorderlight = new(0.1f, 0.1f, 0.1f, 0.2f);
 
-        static readonly Color _timingDark = new Color(1f, 1f, 1f, 0.5f);
-        static readonly Color _timingLight = new Color(0f, 0f, 0f, 0.5f);
-        static readonly Color _targetLabelColor = new Color(1f, 1f, 1f, 0.4f);
-        
-        static readonly Texture2D _paneoptionsicondark;
-        static readonly Texture2D _paneoptionsiconlight;
+        private static readonly Color _timingDark = new(1f, 1f, 1f, 0.5f);
+        private static readonly Color _timingLight = new(0f, 0f, 0f, 0.5f);
+        private static readonly Color _targetLabelColor = new(1f, 1f, 1f, 0.4f);
+
+        private static readonly Texture2D _paneoptionsicondark;
+        private static readonly Texture2D _paneoptionsiconlight;
 
         private static Rect _splitterRect;
-        
-        public static Texture2D PaneOptionsIcon { get { return EditorGUIUtility.isProSkin ? _paneoptionsicondark : _paneoptionsiconlight; } }
 
-        static MMF_PlayerStyling()
-        {
-            _paneoptionsicondark = (Texture2D)EditorGUIUtility.Load("Builtin Skins/DarkSkin/Images/pane options.png");
-            _paneoptionsiconlight = (Texture2D)EditorGUIUtility.Load("Builtin Skins/LightSkin/Images/pane options.png");
-        }
-
-        private static GUIStyle _timingStyle = new GUIStyle();
+        private static readonly GUIStyle _timingStyle = new();
 
         private static Rect _backgroundRect;
         private static Rect _progressRect;
@@ -63,6 +53,22 @@ namespace MoreMountains.Feedbacks
         public static GUIContent _setupRequiredIcon;
         private static GenericMenu _genericMenu;
 
+        static MMF_PlayerStyling()
+        {
+            _paneoptionsicondark = (Texture2D)EditorGUIUtility.Load("Builtin Skins/DarkSkin/Images/pane options.png");
+            _paneoptionsiconlight = (Texture2D)EditorGUIUtility.Load("Builtin Skins/LightSkin/Images/pane options.png");
+        }
+
+        public static Color Splitter => EditorGUIUtility.isProSkin ? _splitterdark : _splitterlight;
+
+        public static Color HeaderBackground =>
+            EditorGUIUtility.isProSkin ? _headerbackgrounddark : _headerbackgroundlight;
+
+        public static Color Reorder => EditorGUIUtility.isProSkin ? _reorderdark : _reorderlight;
+
+        public static Texture2D PaneOptionsIcon =>
+            EditorGUIUtility.isProSkin ? _paneoptionsicondark : _paneoptionsiconlight;
+
         public static void CacheStyling()
         {
             _menuIcon = PaneOptionsIcon;
@@ -81,9 +87,9 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Simply drow a splitter line and a title bellow
+        ///     Simply drow a splitter line and a title bellow
         /// </summary>
-        static public void DrawSection(string title)
+        public static void DrawSection(string title)
         {
             EditorGUILayout.Space();
             DrawSplitter();
@@ -93,9 +99,9 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Draw a separator line
+        ///     Draw a separator line
         /// </summary>
-        static public void DrawSplitter()
+        public static void DrawSplitter()
         {
             // Helper to draw a separator line
 
@@ -104,25 +110,22 @@ namespace MoreMountains.Feedbacks
             _splitterRect.xMin = 0f;
             _splitterRect.width += 4f;
 
-            if (Event.current.type != EventType.Repaint)
-            {
-                return;
-            }
+            if (Event.current.type != EventType.Repaint) return;
 
             EditorGUI.DrawRect(_splitterRect, Splitter);
         }
 
         /// <summary>
-        /// Draw a header similar to the one used for the post-process stack
+        ///     Draw a header similar to the one used for the post-process stack
         /// </summary>
-        static public Rect DrawSimpleHeader(ref bool expanded, ref bool activeField, string title)
+        public static Rect DrawSimpleHeader(ref bool expanded, ref bool activeField, string title)
         {
             var e = Event.current;
 
             // Initialize Rects
 
             _backgroundRect = GUILayoutUtility.GetRect(1f, 17f);
-            
+
             _reorderRect = _backgroundRect;
             _reorderRect.xMin -= 8f;
             _reorderRect.y += 5f;
@@ -143,7 +146,7 @@ namespace MoreMountains.Feedbacks
             _toggleRect.y += 2f;
             _toggleRect.width = 13f;
             _toggleRect.height = 13f;
-            
+
             // Background rect should be full-width
             _backgroundRect.xMin = 0f;
             _backgroundRect.width += 4f;
@@ -159,9 +162,9 @@ namespace MoreMountains.Feedbacks
 
             // Active checkbox
             activeField = GUI.Toggle(_toggleRect, activeField, GUIContent.none, SmallTickbox);
-            
+
             // Handle events
-            
+
             if (e.type == EventType.MouseDown && _labelRect.Contains(e.mousePosition) && e.button == 0)
             {
                 expanded = !expanded;
@@ -172,14 +175,16 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Draw a header similar to the one used for the post-process stack
+        ///     Draw a header similar to the one used for the post-process stack
         /// </summary>
-        static public Rect DrawHeader(ref bool expanded, ref bool activeField, string title, Color feedbackColor, System.Action<GenericMenu> fillGenericMenu, 
-            float startedAt, float duration, float totalDuration, MMFeedbackTiming timing, bool pause, bool requiresSetup, string requiredTarget, Color displayColor, MMF_Player host)
+        public static Rect DrawHeader(ref bool expanded, ref bool activeField, string title, Color feedbackColor,
+            Action<GenericMenu> fillGenericMenu,
+            float startedAt, float duration, float totalDuration, MMFeedbackTiming timing, bool pause,
+            bool requiresSetup, string requiredTarget, Color displayColor, MMF_Player host)
         {
-            float thisTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
-            float thisDeltaTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
-            
+            var thisTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
+            var thisDeltaTime = timing.TimescaleMode == TimescaleModes.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+
             var e = Event.current;
 
             // Initialize Rects
@@ -188,7 +193,7 @@ namespace MoreMountains.Feedbacks
             _progressRect = GUILayoutUtility.GetRect(1f, 2f);
 
             var offset = 4f;
-            
+
             _reorderRect = _backgroundRect;
             _reorderRect.xMin -= 8f;
             _reorderRect.y += 5f;
@@ -217,7 +222,7 @@ namespace MoreMountains.Feedbacks
 
             _colorRect.x = _labelRect.xMin;
             _colorRect.y = _labelRect.yMin;
-            _colorRect.width =  5f;
+            _colorRect.width = 5f;
             _colorRect.height = 17f;
             _colorRect.xMin = 0f;
             _colorRect.xMax = 5f;
@@ -233,21 +238,14 @@ namespace MoreMountains.Feedbacks
             _headerBackgroundColor = Color.white;
             // Background - if color is white we draw the default color
             if (!pause)
-            {
                 _headerBackgroundColor = HeaderBackground;
-            }
             else
-            {
                 _headerBackgroundColor = feedbackColor;
-            }
 
-            if (displayColor != Color.black)
-            {
-                _headerBackgroundColor = displayColor;
-            }
-            
+            if (displayColor != Color.black) _headerBackgroundColor = displayColor;
+
             EditorGUI.DrawRect(_backgroundRect, _headerBackgroundColor);
-            
+
             // Foldout
             expanded = GUI.Toggle(_foldoutRect, expanded, GUIContent.none, EditorStyles.foldout);
 
@@ -260,7 +258,7 @@ namespace MoreMountains.Feedbacks
 
             // Direction ----------------------------------------------------------------------------------------------
 
-            float directionRectWidth = 70f;
+            var directionRectWidth = 70f;
             _directionRect.x = _labelRect.xMax - directionRectWidth;
             _directionRect.y = _labelRect.yMin;
             _directionRect.width = directionRectWidth;
@@ -268,50 +266,47 @@ namespace MoreMountains.Feedbacks
             _directionRect.xMin = _labelRect.xMax - directionRectWidth;
             _directionRect.xMax = _labelRect.xMax;
 
-            if (timing.MMFeedbacksDirectionCondition == MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenBackwards)
-            {
-                
+            if (timing.MMFeedbacksDirectionCondition ==
+                MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenBackwards)
                 EditorGUI.LabelField(_directionRect, _directionUpIcon);
-            }
 
-            if (timing.MMFeedbacksDirectionCondition == MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenForwards)
-            {
+            if (timing.MMFeedbacksDirectionCondition ==
+                MMFeedbackTiming.MMFeedbacksDirectionConditions.OnlyWhenForwards)
                 EditorGUI.LabelField(_directionRect, _directionDownIcon);
-            }
 
             if (requiresSetup)
             {
-                float setupRectWidth = 90f;
+                var setupRectWidth = 90f;
                 _setupRect.x = _labelRect.xMax - setupRectWidth;
                 _setupRect.y = _labelRect.yMin;
                 _setupRect.width = setupRectWidth;
                 _setupRect.height = 17f;
                 _setupRect.xMin = _labelRect.xMax - setupRectWidth;
                 _setupRect.xMax = _labelRect.xMax;
-                
+
                 EditorGUI.LabelField(_setupRect, _setupRequiredIcon);
             }
             else
             {
                 // otherwise we draw the name of our target
-                float setupRectWidth = _labelRect.width / 2f;
+                var setupRectWidth = _labelRect.width / 2f;
                 _setupRect.x = _labelRect.xMax - setupRectWidth - 73f;
                 _setupRect.y = _labelRect.yMin;
                 _setupRect.width = setupRectWidth;
                 _setupRect.height = 17f;
-                
+
                 EditorGUI.LabelField(_setupRect, requiredTarget, _targetLabelStyle);
             }
 
             // Time -----------------------------------------------------------------------------------------------------
 
-            string timingInfo = "";
-            bool displayTotal = false;
+            var timingInfo = "";
+            var displayTotal = false;
             if (host.DisplayFullDurationDetails)
             {
                 if (timing.InitialDelay != 0)
                 {
-                    timingInfo += host.ApplyTimeMultiplier(timing.InitialDelay).ToString() + "s + ";
+                    timingInfo += host.ApplyTimeMultiplier(timing.InitialDelay) + "s + ";
                     displayTotal = true;
                 }
 
@@ -319,63 +314,46 @@ namespace MoreMountains.Feedbacks
 
                 if (timing.NumberOfRepeats != 0)
                 {
-                    float delayBetweenRepeats = host.ApplyTimeMultiplier(timing.DelayBetweenRepeats); 
-                    
-                    timingInfo += " + "+ timing.NumberOfRepeats.ToString() + " x ";
-                    if (timing.DelayBetweenRepeats > 0)
-                    {
-                        timingInfo += "(";
-                    }
+                    var delayBetweenRepeats = host.ApplyTimeMultiplier(timing.DelayBetweenRepeats);
+
+                    timingInfo += " + " + timing.NumberOfRepeats + " x ";
+                    if (timing.DelayBetweenRepeats > 0) timingInfo += "(";
                     timingInfo += duration + "s";
                     if (timing.DelayBetweenRepeats > 0)
-                    {
                         timingInfo += " + " + host.ApplyTimeMultiplier(timing.DelayBetweenRepeats) + "s )";
-                    }
                     displayTotal = true;
                 }
 
-                if (displayTotal)
-                {
-                    timingInfo += " = " + totalDuration.ToString("F2") + "s";
-                }
+                if (displayTotal) timingInfo += " = " + totalDuration.ToString("F2") + "s";
             }
             else
             {
                 timingInfo = totalDuration.ToString("F2") + "s";
             }
 
-            float timingRectWidth = 150f;
+            var timingRectWidth = 150f;
 
             _timingRect.x = _labelRect.xMax - timingRectWidth;
             _timingRect.y = _labelRect.yMin;
             _timingRect.width = timingRectWidth;
             _timingRect.height = 17f;
-            
+
             _timingRect.xMin = _labelRect.xMax - timingRectWidth;
             _timingRect.xMax = _labelRect.xMax;
             EditorGUI.LabelField(_timingRect, timingInfo, _timingStyle);
 
             // Progress bar
-            if (totalDuration == 0f)
-            {
-                totalDuration = 0.1f;
-            }
+            if (totalDuration == 0f) totalDuration = 0.1f;
 
-            if (startedAt == 0f)
+            if (startedAt == 0f) startedAt = 0.001f;
+            if (host.IsPlaying && startedAt > 0f && thisTime - startedAt < totalDuration + 0.05f)
             {
-                startedAt = 0.001f;
-            }
-            if (host.IsPlaying && (startedAt > 0f) && (thisTime - startedAt < totalDuration + 0.05f))
-            {
-                float fullWidth = _progressRect.width;
-                if (totalDuration == 0f) { totalDuration = 0.1f; }
-                float percent = ((thisTime - startedAt) / totalDuration) * 100f;
+                var fullWidth = _progressRect.width;
+                if (totalDuration == 0f) totalDuration = 0.1f;
+                var percent = (thisTime - startedAt) / totalDuration * 100f;
                 _progressRect.width = percent * fullWidth / 100f;
                 _barColor = Color.white;
-                if (thisTime - startedAt > totalDuration)
-                {
-                    _barColor = Color.yellow;
-                }
+                if (thisTime - startedAt > totalDuration) _barColor = Color.yellow;
                 EditorGUI.DrawRect(_progressRect, _barColor);
             }
             else
@@ -386,16 +364,16 @@ namespace MoreMountains.Feedbacks
             // Active checkbox
             activeField = GUI.Toggle(_toggleRect, activeField, GUIContent.none, SmallTickbox);
 
-            
+
             _menuRect.x = _labelRect.xMax + 4f;
             _menuRect.y = _labelRect.y + 4f;
             _menuRect.width = _menuIcon.width;
             _menuRect.height = _menuIcon.height;
-            
+
             // Dropdown menu icon
             GUI.DrawTexture(_menuRect, _menuIcon);
 
-            for(int i = 0; i < 3; i++)
+            for (var i = 0; i < 3; i++)
             {
                 _workRect = _reorderRect;
                 _workRect.height = 1;
@@ -406,7 +384,6 @@ namespace MoreMountains.Feedbacks
             // Handle events
 
             if (e.type == EventType.MouseDown)
-            {
                 if (_menuRect.Contains(e.mousePosition))
                 {
                     fillGenericMenu(_genericMenu);
@@ -418,8 +395,7 @@ namespace MoreMountains.Feedbacks
                     _genericMenu.DropDown(_genericMenuRect);
                     e.Use();
                 }
-            }
-            
+
             if (e.type == EventType.MouseDown && _labelRect.Contains(e.mousePosition) && e.button == 0)
             {
                 expanded = !expanded;
@@ -428,15 +404,12 @@ namespace MoreMountains.Feedbacks
 
             return _backgroundRect;
         }
-        
-        public static void CreateColorTexture(this Texture2D texture2D, Color32 color) 
+
+        public static void CreateColorTexture(this Texture2D texture2D, Color32 color)
         {
-            Color32[] colorArray = texture2D.GetPixels32();
- 
-            for (int i = 0; i < colorArray.Length; ++i) 
-            {
-                colorArray[i] = color;
-            }
+            var colorArray = texture2D.GetPixels32();
+
+            for (var i = 0; i < colorArray.Length; ++i) colorArray[i] = color;
             texture2D.SetPixels32(colorArray);
             texture2D.Apply();
         }

@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace MoreMountains.Feedbacks
 {
     /// the possible states for sequence notes
-    public enum MMSequenceTrackStates { Idle, Down, Up }
+    public enum MMSequenceTrackStates
+    {
+        Idle,
+        Down,
+        Up
+    }
 
     /// <summary>
-    /// A class describing the contents of a sequence note, basically a timestamp and the ID to play at that timestamp
+    ///     A class describing the contents of a sequence note, basically a timestamp and the ID to play at that timestamp
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class MMSequenceNote
     {
         public float Timestamp;
@@ -19,28 +24,29 @@ namespace MoreMountains.Feedbacks
 
         public virtual MMSequenceNote Copy()
         {
-            MMSequenceNote newNote = new MMSequenceNote();
-            newNote.ID = this.ID;
-            newNote.Timestamp = this.Timestamp;
+            var newNote = new MMSequenceNote();
+            newNote.ID = ID;
+            newNote.Timestamp = Timestamp;
             return newNote;
         }
     }
 
     /// <summary>
-    /// A class describing the properties of a sequence's track : ID, color (for the inspector), Key (for the recorder), State (for the recorder)
+    ///     A class describing the properties of a sequence's track : ID, color (for the inspector), Key (for the recorder),
+    ///     State (for the recorder)
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class MMSequenceTrack
     {
-        public int ID = 0;
+        public int ID;
         public Color TrackColor;
         public KeyCode Key = KeyCode.Space;
         public bool Active = true;
-        [MMFReadOnly]
-        public MMSequenceTrackStates State = MMSequenceTrackStates.Idle;
-        [HideInInspector]
-        public bool Initialized = false;
-        
+
+        [MMFReadOnly] public MMSequenceTrackStates State = MMSequenceTrackStates.Idle;
+
+        [HideInInspector] public bool Initialized;
+
         public virtual void SetDefaults(int index)
         {
             if (!Initialized)
@@ -51,22 +57,22 @@ namespace MoreMountains.Feedbacks
                 Active = true;
                 State = MMSequenceTrackStates.Idle;
                 Initialized = true;
-            }            
+            }
         }
     }
 
     /// <summary>
-    /// A class used to store sequence notes
+    ///     A class used to store sequence notes
     /// </summary>
-    [System.Serializable]
+    [Serializable]
     public class MMSequenceList
     {
         public List<MMSequenceNote> Line;
     }
 
     /// <summary>
-    /// This scriptable object holds "sequences", data used to record and play events in sequence
-    /// MMSequences can be played by MMFeedbacks from their Timing section, by Sequencers and potentially other classes
+    ///     This scriptable object holds "sequences", data used to record and play events in sequence
+    ///     MMSequences can be played by MMFeedbacks from their Timing section, by Sequencers and potentially other classes
     /// </summary>
     [CreateAssetMenu(menuName = "MoreMountains/Sequencer/MMSequence")]
     public class MMSequence : ScriptableObject
@@ -76,12 +82,14 @@ namespace MoreMountains.Feedbacks
         [Tooltip("the length (in seconds) of the sequence")]
         [MMFReadOnly]
         public float Length;
+
         /// the original sequence (as outputted by the input sequence recorder)
         [Tooltip("the original sequence (as outputted by the input sequence recorder)")]
         public MMSequenceList OriginalSequence;
+
         /// the duration in seconds to apply after the last input
         [Tooltip("the duration in seconds to apply after the last input")]
-        public float EndSilenceDuration = 0f;
+        public float EndSilenceDuration;
 
         [Header("Sequence Contents")]
         /// the list of tracks for this sequence
@@ -92,34 +100,43 @@ namespace MoreMountains.Feedbacks
         /// whether this sequence should be used in quantized form or not
         [Tooltip("whether this sequence should be used in quantized form or not")]
         public bool Quantized;
+
         /// the target BPM for this sequence
         [Tooltip("the target BPM for this sequence")]
         public int TargetBPM = 120;
+
         /// the contents of the quantized sequence
         [Tooltip("the contents of the quantized sequence")]
         public List<MMSequenceList> QuantizedSequence;
-        
-        [Space]
-        [Header("Controls")]
-        [MMFInspectorButton("RandomizeTrackColors")]
+
+        [Space] [Header("Controls")] [MMFInspectorButton("RandomizeTrackColors")]
         public bool RandomizeTrackColorsButton;
-        
-        protected float[] _quantizedBeats; 
+
         protected List<MMSequenceNote> _deleteList;
 
+        protected float[] _quantizedBeats;
+
         /// <summary>
-        /// Compares and sorts two sequence notes
+        ///     On validate, we initialize our track's properties
+        /// </summary>
+        protected virtual void OnValidate()
+        {
+            for (var i = 0; i < SequenceTracks.Count; i++) SequenceTracks[i].SetDefaults(i);
+        }
+
+        /// <summary>
+        ///     Compares and sorts two sequence notes
         /// </summary>
         /// <param name="p1"></param>
         /// <param name="p2"></param>
         /// <returns></returns>
-        static int SortByTimestamp(MMSequenceNote p1, MMSequenceNote p2)
+        private static int SortByTimestamp(MMSequenceNote p1, MMSequenceNote p2)
         {
             return p1.Timestamp.CompareTo(p2.Timestamp);
         }
 
         /// <summary>
-        /// Sorts the original sequence based on timestamps
+        ///     Sorts the original sequence based on timestamps
         /// </summary>
         public virtual void SortOriginalSequence()
         {
@@ -127,7 +144,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Quantizes the original sequence, filling the QuantizedSequence list, arranging events on the beat
+        ///     Quantizes the original sequence, filling the QuantizedSequence list, arranging events on the beat
         /// </summary>
         public virtual void QuantizeOriginalSequence()
         {
@@ -136,7 +153,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Computes the length of the sequence
+        ///     Computes the length of the sequence
         /// </summary>
         public virtual void ComputeLength()
         {
@@ -144,79 +161,60 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Makes every timestamp in the sequence match the BPM track
+        ///     Makes every timestamp in the sequence match the BPM track
         /// </summary>
         public virtual void QuantizeSequenceToBPM(List<MMSequenceNote> baseSequence)
         {
-            float sequenceLength = Length;
-            float beatDuration = 60f / TargetBPM;
-            int numberOfBeatsInSequence = (int)(sequenceLength / beatDuration);
+            var sequenceLength = Length;
+            var beatDuration = 60f / TargetBPM;
+            var numberOfBeatsInSequence = (int)(sequenceLength / beatDuration);
             QuantizedSequence = new List<MMSequenceList>();
             _deleteList = new List<MMSequenceNote>();
             _deleteList.Clear();
 
             // we fill the BPM track with the computed timestamps
             _quantizedBeats = new float[numberOfBeatsInSequence];
-            for (int i = 0; i < numberOfBeatsInSequence; i++)
-            {
-                _quantizedBeats[i] = i * beatDuration;
-            }
-            
-            for (int i = 0; i < SequenceTracks.Count; i++)
+            for (var i = 0; i < numberOfBeatsInSequence; i++) _quantizedBeats[i] = i * beatDuration;
+
+            for (var i = 0; i < SequenceTracks.Count; i++)
             {
                 QuantizedSequence.Add(new MMSequenceList());
                 QuantizedSequence[i].Line = new List<MMSequenceNote>();
-                for (int j = 0; j < numberOfBeatsInSequence; j++)
+                for (var j = 0; j < numberOfBeatsInSequence; j++)
                 {
-                    MMSequenceNote newNote = new MMSequenceNote();
+                    var newNote = new MMSequenceNote();
                     newNote.ID = -1;
                     newNote.Timestamp = _quantizedBeats[j];
                     QuantizedSequence[i].Line.Add(newNote);
 
-                    foreach (MMSequenceNote note in baseSequence)
+                    foreach (var note in baseSequence)
                     {
-                        float newTimestamp = RoundFloatToArray(note.Timestamp, _quantizedBeats);
-                        if ((newTimestamp == _quantizedBeats[j]) && (note.ID == SequenceTracks[i].ID))
-                        {
+                        var newTimestamp = RoundFloatToArray(note.Timestamp, _quantizedBeats);
+                        if (newTimestamp == _quantizedBeats[j] && note.ID == SequenceTracks[i].ID)
                             QuantizedSequence[i].Line[j].ID = note.ID;
-                        }
                     }
                 }
-            }        
-        }
-
-        /// <summary>
-        /// On validate, we initialize our track's properties
-        /// </summary>
-        protected virtual void OnValidate()
-        {
-            for (int i = 0; i < SequenceTracks.Count; i++)
-            {
-                SequenceTracks[i].SetDefaults(i);
             }
         }
 
         /// <summary>
-        /// Randomizes track colors
+        ///     Randomizes track colors
         /// </summary>
         protected virtual void RandomizeTrackColors()
         {
-            foreach(MMSequenceTrack track in SequenceTracks)
-            {
-                track.TrackColor = RandomSequenceColor();
-            }
+            foreach (var track in SequenceTracks) track.TrackColor = RandomSequenceColor();
         }
 
         /// <summary>
-        /// Returns a random color for the sequence tracks
+        ///     Returns a random color for the sequence tracks
         /// </summary>
         /// <returns></returns>
         public static Color RandomSequenceColor()
         {
-            int random = UnityEngine.Random.Range(0, 32);
+            var random = Random.Range(0, 32);
             switch (random)
             {
-                case 0: return new Color32(240, 248, 255, 255); 
+                case 0: return new Color32(240, 248, 255, 255);
                 case 1: return new Color32(127, 255, 212, 255);
                 case 2: return new Color32(245, 245, 220, 255);
                 case 3: return new Color32(95, 158, 160, 255);
@@ -250,49 +248,39 @@ namespace MoreMountains.Feedbacks
                 case 31: return new Color32(255, 255, 0, 255);
                 case 32: return new Color32(154, 205, 50, 255);
             }
-            return new Color32(240, 248, 255, 255); 
+
+            return new Color32(240, 248, 255, 255);
         }
-        
+
         /// <summary>
-        /// Rounds a float to the closest float in an array (array has to be sorted)
+        ///     Rounds a float to the closest float in an array (array has to be sorted)
         /// </summary>
         /// <param name="value"></param>
         /// <param name="array"></param>
         /// <returns></returns>
         public static float RoundFloatToArray(float value, float[] array)
         {
-            int min = 0;
+            var min = 0;
             if (array[min] >= value) return array[min];
 
-            int max = array.Length - 1;
+            var max = array.Length - 1;
             if (array[max] <= value) return array[max];
 
             while (max - min > 1)
             {
-                int mid = (max + min) / 2;
+                var mid = (max + min) / 2;
 
                 if (array[mid] == value)
-                {
                     return array[mid];
-                }
-                else if (array[mid] < value)
-                {
+                if (array[mid] < value)
                     min = mid;
-                }
                 else
-                {
                     max = mid;
-                }
             }
 
             if (array[max] - value <= value - array[min])
-            {
                 return array[max];
-            }
-            else
-            {
-                return array[min];
-            }
+            return array[min];
         }
     }
 }

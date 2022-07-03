@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 namespace MoreMountains.InventoryEngine
-{	
+{
 	/// <summary>
-	/// The class used to reference the grid component of an InventoryDisplay
+	///     The class used to reference the grid component of an InventoryDisplay
 	/// </summary>
-	public class InventoryDisplayGrid : MonoBehaviour 
-	{
-				
-	}
+	public class InventoryDisplayGrid : MonoBehaviour
+    {
+    }
 }

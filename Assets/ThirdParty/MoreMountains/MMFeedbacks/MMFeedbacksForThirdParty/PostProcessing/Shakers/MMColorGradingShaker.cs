@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
-using MoreMountains.Feedbacks;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
     /// <summary>
-    /// Add this class to a Camera with a color grading post processing and it'll be able to "shake" its values by getting events
+    ///     Add this class to a Camera with a color grading post processing and it'll be able to "shake" its values by getting
+    ///     events
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/PostProcessing/MMColorGradingShaker")]
     [RequireComponent(typeof(PostProcessVolume))]
@@ -19,10 +18,12 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Header("Post Exposure")]
         /// the curve used to animate the focus distance value on
         [Tooltip("the curve used to animate the focus distance value on")]
-        public AnimationCurve ShakePostExposure = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        public AnimationCurve ShakePostExposure = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
         /// the value to remap the curve's 0 to
         [Tooltip("the value to remap the curve's 0 to")]
-        public float RemapPostExposureZero = 0f;
+        public float RemapPostExposureZero;
+
         /// the value to remap the curve's 1 to
         [Tooltip("the value to remap the curve's 1 to")]
         public float RemapPostExposureOne = 1f;
@@ -30,75 +31,66 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Header("Hue Shift")]
         /// the curve used to animate the aperture value on
         [Tooltip("the curve used to animate the aperture value on")]
-        public AnimationCurve ShakeHueShift = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        public AnimationCurve ShakeHueShift = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
         /// the value to remap the curve's 0 to
-        [Tooltip("the value to remap the curve's 0 to")]
-        [Range(-180f, 180f)]
-        public float RemapHueShiftZero = 0f;
+        [Tooltip("the value to remap the curve's 0 to")] [Range(-180f, 180f)]
+        public float RemapHueShiftZero;
+
         /// the value to remap the curve's 1 to
-        [Tooltip("the value to remap the curve's 1 to")]
-        [Range(-180f, 180f)]
+        [Tooltip("the value to remap the curve's 1 to")] [Range(-180f, 180f)]
         public float RemapHueShiftOne = 180f;
 
         [Header("Saturation")]
         /// the curve used to animate the focal length value on
         [Tooltip("the curve used to animate the focal length value on")]
-        public AnimationCurve ShakeSaturation = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        public AnimationCurve ShakeSaturation = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
         /// the value to remap the curve's 0 to
-        [Tooltip("the value to remap the curve's 0 to")]
-        [Range(-100f, 100f)]
-        public float RemapSaturationZero = 0f;
+        [Tooltip("the value to remap the curve's 0 to")] [Range(-100f, 100f)]
+        public float RemapSaturationZero;
+
         /// the value to remap the curve's 1 to
-        [Tooltip("the value to remap the curve's 1 to")]
-        [Range(-100f, 100f)]
+        [Tooltip("the value to remap the curve's 1 to")] [Range(-100f, 100f)]
         public float RemapSaturationOne = 100f;
 
         [Header("Contrast")]
         /// the curve used to animate the focal length value on
         [Tooltip("the curve used to animate the focal length value on")]
-        public AnimationCurve ShakeContrast = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        public AnimationCurve ShakeContrast = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
         /// the value to remap the curve's 0 to
-        [Tooltip("the value to remap the curve's 0 to")]
-        [Range(-100f, 100f)]
-        public float RemapContrastZero = 0f;
+        [Tooltip("the value to remap the curve's 0 to")] [Range(-100f, 100f)]
+        public float RemapContrastZero;
+
         /// the value to remap the curve's 1 to
-        [Tooltip("the value to remap the curve's 1 to")]
-        [Range(-100f, 100f)]
+        [Tooltip("the value to remap the curve's 1 to")] [Range(-100f, 100f)]
         public float RemapContrastOne = 100f;
 
-        protected PostProcessVolume _volume;
         protected ColorGrading _colorGrading;
-        protected float _initialPostExposure;
-        protected float _initialHueShift;
-        protected float _initialSaturation;
         protected float _initialContrast;
-        protected float _originalShakeDuration;
+        protected float _initialHueShift;
+        protected float _initialPostExposure;
+        protected float _initialSaturation;
         protected bool _originalRelativeValues;
-        protected AnimationCurve _originalShakePostExposure;
-        protected float _originalRemapPostExposureZero;
-        protected float _originalRemapPostExposureOne;
-        protected AnimationCurve _originalShakeHueShift;
-        protected float _originalRemapHueShiftZero;
-        protected float _originalRemapHueShiftOne;
-        protected AnimationCurve _originalShakeSaturation;
-        protected float _originalRemapSaturationZero;
-        protected float _originalRemapSaturationOne;
-        protected AnimationCurve _originalShakeContrast;
-        protected float _originalRemapContrastZero;
         protected float _originalRemapContrastOne;
+        protected float _originalRemapContrastZero;
+        protected float _originalRemapHueShiftOne;
+        protected float _originalRemapHueShiftZero;
+        protected float _originalRemapPostExposureOne;
+        protected float _originalRemapPostExposureZero;
+        protected float _originalRemapSaturationOne;
+        protected float _originalRemapSaturationZero;
+        protected AnimationCurve _originalShakeContrast;
+        protected float _originalShakeDuration;
+        protected AnimationCurve _originalShakeHueShift;
+        protected AnimationCurve _originalShakePostExposure;
+        protected AnimationCurve _originalShakeSaturation;
+
+        protected PostProcessVolume _volume;
 
         /// <summary>
-        /// On init we initialize our values
-        /// </summary>
-        protected override void Initialization()
-        {
-            base.Initialization();
-            _volume = this.gameObject.GetComponent<PostProcessVolume>();
-            _volume.profile.TryGetSettings(out _colorGrading);
-        }
-
-        /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
+        ///     When that shaker gets added, we initialize its shake duration
         /// </summary>
         protected virtual void Reset()
         {
@@ -106,22 +98,36 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Shakes values over time
+        ///     On init we initialize our values
+        /// </summary>
+        protected override void Initialization()
+        {
+            base.Initialization();
+            _volume = gameObject.GetComponent<PostProcessVolume>();
+            _volume.profile.TryGetSettings(out _colorGrading);
+        }
+
+        /// <summary>
+        ///     Shakes values over time
         /// </summary>
         protected override void Shake()
         {
-            float newPostExposure = ShakeFloat(ShakePostExposure, RemapPostExposureZero, RemapPostExposureOne, RelativeValues, _initialPostExposure);
+            var newPostExposure = ShakeFloat(ShakePostExposure, RemapPostExposureZero, RemapPostExposureOne,
+                RelativeValues, _initialPostExposure);
             _colorGrading.postExposure.Override(newPostExposure);
-            float newHueShift = ShakeFloat(ShakeHueShift, RemapHueShiftZero, RemapHueShiftOne, RelativeValues, _initialHueShift);
+            var newHueShift = ShakeFloat(ShakeHueShift, RemapHueShiftZero, RemapHueShiftOne, RelativeValues,
+                _initialHueShift);
             _colorGrading.hueShift.Override(newHueShift);
-            float newSaturation = ShakeFloat(ShakeSaturation, RemapSaturationZero, RemapSaturationOne, RelativeValues, _initialSaturation);
+            var newSaturation = ShakeFloat(ShakeSaturation, RemapSaturationZero, RemapSaturationOne, RelativeValues,
+                _initialSaturation);
             _colorGrading.saturation.Override(newSaturation);
-            float newContrast = ShakeFloat(ShakeContrast, RemapContrastZero, RemapContrastOne, RelativeValues, _initialContrast);
+            var newContrast = ShakeFloat(ShakeContrast, RemapContrastZero, RemapContrastOne, RelativeValues,
+                _initialContrast);
             _colorGrading.contrast.Override(newContrast);
         }
 
         /// <summary>
-        /// Collects initial values on the target
+        ///     Collects initial values on the target
         /// </summary>
         protected override void GrabInitialValues()
         {
@@ -132,7 +138,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// When we get the appropriate event, we trigger a shake
+        ///     When we get the appropriate event, we trigger a shake
         /// </summary>
         /// <param name="intensity"></param>
         /// <param name="duration"></param>
@@ -140,19 +146,18 @@ namespace MoreMountains.FeedbacksForThirdParty
         /// <param name="relativeIntensity"></param>
         /// <param name="feedbacksIntensity"></param>
         /// <param name="channel"></param>
-        public virtual void OnMMColorGradingShakeEvent(AnimationCurve shakePostExposure, float remapPostExposureZero, float remapPostExposureOne,
+        public virtual void OnMMColorGradingShakeEvent(AnimationCurve shakePostExposure, float remapPostExposureZero,
+            float remapPostExposureOne,
             AnimationCurve shakeHueShift, float remapHueShiftZero, float remapHueShiftOne,
             AnimationCurve shakeSaturation, float remapSaturationZero, float remapSaturationOne,
             AnimationCurve shakeContrast, float remapContrastZero, float remapContrastOne,
             float duration, bool relativeValues = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true,
             bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
-            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking))
-            {
-                return;
-            }
-            
+            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking)) return;
+
             if (stop)
             {
                 Stop();
@@ -188,7 +193,7 @@ namespace MoreMountains.FeedbacksForThirdParty
             RemapPostExposureOne = remapPostExposureOne;
             ShakeHueShift = shakeHueShift;
             RemapHueShiftZero = remapHueShiftZero;
-            RemapHueShiftOne  = remapHueShiftOne;
+            RemapHueShiftOne = remapHueShiftOne;
             ShakeSaturation = shakeSaturation;
             RemapSaturationZero = remapSaturationZero;
             RemapSaturationOne = remapSaturationOne;
@@ -201,7 +206,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Resets the target's values
+        ///     Resets the target's values
         /// </summary>
         protected override void ResetTargetValues()
         {
@@ -213,7 +218,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Resets the shaker's values
+        ///     Resets the shaker's values
         /// </summary>
         protected override void ResetShakerValues()
         {
@@ -235,7 +240,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -244,7 +249,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -254,42 +259,48 @@ namespace MoreMountains.FeedbacksForThirdParty
     }
 
     /// <summary>
-    /// An event used to trigger vignette shakes
+    ///     An event used to trigger vignette shakes
     /// </summary>
     public struct MMColorGradingShakeEvent
     {
-        public delegate void Delegate(AnimationCurve shakePostExposure, float remapPostExposureZero, float remapPostExposureOne,
+        public delegate void Delegate(AnimationCurve shakePostExposure, float remapPostExposureZero,
+            float remapPostExposureOne,
             AnimationCurve shakeHueShift, float remapHueShiftZero, float remapHueShiftOne,
             AnimationCurve shakeSaturation, float remapSaturationZero, float remapSaturationOne,
             AnimationCurve shakeContrast, float remapContrastZero, float remapContrastOne,
             float duration, bool relativeValues = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true,
             bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false);
-        static private event Delegate OnEvent;
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(AnimationCurve shakePostExposure, float remapPostExposureZero, float remapPostExposureOne,
+        public static void Trigger(AnimationCurve shakePostExposure, float remapPostExposureZero,
+            float remapPostExposureOne,
             AnimationCurve shakeHueShift, float remapHueShiftZero, float remapHueShiftOne,
             AnimationCurve shakeSaturation, float remapSaturationZero, float remapSaturationOne,
             AnimationCurve shakeContrast, float remapContrastZero, float remapContrastOne,
             float duration, bool relativeValues = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, 
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true,
             bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
             OnEvent?.Invoke(shakePostExposure, remapPostExposureZero, remapPostExposureOne,
                 shakeHueShift, remapHueShiftZero, remapHueShiftOne,
                 shakeSaturation, remapSaturationZero, remapSaturationOne,
                 shakeContrast, remapContrastZero, remapContrastOne,
-                duration, relativeValues, feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop);
+                duration, relativeValues, feedbacksIntensity, channel, resetShakerValuesAfterShake,
+                resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop);
         }
     }
 }

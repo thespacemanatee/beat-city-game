@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Vector3 Extensions
+    ///     Vector3 Extensions
     /// </summary>
     public static class MMVector3Extensions
     {
         /// <summary>
-        /// Sets the x value of a vector
+        ///     Sets the x value of a vector
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="newValue"></param>
@@ -23,7 +20,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the y value of a vector
+        ///     Sets the y value of a vector
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="newValue"></param>
@@ -35,7 +32,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the z value of a vector
+        ///     Sets the z value of a vector
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="newValue"></param>
@@ -47,34 +44,34 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Inverts a vector
+        ///     Inverts a vector
         /// </summary>
         /// <param name="newValue"></param>
         /// <returns></returns>
         public static Vector3 MMInvert(this Vector3 newValue)
         {
             return new Vector3
-                (
-                    1.0f / newValue.x,
-                    1.0f / newValue.y,
-                    1.0f / newValue.z
-                );
+            (
+                1.0f / newValue.x,
+                1.0f / newValue.y,
+                1.0f / newValue.z
+            );
         }
 
         /// <summary>
-        /// Projects a vector on another
+        ///     Projects a vector on another
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="projectedVector"></param>
         /// <returns></returns>
         public static Vector3 MMProject(this Vector3 vector, Vector3 projectedVector)
         {
-            float _dot = Vector3.Dot(vector, projectedVector);
+            var _dot = Vector3.Dot(vector, projectedVector);
             return _dot * projectedVector;
         }
 
         /// <summary>
-        /// Rejects a vector on another
+        ///     Rejects a vector on another
         /// </summary>
         /// <param name="vector"></param>
         /// <param name="rejectedVector"></param>
@@ -85,7 +82,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Rounds all components of a vector
+        ///     Rounds all components of a vector
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>

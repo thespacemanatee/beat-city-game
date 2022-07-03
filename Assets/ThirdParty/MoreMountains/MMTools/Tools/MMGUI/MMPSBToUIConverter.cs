@@ -1,31 +1,28 @@
-﻿using UnityEngine;
-using System.Collections;
-using System;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
-using MoreMountains.Tools;
-using System.Collections.Generic;
 
 namespace MoreMountains.Tools
 {
     [AddComponentMenu("More Mountains/Tools/GUI/MMPSBToUIConverter")]
     public class MMPSBToUIConverter : MonoBehaviour
     {
-        [Header("Target")]
-        public Canvas TargetCanvas;
-        public float ScaleFactor = 100f;
-        public bool ReplicateNesting = false;
+        [Header("Target")] public Canvas TargetCanvas;
 
-        [Header("Size")]
-        public float TargetWidth = 2048;
+        public float ScaleFactor = 100f;
+        public bool ReplicateNesting;
+
+        [Header("Size")] public float TargetWidth = 2048;
+
         public float TargetHeight = 1152;
 
-        [Header("Conversion")]
-        [MMInspectorButton("ConvertToCanvas")]
+        [Header("Conversion")] [MMInspectorButton("ConvertToCanvas")]
         public bool ConvertToCanvasButton;
-        public Vector3 ChildImageOffset = new Vector3(-1024f, -576f, 0f);
+
+        public Vector3 ChildImageOffset = new(-1024f, -576f, 0f);
+        protected Dictionary<Transform, int> _sortingOrders;
 
         protected Transform _topLevel;
-        protected Dictionary<Transform, int> _sortingOrders;
 
         public virtual void ConvertToCanvas()
         {
@@ -35,39 +32,31 @@ namespace MoreMountains.Tools
 
             // remove existing canvas if found
             foreach (Transform child in TargetCanvas.transform)
-            {
-                if (child.name == this.name)
+                if (child.name == name)
                 {
                     child.MMDestroyAllChildren();
                     DestroyImmediate(child.gameObject);
                 }
-            }
 
             // force size on canvas scaler
-            CanvasScaler canvasScaler = TargetCanvas.GetComponent<CanvasScaler>();
-            if (canvasScaler != null)
-            {
-                canvasScaler.referenceResolution = new Vector2(TargetWidth, TargetHeight);
-            }
+            var canvasScaler = TargetCanvas.GetComponent<CanvasScaler>();
+            if (canvasScaler != null) canvasScaler.referenceResolution = new Vector2(TargetWidth, TargetHeight);
 
             // create a parent in the target canvas
-            GameObject newRoot = new GameObject(this.name, typeof(RectTransform));
+            var newRoot = new GameObject(name, typeof(RectTransform));
             newRoot.transform.SetParent(TargetCanvas.transform);
-            RectTransform newRootRect = newRoot.GetComponent<RectTransform>();
+            var newRootRect = newRoot.GetComponent<RectTransform>();
             SetupForStretch(newRootRect);
 
             _topLevel = newRoot.transform;
-            CreateImageForChildren(this.transform, newRoot.transform);
+            CreateImageForChildren(transform, newRoot.transform);
 
             // apply sorting orders
-            foreach (KeyValuePair<Transform, int> pair in _sortingOrders)
-            {
-                pair.Key.SetSiblingIndex(pair.Value);
-            }
+            foreach (var pair in _sortingOrders) pair.Key.SetSiblingIndex(pair.Value);
         }
 
         /// <summary>
-        /// Recursively goes through the children of the specified "root" Transform, and parents them to the specified "parent" 
+        ///     Recursively goes through the children of the specified "root" Transform, and parents them to the specified "parent"
         /// </summary>
         /// <param name="root"></param>
         /// <param name="parent"></param>
@@ -75,7 +64,7 @@ namespace MoreMountains.Tools
         {
             foreach (Transform child in root)
             {
-                GameObject imageGO = new GameObject(child.name, typeof(RectTransform));
+                var imageGO = new GameObject(child.name, typeof(RectTransform));
                 imageGO.transform.localPosition = ScaleFactor * child.transform.localPosition;
                 if (ReplicateNesting)
                 {
@@ -84,21 +73,21 @@ namespace MoreMountains.Tools
                 else
                 {
                     imageGO.transform.SetParent(_topLevel);
-                    Vector3 newLocalPosition = imageGO.transform.localPosition;
+                    var newLocalPosition = imageGO.transform.localPosition;
                     newLocalPosition.x = newLocalPosition.x + TargetWidth / 2f;
                     imageGO.transform.localPosition = newLocalPosition;
                 }
 
-                SpriteRenderer spriteRenderer = child.gameObject.GetComponent<SpriteRenderer>();
+                var spriteRenderer = child.gameObject.GetComponent<SpriteRenderer>();
                 if (spriteRenderer != null)
                 {
-                    Image image = imageGO.AddComponent<Image>();
+                    var image = imageGO.AddComponent<Image>();
                     image.sprite = spriteRenderer.sprite;
                     _sortingOrders.Add(image.transform, spriteRenderer.sortingOrder);
                     image.SetNativeSize();
 
-                    RectTransform imageGoRect = imageGO.GetComponent<RectTransform>();
-                    Vector3 newPosition = imageGoRect.localPosition;
+                    var imageGoRect = imageGO.GetComponent<RectTransform>();
+                    var newPosition = imageGoRect.localPosition;
                     newPosition += ChildImageOffset;
                     newPosition.z = 0f;
                     imageGoRect.localPosition = newPosition;
@@ -106,10 +95,11 @@ namespace MoreMountains.Tools
                 else
                 {
                     imageGO.name += " - NODE";
-                    RectTransform imageGoRect = imageGO.GetComponent<RectTransform>();
+                    var imageGoRect = imageGO.GetComponent<RectTransform>();
                     imageGoRect.sizeDelta = new Vector2(TargetWidth, TargetHeight);
                     imageGoRect.localPosition = Vector3.zero;
                 }
+
                 imageGO.GetComponent<RectTransform>().localScale = Vector3.one;
                 CreateImageForChildren(child, imageGO.transform);
             }
@@ -125,6 +115,5 @@ namespace MoreMountains.Tools
             rect.offsetMax = Vector2.zero;
             rect.localScale = Vector3.one;
         }
-
     }
 }

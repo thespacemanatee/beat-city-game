@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Color extensions
+    ///     Color extensions
     /// </summary>
     public static class MMColorExtensions
     {
         /// <summary>
-        /// Adds all parts of the color and returns a float
+        ///     Adds all parts of the color and returns a float
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
@@ -21,7 +18,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Returns a mean value between r, g and b
+        ///     Returns a mean value between r, g and b
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>
@@ -31,7 +28,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Computes the color's luminance value
+        ///     Computes the color's luminance value
         /// </summary>
         /// <param name="color"></param>
         /// <returns></returns>

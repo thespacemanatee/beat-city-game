@@ -1,224 +1,223 @@
-﻿using UnityEngine;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MoreMountains.Tools;
+using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
 namespace MoreMountains.Feedbacks
-{    
+{
     /// <summary>
-    /// This feedback will let you play a sound via the MMSoundManager. You will need a game object in your scene with a MMSoundManager object on it for this to work.
+    ///     This feedback will let you play a sound via the MMSoundManager. You will need a game object in your scene with a
+    ///     MMSoundManager object on it for this to work.
     /// </summary>
     [ExecuteAlways]
     [AddComponentMenu("")]
     [FeedbackPath("Audio/MMSoundManager Sound")]
-    [FeedbackHelp("This feedback will let you play a sound via the MMSoundManager. You will need a game object in your scene with a MMSoundManager object on it for this to work.")]
+    [FeedbackHelp(
+        "This feedback will let you play a sound via the MMSoundManager. You will need a game object in your scene with a MMSoundManager object on it for this to work.")]
     public class MMF_MMSoundManagerSound : MMF_Feedback
     {
         /// a static bool used to disable all feedbacks of this type at once
         public static bool FeedbackTypeAuthorized = true;
-        /// sets the inspector color for this feedback
-        #if UNITY_EDITOR
-            public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.SoundsColor; } }
-            public override bool EvaluateRequiresSetup()
-            {
-                bool requiresSetup = false;
-                if (Sfx == null)
-                {
-                    requiresSetup = true;
-                }
-                if ((RandomSfx != null) && (RandomSfx.Length > 0))
-                {
-                    requiresSetup = false;
-                    foreach (AudioClip clip in RandomSfx)
-                    {
-                        if (clip == null)
-                        {
-                            requiresSetup = true;
-                        }
-                    }    
-                }
-                return requiresSetup;
-            }
-            public override string RequiredTargetText { get { return Sfx != null ? Sfx.name : "";  } }
 
-            public override string RequiresSetupText { get { return "This feedback requires that you set an Audio clip in its Sfx slot below, or one or more clips in the Random Sfx array."; } }
-            public override bool HasCustomInspectors { get { return true; } }
-        #endif
+        protected AudioSource _editorAudioSource;
+        protected MMSoundManagerPlayOptions _options;
+        protected AudioSource _playedAudioSource;
 
-        /// the duration of this feedback is the duration of the clip being played
-        public override float FeedbackDuration { get { return GetDuration(); } }
-        
-        [MMFInspectorGroup("Sound", true, 14, true)]
-        /// the sound clip to play
-        [Tooltip("the sound clip to play")]
-        public AudioClip Sfx;
+        protected AudioClip _randomClip;
+        protected float _randomPlaybackTime;
 
-        /// an array to pick a random sfx from
-        [Tooltip("an array to pick a random sfx from")]
-        public AudioClip[] RandomSfx;
+        /// the AudioGroup on which to play the sound. If you're already targeting a preset track, you can leave it blank, otherwise the group you specify here will override it.
+        [Tooltip(
+            "the AudioGroup on which to play the sound. If you're already targeting a preset track, you can leave it blank, otherwise the group you specify here will override it.")]
+        public AudioMixerGroup AudioGroup = null;
 
-        /// a test button used to play the sound in inspector
-        public MMF_Button TestPlayButton;
-        /// a test button used to stop the sound in inspector
-        public MMF_Button TestStopButton;
-        
-        [MMFInspectorGroup("Sound Properties", true, 24)]
-        [Header("Volume")]
-        /// the minimum volume to play the sound at
-        [Tooltip("the minimum volume to play the sound at")]
-        [Range(0f,2f)]
-        public float MinVolume = 1f;
+        /// if in any of the above solo modes, AutoUnSoloOnEnd will unmute the track(s) automatically once that sound stops playing
+        [Tooltip(
+            "if in any of the above solo modes, AutoUnSoloOnEnd will unmute the track(s) automatically once that sound stops playing")]
+        public bool AutoUnSoloOnEnd = false;
+
+        [MMFInspectorGroup("Effects", true, 36)]
+        /// Bypass effects (Applied from filter components or global listener filters).
+        [Tooltip("Bypass effects (Applied from filter components or global listener filters).")]
+        public bool BypassEffects = false;
+
+        /// When set global effects on the AudioListener will not be applied to the audio signal generated by the AudioSource. Does not apply if the AudioSource is playing into a mixer group.
+        [Tooltip(
+            "When set global effects on the AudioListener will not be applied to the audio signal generated by the AudioSource. Does not apply if the AudioSource is playing into a mixer group.")]
+        public bool BypassListenerEffects = false;
+
+        /// When set doesn't route the signal from an AudioSource into the global reverb associated with reverb zones.
+        [Tooltip(
+            "When set doesn't route the signal from an AudioSource into the global reverb associated with reverb zones.")]
+        public bool BypassReverbZones = false;
+
+        /// whether or not this sound should play if the same sound clip is already playing
+        [Tooltip("whether or not this sound should play if the same sound clip is already playing")]
+        public bool DoNotPlayIfClipAlreadyPlaying = false;
+
+        [MMFInspectorGroup("3D Sound Settings", true, 37)]
+        /// Sets the Doppler scale for this AudioSource.
+        [Tooltip("Sets the Doppler scale for this AudioSource.")]
+        [Range(0f, 5f)]
+        public float DopplerLevel = 1f;
+
+        [MMFInspectorGroup("Fade", true, 30)]
+        /// whether or not to fade this sound in when playing it
+        [Tooltip("whether or not to fade this sound in when playing it")]
+        public bool Fade = false;
+
+        /// if fading, the duration of the fade, in seconds
+        [Tooltip("if fading, the duration of the fade, in seconds")] [MMCondition("Fade", true)]
+        public float FadeDuration = 1f;
+
+        /// if fading, the volume at which to start the fade
+        [Tooltip("if fading, the volume at which to start the fade")] [MMCondition("Fade", true)]
+        public float FadeInitialVolume = 0f;
+
+        /// if fading, the tween over which to fade the sound
+        [Tooltip("if fading, the tween over which to fade the sound ")] [MMCondition("Fade", true)]
+        public MMTweenType FadeTween = new(MMTween.MMTweenCurve.EaseInOutQuartic);
+
+        /// the ID of the sound. This is useful if you plan on using sound control feedbacks on it afterwards.
+        [Tooltip("the ID of the sound. This is useful if you plan on using sound control feedbacks on it afterwards.")]
+        public int ID = 0;
+
+        /// whether or not this sound should loop
+        [Tooltip("whether or not this sound should loop")]
+        public bool Loop = false;
+
+        /// (Logarithmic rolloff) MaxDistance is the distance a sound stops attenuating at.
+        [Tooltip("(Logarithmic rolloff) MaxDistance is the distance a sound stops attenuating at.")]
+        public float MaxDistance = 500f;
+
+        /// the maximum pitch to play the sound at
+        [Tooltip("the maximum pitch to play the sound at")] [Range(-3f, 3f)]
+        public float MaxPitch = 1f;
+
         /// the maximum volume to play the sound at
-        [Tooltip("the maximum volume to play the sound at")]
-        [Range(0f,2f)]
+        [Tooltip("the maximum volume to play the sound at")] [Range(0f, 2f)]
         public float MaxVolume = 1f;
+
+        /// Within the Min distance the AudioSource will cease to grow louder in volume.
+        [Tooltip("Within the Min distance the AudioSource will cease to grow louder in volume.")]
+        public float MinDistance = 1f;
 
         [Header("Pitch")]
         /// the minimum pitch to play the sound at
         [Tooltip("the minimum pitch to play the sound at")]
-        [Range(-3f,3f)]
+        [Range(-3f, 3f)]
         public float MinPitch = 1f;
-        /// the maximum pitch to play the sound at
-        [Tooltip("the maximum pitch to play the sound at")]
-        [Range(-3f,3f)]
-        public float MaxPitch = 1f;
+
+        [MMFInspectorGroup("Sound Properties", true)]
+        [Header("Volume")]
+        /// the minimum volume to play the sound at
+        [Tooltip("the minimum volume to play the sound at")]
+        [Range(0f, 2f)]
+        public float MinVolume = 1f;
+
+        [MMFInspectorGroup("SoundManager Options", true, 28)]
+        /// the track on which to play the sound. Pick the one that matches the nature of your sound
+        [Tooltip("the track on which to play the sound. Pick the one that matches the nature of your sound")]
+        public MMSoundManager.MMSoundManagerTracks MmSoundManagerTrack = MMSoundManager.MMSoundManagerTracks.Sfx;
+
+        [MMFInspectorGroup("Spatial Settings", true, 33)]
+        /// Pans a playing sound in a stereo way (left or right). This only applies to sounds that are Mono or Stereo.
+        [Tooltip(
+            "Pans a playing sound in a stereo way (left or right). This only applies to sounds that are Mono or Stereo.")]
+        [Range(-1f, 1f)]
+        public float PanStereo;
+
+        /// whether or not this sound should continue playing when transitioning to another scene
+        [Tooltip("whether or not this sound should continue playing when transitioning to another scene")]
+        public bool Persistent = false;
 
         [Header("Time")]
         /// the minimum and maximum time stamps at which to play the sound 
         [Tooltip("the minimum and maximum time stamps at which to play the sound")]
         [MMVector("Min", "Max")]
-        public Vector2 PlaybackTime = new Vector2(0f, 0f);
-        [MMFInspectorGroup("SoundManager Options", true, 28)]
-        /// the track on which to play the sound. Pick the one that matches the nature of your sound
-        [Tooltip("the track on which to play the sound. Pick the one that matches the nature of your sound")]
-        public MMSoundManager.MMSoundManagerTracks MmSoundManagerTrack = MMSoundManager.MMSoundManagerTracks.Sfx;
-        /// the ID of the sound. This is useful if you plan on using sound control feedbacks on it afterwards. 
-        [Tooltip("the ID of the sound. This is useful if you plan on using sound control feedbacks on it afterwards.")]
-        public int ID = 0;
-        /// the AudioGroup on which to play the sound. If you're already targeting a preset track, you can leave it blank, otherwise the group you specify here will override it.
-        [Tooltip("the AudioGroup on which to play the sound. If you're already targeting a preset track, you can leave it blank, otherwise the group you specify here will override it.")]
-        public AudioMixerGroup AudioGroup = null;
-        /// if (for some reason) you've already got an audiosource and wouldn't like to use the built-in pool system, you can specify it here 
-        [Tooltip("if (for some reason) you've already got an audiosource and wouldn't like to use the built-in pool system, you can specify it here")]
-        public AudioSource RecycleAudioSource = null;
-        /// whether or not this sound should loop
-        [Tooltip("whether or not this sound should loop")]
-        public bool Loop = false;
-        /// whether or not this sound should continue playing when transitioning to another scene
-        [Tooltip("whether or not this sound should continue playing when transitioning to another scene")]
-        public bool Persistent = false;
-        /// whether or not this sound should play if the same sound clip is already playing
-        [Tooltip("whether or not this sound should play if the same sound clip is already playing")]
-        public bool DoNotPlayIfClipAlreadyPlaying = false;
-        /// if this is true, this sound will stop playing when stopping the feedback
-        [Tooltip("if this is true, this sound will stop playing when stopping the feedback")]
-        public bool StopSoundOnFeedbackStop = false;
-        
-        [MMFInspectorGroup("Fade", true, 30)]
-        /// whether or not to fade this sound in when playing it
-        [Tooltip("whether or not to fade this sound in when playing it")]
-        public bool Fade = false;
-        /// if fading, the volume at which to start the fade
-        [Tooltip("if fading, the volume at which to start the fade")]
-        [MMCondition("Fade", true)]
-        public float FadeInitialVolume = 0f;
-        /// if fading, the duration of the fade, in seconds
-        [Tooltip("if fading, the duration of the fade, in seconds")]
-        [MMCondition("Fade", true)]
-        public float FadeDuration = 1f;
-        /// if fading, the tween over which to fade the sound 
-        [Tooltip("if fading, the tween over which to fade the sound ")]
-        [MMCondition("Fade", true)]
-        public MMTweenType FadeTween = new MMTweenType(MMTween.MMTweenCurve.EaseInOutQuartic);
-        
-        [MMFInspectorGroup("Solo", true, 32)]
-        /// whether or not this sound should play in solo mode over its destination track. If yes, all other sounds on that track will be muted when this sound starts playing
-        [Tooltip("whether or not this sound should play in solo mode over its destination track. If yes, all other sounds on that track will be muted when this sound starts playing")]
-        public bool SoloSingleTrack = false;
-        /// whether or not this sound should play in solo mode over all other tracks. If yes, all other tracks will be muted when this sound starts playing
-        [Tooltip("whether or not this sound should play in solo mode over all other tracks. If yes, all other tracks will be muted when this sound starts playing")]
-        public bool SoloAllTracks = false;
-        /// if in any of the above solo modes, AutoUnSoloOnEnd will unmute the track(s) automatically once that sound stops playing
-        [Tooltip("if in any of the above solo modes, AutoUnSoloOnEnd will unmute the track(s) automatically once that sound stops playing")]
-        public bool AutoUnSoloOnEnd = false;
+        public Vector2 PlaybackTime = new(0f, 0f);
 
-        [MMFInspectorGroup("Spatial Settings", true, 33)]
-        /// Pans a playing sound in a stereo way (left or right). This only applies to sounds that are Mono or Stereo.
-        [Tooltip("Pans a playing sound in a stereo way (left or right). This only applies to sounds that are Mono or Stereo.")]
-        [Range(-1f,1f)]
-        public float PanStereo;
-        /// Sets how much this AudioSource is affected by 3D spatialisation calculations (attenuation, doppler etc). 0.0 makes the sound full 2D, 1.0 makes it full 3D.
-        [Tooltip("Sets how much this AudioSource is affected by 3D spatialisation calculations (attenuation, doppler etc). 0.0 makes the sound full 2D, 1.0 makes it full 3D.")]
-        [Range(0f,1f)]
-        public float SpatialBlend;
-        
-        [MMFInspectorGroup("Effects", true, 36)]
-        /// Bypass effects (Applied from filter components or global listener filters).
-        [Tooltip("Bypass effects (Applied from filter components or global listener filters).")]
-        public bool BypassEffects = false;
-        /// When set global effects on the AudioListener will not be applied to the audio signal generated by the AudioSource. Does not apply if the AudioSource is playing into a mixer group.
-        [Tooltip("When set global effects on the AudioListener will not be applied to the audio signal generated by the AudioSource. Does not apply if the AudioSource is playing into a mixer group.")]
-        public bool BypassListenerEffects = false;
-        /// When set doesn't route the signal from an AudioSource into the global reverb associated with reverb zones.
-        [Tooltip("When set doesn't route the signal from an AudioSource into the global reverb associated with reverb zones.")]
-        public bool BypassReverbZones = false;
         /// Sets the priority of the AudioSource.
-        [Tooltip("Sets the priority of the AudioSource.")]
-        [Range(0, 256)]
+        [Tooltip("Sets the priority of the AudioSource.")] [Range(0, 256)]
         public int Priority = 128;
+
+        /// an array to pick a random sfx from
+        [Tooltip("an array to pick a random sfx from")]
+        public AudioClip[] RandomSfx;
+
+        /// if (for some reason) you've already got an audiosource and wouldn't like to use the built-in pool system, you can specify it here
+        [Tooltip(
+            "if (for some reason) you've already got an audiosource and wouldn't like to use the built-in pool system, you can specify it here")]
+        public AudioSource RecycleAudioSource = null;
+
         /// The amount by which the signal from the AudioSource will be mixed into the global reverb associated with the Reverb Zones.
-        [Tooltip("The amount by which the signal from the AudioSource will be mixed into the global reverb associated with the Reverb Zones.")]
-        [Range(0f,1.1f)]
+        [Tooltip(
+            "The amount by which the signal from the AudioSource will be mixed into the global reverb associated with the Reverb Zones.")]
+        [Range(0f, 1.1f)]
         public float ReverbZoneMix = 1f;
-        
-        [MMFInspectorGroup("3D Sound Settings", true, 37)]
-        /// Sets the Doppler scale for this AudioSource.
-        [Tooltip("Sets the Doppler scale for this AudioSource.")]
-        [Range(0f,5f)]
-        public float DopplerLevel = 1f;
-        /// Sets the spread angle (in degrees) of a 3d stereo or multichannel sound in speaker space.
-        [Tooltip("Sets the spread angle (in degrees) of a 3d stereo or multichannel sound in speaker space.")]
-        [Range(0,360)]
-        public int Spread = 0;
+
         /// Sets/Gets how the AudioSource attenuates over distance.
         [Tooltip("Sets/Gets how the AudioSource attenuates over distance.")]
         public AudioRolloffMode RolloffMode = AudioRolloffMode.Logarithmic;
-        /// Within the Min distance the AudioSource will cease to grow louder in volume.
-        [Tooltip("Within the Min distance the AudioSource will cease to grow louder in volume.")]
-        public float MinDistance = 1f;
-        /// (Logarithmic rolloff) MaxDistance is the distance a sound stops attenuating at.
-        [Tooltip("(Logarithmic rolloff) MaxDistance is the distance a sound stops attenuating at.")]
-        public float MaxDistance = 500f;
-        
-        protected AudioClip _randomClip;
-        protected AudioSource _editorAudioSource;
-        protected MMSoundManagerPlayOptions _options;
-        protected AudioSource _playedAudioSource;
-        protected float _randomPlaybackTime;
+
+        [MMFInspectorGroup("Sound", true, 14, true)]
+        /// the sound clip to play
+        [Tooltip("the sound clip to play")]
+        public AudioClip Sfx;
+
+        /// whether or not this sound should play in solo mode over all other tracks. If yes, all other tracks will be muted when this sound starts playing
+        [Tooltip(
+            "whether or not this sound should play in solo mode over all other tracks. If yes, all other tracks will be muted when this sound starts playing")]
+        public bool SoloAllTracks = false;
+
+        [MMFInspectorGroup("Solo", true, 32)]
+        /// whether or not this sound should play in solo mode over its destination track. If yes, all other sounds on that track will be muted when this sound starts playing
+        [Tooltip(
+            "whether or not this sound should play in solo mode over its destination track. If yes, all other sounds on that track will be muted when this sound starts playing")]
+        public bool SoloSingleTrack = false;
+
+        /// Sets how much this AudioSource is affected by 3D spatialisation calculations (attenuation, doppler etc). 0.0 makes the sound full 2D, 1.0 makes it full 3D.
+        [Tooltip(
+            "Sets how much this AudioSource is affected by 3D spatialisation calculations (attenuation, doppler etc). 0.0 makes the sound full 2D, 1.0 makes it full 3D.")]
+        [Range(0f, 1f)]
+        public float SpatialBlend;
+
+        /// Sets the spread angle (in degrees) of a 3d stereo or multichannel sound in speaker space.
+        [Tooltip("Sets the spread angle (in degrees) of a 3d stereo or multichannel sound in speaker space.")]
+        [Range(0, 360)]
+        public int Spread = 0;
+
+        /// if this is true, this sound will stop playing when stopping the feedback
+        [Tooltip("if this is true, this sound will stop playing when stopping the feedback")]
+        public bool StopSoundOnFeedbackStop = false;
+
+        /// a test button used to play the sound in inspector
+        public MMF_Button TestPlayButton;
+
+        /// a test button used to stop the sound in inspector
+        public MMF_Button TestStopButton;
+
+        /// the duration of this feedback is the duration of the clip being played
+        public override float FeedbackDuration => GetDuration();
 
         public override void InitializeCustomAttributes()
         {
             TestPlayButton = new MMF_Button("Debug Play Sound", TestPlaySound);
             TestStopButton = new MMF_Button("Debug Stop Sound", TestStopSound);
         }
-        
+
         /// <summary>
-        /// Plays either a random sound or the specified sfx
+        ///     Plays either a random sound or the specified sfx
         /// </summary>
         /// <param name="position"></param>
         /// <param name="feedbacksIntensity"></param>
         protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
         {
-            if (!Active || !FeedbackTypeAuthorized)
-            {
-                return;
-            }
-            
-            float intensityMultiplier = Timing.ConstantIntensity ? 1f : feedbacksIntensity;
-            
+            if (!Active || !FeedbackTypeAuthorized) return;
+
+            var intensityMultiplier = Timing.ConstantIntensity ? 1f : feedbacksIntensity;
+
             if (Sfx != null)
             {
                 PlaySound(Sfx, position, intensityMultiplier);
@@ -229,26 +228,20 @@ namespace MoreMountains.Feedbacks
             {
                 _randomClip = RandomSfx[Random.Range(0, RandomSfx.Length)];
 
-                if (_randomClip != null)
-                {
-                    PlaySound(_randomClip, position, intensityMultiplier);
-                }
+                if (_randomClip != null) PlaySound(_randomClip, position, intensityMultiplier);
             }
         }
 
         /// <summary>
-        /// On Stop, we stop our sound if needed
+        ///     On Stop, we stop our sound if needed
         /// </summary>
         /// <param name="position"></param>
         /// <param name="feedbacksIntensity"></param>
         protected override void CustomStopFeedback(Vector3 position, float feedbacksIntensity = 1)
         {
-            if (!Active || !FeedbackTypeAuthorized)
-            {
-                return;
-            }
-            
-            if (StopSoundOnFeedbackStop && (_playedAudioSource != null))
+            if (!Active || !FeedbackTypeAuthorized) return;
+
+            if (StopSoundOnFeedbackStop && _playedAudioSource != null)
             {
                 _playedAudioSource.Stop();
                 MMSoundManager.Instance.FreeSound(_playedAudioSource);
@@ -256,33 +249,26 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Triggers a play sound event
+        ///     Triggers a play sound event
         /// </summary>
         /// <param name="sfx"></param>
         /// <param name="position"></param>
         /// <param name="intensity"></param>
         protected virtual void PlaySound(AudioClip sfx, Vector3 position, float intensity)
         {
-            if (DoNotPlayIfClipAlreadyPlaying) 
-            {
+            if (DoNotPlayIfClipAlreadyPlaying)
                 if (MMSoundManager.Instance.FindByClip(sfx) != null)
-                {
-                    return;    
-                }
-            }
-            
-            float volume = Random.Range(MinVolume, MaxVolume);
-            
-            if (!Timing.ConstantIntensity)
-            {
-                volume = volume * intensity;
-            }
-            
-            float pitch = Random.Range(MinPitch, MaxPitch);
+                    return;
+
+            var volume = Random.Range(MinVolume, MaxVolume);
+
+            if (!Timing.ConstantIntensity) volume = volume * intensity;
+
+            var pitch = Random.Range(MinPitch, MaxPitch);
             _randomPlaybackTime = Random.Range(PlaybackTime.x, PlaybackTime.y);
 
-            int timeSamples = NormalPlayDirection ? 0 : sfx.samples - 1;
-            
+            var timeSamples = NormalPlayDirection ? 0 : sfx.samples - 1;
+
             _options.MmSoundManagerTrack = MmSoundManagerTrack;
             _options.Location = position;
             _options.Loop = Loop;
@@ -317,26 +303,19 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Returns the duration of the sound, or of the longest of the random sounds
+        ///     Returns the duration of the sound, or of the longest of the random sounds
         /// </summary>
         /// <returns></returns>
         protected virtual float GetDuration()
         {
-            if (Sfx != null)
-            {
-                return Sfx.length - _randomPlaybackTime;
-            }
+            if (Sfx != null) return Sfx.length - _randomPlaybackTime;
 
-            float longest = 0f;
-            if ((RandomSfx != null) && (RandomSfx.Length > 0))
+            var longest = 0f;
+            if (RandomSfx != null && RandomSfx.Length > 0)
             {
-                foreach (AudioClip clip in RandomSfx)
-                {
-                    if ((clip != null) && (clip.length > longest))
-                    {
+                foreach (var clip in RandomSfx)
+                    if (clip != null && clip.length > longest)
                         longest = clip.length;
-                    }
-                }
 
                 return longest - _randomPlaybackTime;
             }
@@ -344,64 +323,87 @@ namespace MoreMountains.Feedbacks
             return 0f;
         }
 
+        /// sets the inspector color for this feedback
+#if UNITY_EDITOR
+        public override Color FeedbackColor
+        {
+            get { return MMFeedbacksInspectorColors.SoundsColor; }
+        }
+
+        public override bool EvaluateRequiresSetup()
+        {
+            var requiresSetup = false;
+            if (Sfx == null) requiresSetup = true;
+            if (RandomSfx != null && RandomSfx.Length > 0)
+            {
+                requiresSetup = false;
+                foreach (var clip in RandomSfx)
+                    if (clip == null)
+                        requiresSetup = true;
+            }
+
+            return requiresSetup;
+        }
+
+        public override string RequiredTargetText => Sfx != null ? Sfx.name : "";
+
+        public override string RequiresSetupText =>
+            "This feedback requires that you set an Audio clip in its Sfx slot below, or one or more clips in the Random Sfx array.";
+
+        public override bool HasCustomInspectors => true;
+#endif
+
         #region TestMethods
 
         /// <summary>
-        /// A test method that creates an audiosource, plays it, and destroys itself after play
+        ///     A test method that creates an audiosource, plays it, and destroys itself after play
         /// </summary>
         protected virtual async void TestPlaySound()
         {
             AudioClip tmpAudioClip = null;
 
-            if (Sfx != null)
-            {
-                tmpAudioClip = Sfx;
-            }
+            if (Sfx != null) tmpAudioClip = Sfx;
 
-            if ((RandomSfx != null) && (RandomSfx.Length > 0))
-            {
-                tmpAudioClip = RandomSfx[Random.Range(0, RandomSfx.Length)];
-            }
+            if (RandomSfx != null && RandomSfx.Length > 0) tmpAudioClip = RandomSfx[Random.Range(0, RandomSfx.Length)];
 
             if (tmpAudioClip == null)
             {
-                Debug.LogError(Label + " on " + Owner.gameObject.name + " can't play in editor mode, you haven't set its Sfx.");
+                Debug.LogError(Label + " on " + Owner.gameObject.name +
+                               " can't play in editor mode, you haven't set its Sfx.");
                 return;
             }
 
-            float volume = Random.Range(MinVolume, MaxVolume);
-            float pitch = Random.Range(MinPitch, MaxPitch);
+            var volume = Random.Range(MinVolume, MaxVolume);
+            var pitch = Random.Range(MinPitch, MaxPitch);
             _randomPlaybackTime = Random.Range(PlaybackTime.x, PlaybackTime.y);
-            GameObject temporaryAudioHost = new GameObject("EditorTestAS_WillAutoDestroy");
+            var temporaryAudioHost = new GameObject("EditorTestAS_WillAutoDestroy");
             SceneManager.MoveGameObjectToScene(temporaryAudioHost.gameObject, Owner.gameObject.scene);
             temporaryAudioHost.transform.position = Owner.transform.position;
-            _editorAudioSource = temporaryAudioHost.AddComponent<AudioSource>() as AudioSource;
+            _editorAudioSource = temporaryAudioHost.AddComponent<AudioSource>();
             PlayAudioSource(_editorAudioSource, tmpAudioClip, volume, pitch, _randomPlaybackTime);
-            float length = 1000 * tmpAudioClip.length;
+            var length = 1000 * tmpAudioClip.length;
             length = length / Mathf.Abs(pitch);
             await Task.Delay((int)length);
             Object.DestroyImmediate(temporaryAudioHost);
         }
 
         /// <summary>
-        /// A test method that stops the test sound
+        ///     A test method that stops the test sound
         /// </summary>
         protected virtual void TestStopSound()
         {
-            if (_editorAudioSource != null)
-            {
-                _editorAudioSource.Stop();
-            }            
+            if (_editorAudioSource != null) _editorAudioSource.Stop();
         }
 
         /// <summary>
-        /// Plays the audio source with the specified volume and pitch
+        ///     Plays the audio source with the specified volume and pitch
         /// </summary>
         /// <param name="audioSource"></param>
         /// <param name="sfx"></param>
         /// <param name="volume"></param>
         /// <param name="pitch"></param>
-        protected virtual void PlayAudioSource(AudioSource audioSource, AudioClip sfx, float volume, float pitch, float time)
+        protected virtual void PlayAudioSource(AudioSource audioSource, AudioClip sfx, float volume, float pitch,
+            float time)
         {
             // we set that audio source clip to the one in paramaters
             audioSource.clip = sfx;
@@ -412,7 +414,7 @@ namespace MoreMountains.Feedbacks
             // we set our loop setting
             audioSource.loop = false;
             // we start playing the sound
-            audioSource.Play(); 
+            audioSource.Play();
         }
 
         #endregion

@@ -1,21 +1,19 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// Float property setter
+    ///     Float property setter
     /// </summary>
     public class MMPropertyLinkFloat : MMPropertyLink
     {
+        protected float _initialValue;
+        protected float _newValue;
         public Func<float> GetFloatDelegate;
         public Action<float> SetFloatDelegate;
 
-        protected float _initialValue;
-        protected float _newValue;
-
         /// <summary>
-        /// On init, grabs the initial float value
+        ///     On init, grabs the initial float value
         /// </summary>
         /// <param name="property"></param>
         public override void Initialization(MMProperty property)
@@ -25,7 +23,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Creates cached getter and setters for properties
+        ///     Creates cached getter and setters for properties
         /// </summary>
         /// <param name="property"></param>
         public override void CreateGettersAndSetters(MMProperty property)
@@ -33,26 +31,24 @@ namespace MoreMountains.Tools
             base.CreateGettersAndSetters(property);
             if (property.MemberType == MMProperty.MemberTypes.Property)
             {
-                object firstArgument = (property.TargetScriptableObject == null) ? (object)property.TargetComponent : (object)property.TargetScriptableObject;
+                object firstArgument = property.TargetScriptableObject == null
+                    ? property.TargetComponent
+                    : property.TargetScriptableObject;
 
                 if (property.MemberPropertyInfo.GetGetMethod() != null)
-                {
                     GetFloatDelegate = (Func<float>)Delegate.CreateDelegate(typeof(Func<float>),
-                                                                                    firstArgument,
-                                                                                    property.MemberPropertyInfo.GetGetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetGetMethod());
                 if (property.MemberPropertyInfo.GetSetMethod() != null)
-                {
                     SetFloatDelegate = (Action<float>)Delegate.CreateDelegate(typeof(Action<float>),
-                                                                                firstArgument,
-                                                                                property.MemberPropertyInfo.GetSetMethod());
-                }
+                        firstArgument,
+                        property.MemberPropertyInfo.GetSetMethod());
                 _getterSetterInitialized = true;
             }
         }
 
         /// <summary>
-        /// Gets the raw value of the property, a normalized float value, caching the operation if possible
+        ///     Gets the raw value of the property, a normalized float value, caching the operation if possible
         /// </summary>
         /// <param name="emitter"></param>
         /// <param name="property"></param>
@@ -63,7 +59,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the raw property value, float normalized, caching the operation if possible
+        ///     Sets the raw property value, float normalized, caching the operation if possible
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -74,7 +70,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Returns this property link's level between 0 and 1
+        ///     Returns this property link's level between 0 and 1
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -82,9 +78,10 @@ namespace MoreMountains.Tools
         /// <returns></returns>
         public override float GetLevel(MMPropertyEmitter emitter, MMProperty property)
         {
-            float returnValue = GetValueOptimized(property);
+            var returnValue = GetValueOptimized(property);
 
-            returnValue = MMMaths.Clamp(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne, emitter.ClampMin, emitter.ClampMax);
+            returnValue = MMMaths.Clamp(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne,
+                emitter.ClampMin, emitter.ClampMax);
             returnValue = MMMaths.Remap(returnValue, emitter.FloatRemapMinToZero, emitter.FloatRemapMaxToOne, 0f, 1f);
 
             emitter.Level = returnValue;
@@ -92,7 +89,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets the level 
+        ///     Sets the level
         /// </summary>
         /// <param name="receiver"></param>
         /// <param name="property"></param>
@@ -103,16 +100,13 @@ namespace MoreMountains.Tools
 
             _newValue = MMMaths.Remap(level, 0f, 1f, receiver.FloatRemapZero, receiver.FloatRemapOne);
 
-            if (receiver.RelativeValue)
-            {
-                _newValue = _initialValue + _newValue;
-            }
+            if (receiver.RelativeValue) _newValue = _initialValue + _newValue;
 
             SetValueOptimized(property, _newValue);
         }
 
         /// <summary>
-        /// Gets either the cached value or the raw value
+        ///     Gets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <returns></returns>
@@ -122,20 +116,16 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets either the cached value or the raw value
+        ///     Sets either the cached value or the raw value
         /// </summary>
         /// <param name="property"></param>
         /// <param name="newValue"></param>
         protected virtual void SetValueOptimized(MMProperty property, float newValue)
         {
             if (_getterSetterInitialized)
-            {
                 SetFloatDelegate(_newValue);
-            }
             else
-            {
                 SetPropertyValue(property, _newValue);
-            }
         }
     }
 }

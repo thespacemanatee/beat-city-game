@@ -1,28 +1,28 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using MoreMountains.Feedbacks;
-using System;
 
 namespace MoreMountains.Feedbacks
 {
     public struct MMFlashEvent
     {
-        public delegate void Delegate(Color flashColor, float duration, float alpha, int flashID, int channel, TimescaleModes timescaleMode, bool stop = false);
-        static private event Delegate OnEvent;
+        public delegate void Delegate(Color flashColor, float duration, float alpha, int flashID, int channel,
+            TimescaleModes timescaleMode, bool stop = false);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(Color flashColor, float duration, float alpha, int flashID, int channel, TimescaleModes timescaleMode, bool stop = false)
+        public static void Trigger(Color flashColor, float duration, float alpha, int flashID, int channel,
+            TimescaleModes timescaleMode, bool stop = false)
         {
             OnEvent?.Invoke(flashColor, duration, alpha, flashID, channel, timescaleMode, stop);
         }
@@ -32,18 +32,22 @@ namespace MoreMountains.Feedbacks
     public class MMFlashDebugSettings
     {
         /// the channel to broadcast that flash event on
-        public int Channel = 0;
+        public int Channel;
+
         /// the color of the flash
         public Color FlashColor = Color.white;
+
         /// the flash duration (in seconds)
         public float FlashDuration = 0.2f;
+
         /// the alpha of the flash
         public float FlashAlpha = 1f;
+
         /// the ID of the flash (usually 0). You can specify on each MMFlash object an ID, allowing you to have different flash images in one scene and call them separately (one for damage, one for health pickups, etc)
-        public int FlashID = 0;
+        public int FlashID;
     }
-    
-	[RequireComponent(typeof(Image))]
+
+    [RequireComponent(typeof(Image))]
     [RequireComponent(typeof(CanvasGroup))]
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Various/MMFlash")]
     /// <summary>
@@ -54,105 +58,117 @@ namespace MoreMountains.Feedbacks
         [Header("Flash")]
         /// the channel to receive flash events on
         [Tooltip("the channel to receive flash events on")]
-        public int Channel = 0;
+        public int Channel;
+
         /// the ID of this MMFlash object. When triggering a MMFlashEvent you can specify an ID, and only MMFlash objects with this ID will answer the call and flash, allowing you to have more than one flash object in a scene
-        [Tooltip("the ID of this MMFlash object. When triggering a MMFlashEvent you can specify an ID, and only MMFlash objects with this ID will answer the call and flash, allowing you to have more than one flash object in a scene")]
-        public int FlashID = 0;
-        
+        [Tooltip(
+            "the ID of this MMFlash object. When triggering a MMFlashEvent you can specify an ID, and only MMFlash objects with this ID will answer the call and flash, allowing you to have more than one flash object in a scene")]
+        public int FlashID;
+
         [Header("Debug")]
         /// the set of test settings to use when pressing the DebugTest button
         [Tooltip("the set of test settings to use when pressing the DebugTest button")]
         public MMFlashDebugSettings DebugSettings;
+
         /// a test button that calls the DebugTest method
-        [Tooltip("a test button that calls the DebugTest method")]
-        [MMFInspectorButton("DebugTest")]
+        [Tooltip("a test button that calls the DebugTest method")] [MMFInspectorButton("DebugTest")]
         public bool DebugTestButton;
 
-        public virtual float GetTime() { return (_timescaleMode == TimescaleModes.Scaled) ? Time.time : Time.unscaledTime; }
-        public virtual float GetDeltaTime() { return (_timescaleMode == TimescaleModes.Scaled) ? Time.deltaTime : Time.unscaledDeltaTime; }
-
-        protected Image _image;
         protected CanvasGroup _canvasGroup;
-		protected bool _flashing = false;
-        protected float _targetAlpha;
-        protected Color _initialColor;
         protected float _delta;
-        protected float _flashStartedTimestamp;
         protected int _direction = 1;
         protected float _duration;
+        protected bool _flashing;
+        protected float _flashStartedTimestamp;
+
+        protected Image _image;
+        protected Color _initialColor;
+        protected float _targetAlpha;
         protected TimescaleModes _timescaleMode;
 
-		/// <summary>
-		/// On start we grab our image component
-		/// </summary>
-		protected virtual void Start()
-		{
-			_image = GetComponent<Image>();
+        /// <summary>
+        ///     On start we grab our image component
+        /// </summary>
+        protected virtual void Start()
+        {
+            _image = GetComponent<Image>();
             _canvasGroup = GetComponent<CanvasGroup>();
             _initialColor = _image.color;
         }
 
-		/// <summary>
-		/// On update we flash our image if needed
-		/// </summary>
-		protected virtual void Update()
-		{
-			if (_flashing)
-			{
-				_image.enabled = true;
+        /// <summary>
+        ///     On update we flash our image if needed
+        /// </summary>
+        protected virtual void Update()
+        {
+            if (_flashing)
+            {
+                _image.enabled = true;
 
-                if (GetTime() - _flashStartedTimestamp > _duration / 2f)
-                {
-                    _direction = -1;
-                }
+                if (GetTime() - _flashStartedTimestamp > _duration / 2f) _direction = -1;
 
                 if (_direction == 1)
-                {
                     _delta += GetDeltaTime() / (_duration / 2f);
-                }
                 else
-                {
                     _delta -= GetDeltaTime() / (_duration / 2f);
-                }
-                
-                if (GetTime() - _flashStartedTimestamp > _duration)
-                {
-                    _flashing = false;
-                }
+
+                if (GetTime() - _flashStartedTimestamp > _duration) _flashing = false;
 
                 _canvasGroup.alpha = Mathf.Lerp(0f, _targetAlpha, _delta);
             }
-			else
-			{
-				_image.enabled = false;
-			}
-		}
+            else
+            {
+                _image.enabled = false;
+            }
+        }
+
+        /// <summary>
+        ///     On enable we start listening for events
+        /// </summary>
+        protected virtual void OnEnable()
+        {
+            MMFlashEvent.Register(OnMMFlashEvent);
+        }
+
+        /// <summary>
+        ///     On disable we stop listening for events
+        /// </summary>
+        protected virtual void OnDisable()
+        {
+            MMFlashEvent.Unregister(OnMMFlashEvent);
+        }
+
+        public virtual float GetTime()
+        {
+            return _timescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
+        }
+
+        public virtual float GetDeltaTime()
+        {
+            return _timescaleMode == TimescaleModes.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+        }
 
         public virtual void DebugTest()
         {
-            MMFlashEvent.Trigger(DebugSettings.FlashColor, DebugSettings.FlashDuration, DebugSettings.FlashAlpha, DebugSettings.FlashID, DebugSettings.Channel, TimescaleModes.Unscaled);
+            MMFlashEvent.Trigger(DebugSettings.FlashColor, DebugSettings.FlashDuration, DebugSettings.FlashAlpha,
+                DebugSettings.FlashID, DebugSettings.Channel, TimescaleModes.Unscaled);
         }
 
-		/// <summary>
-		/// When getting a flash event, we turn our image on
-		/// </summary>
-		public virtual void OnMMFlashEvent(Color flashColor, float duration, float alpha, int flashID, int channel, TimescaleModes timescaleMode, bool stop = false)
+        /// <summary>
+        ///     When getting a flash event, we turn our image on
+        /// </summary>
+        public virtual void OnMMFlashEvent(Color flashColor, float duration, float alpha, int flashID, int channel,
+            TimescaleModes timescaleMode, bool stop = false)
         {
-            if (flashID != FlashID) 
-            {
-                return;
-            }
-            
+            if (flashID != FlashID) return;
+
             if (stop)
             {
-	            _flashing = false;
-	            return;
-            }
-
-            if ((channel != Channel) && (channel != -1) && (Channel != -1))
-            {
+                _flashing = false;
                 return;
             }
+
+            if (channel != Channel && channel != -1 && Channel != -1) return;
 
             if (!_flashing)
             {
@@ -166,22 +182,6 @@ namespace MoreMountains.Feedbacks
                 _timescaleMode = timescaleMode;
                 _flashStartedTimestamp = GetTime();
             }
-        } 
-
-		/// <summary>
-		/// On enable we start listening for events
-		/// </summary>
-		protected virtual void OnEnable()
-		{
-            MMFlashEvent.Register(OnMMFlashEvent);
-		}
-
-		/// <summary>
-		/// On disable we stop listening for events
-		/// </summary>
-		protected virtual void OnDisable()
-		{
-            MMFlashEvent.Unregister(OnMMFlashEvent);
-        }		
-	}
+        }
+    }
 }

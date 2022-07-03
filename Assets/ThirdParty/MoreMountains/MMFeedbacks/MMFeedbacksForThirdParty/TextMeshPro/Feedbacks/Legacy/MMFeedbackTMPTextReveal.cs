@@ -1,50 +1,96 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// This feedback will let you reveal words, lines, or characters in a target TMP, one at a time
+    ///     This feedback will let you reveal words, lines, or characters in a target TMP, one at a time
     /// </summary>
     [AddComponentMenu("")]
     [FeedbackHelp("This feedback will let you reveal words, lines, or characters in a target TMP, one at a time")]
     [FeedbackPath("TextMesh Pro/TMP Text Reveal")]
     public class MMFeedbackTMPTextReveal : MMFeedback
     {
+        /// whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take
+        public enum DurationModes
+        {
+            Interval,
+            TotalDuration
+        }
+
+        /// the possible ways to reveal the text
+        public enum RevealModes
+        {
+            Character,
+            Lines,
+            Words
+        }
+
         /// a static bool used to disable all feedbacks of this type at once
         public static bool FeedbackTypeAuthorized = true;
+
+        [Header("TextMesh Pro")]
+        /// the target TMP_Text component we want to change the text on
+        [Tooltip("the target TMP_Text component we want to change the text on")]
+        public TMP_Text TargetTMPText;
+
+        [Header("Change Text")]
+        /// whether or not to replace the current TMP target's text on play
+        [Tooltip("whether or not to replace the current TMP target's text on play")]
+        public bool ReplaceText;
+
+        /// the new text to replace the old one with
+        [Tooltip("the new text to replace the old one with")] [TextArea]
+        public string NewText = "Hello World";
+
+        [Header("Reveal")]
+        /// the selected way to reveal the text (character by character, word by word, or line by line)
+        [Tooltip("the selected way to reveal the text (character by character, word by word, or line by line)")]
+        public RevealModes RevealMode = RevealModes.Character;
+
+        /// whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take
+        [Tooltip(
+            "whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take")]
+        public DurationModes DurationMode = DurationModes.Interval;
+
+        /// the interval (in seconds) between two reveals
+        [Tooltip("the interval (in seconds) between two reveals")]
+        [MMFEnumCondition("DurationMode", (int)DurationModes.Interval)]
+        public float IntervalBetweenReveals = 0.05f;
+
+        /// the total duration of the text reveal, in seconds
+        [Tooltip("the total duration of the text reveal, in seconds")]
+        [MMFEnumCondition("DurationMode", (int)DurationModes.TotalDuration)]
+        public float RevealDuration = 1f;
+
+        protected Coroutine _coroutine;
+
+        protected float _delay;
+        protected int _richTextLength;
 #if UNITY_EDITOR
-        public override Color FeedbackColor { get { return MMFeedbacksInspectorColors.TMPColor; } }
+        public override Color FeedbackColor => MMFeedbacksInspectorColors.TMPColor;
 #endif
-        /// the duration of this feedback 
+        /// the duration of this feedback
         public override float FeedbackDuration
         {
             get
             {
-                if (DurationMode == DurationModes.TotalDuration)
+                if (DurationMode == DurationModes.TotalDuration) return RevealDuration;
+
+                if (TargetTMPText == null || TargetTMPText.textInfo == null) return 0f;
+
+                switch (RevealMode)
                 {
-                    return RevealDuration;
+                    case RevealModes.Character:
+                        return RichTextLength(TargetTMPText.text) * IntervalBetweenReveals;
+                    case RevealModes.Lines:
+                        return TargetTMPText.textInfo.lineCount * IntervalBetweenReveals;
+                    case RevealModes.Words:
+                        return TargetTMPText.textInfo.wordCount * IntervalBetweenReveals;
                 }
-                else
-                {
-                    if ((TargetTMPText == null) || (TargetTMPText.textInfo == null))
-                    {
-                        return 0f;
-                    }
-                    
-                    switch (RevealMode)
-                    {
-                        case RevealModes.Character:
-                            return RichTextLength(TargetTMPText.text) * IntervalBetweenReveals;
-                        case RevealModes.Lines:
-                            return TargetTMPText.textInfo.lineCount * IntervalBetweenReveals;
-                        case RevealModes.Words:
-                            return TargetTMPText.textInfo.wordCount * IntervalBetweenReveals;
-                    }
-                    return 0f;
-                }                
+
+                return 0f;
             }
             set
             {
@@ -55,7 +101,6 @@ namespace MoreMountains.Feedbacks
                 else
                 {
                     if (TargetTMPText != null)
-                    {
                         switch (RevealMode)
                         {
                             case RevealModes.Character:
@@ -68,69 +113,20 @@ namespace MoreMountains.Feedbacks
                                 IntervalBetweenReveals = value / TargetTMPText.textInfo.wordCount;
                                 break;
                         }
-                    }
                 }
             }
         }
 
-        /// the possible ways to reveal the text
-        public enum RevealModes { Character, Lines, Words }
-        /// whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take
-        public enum DurationModes { Interval, TotalDuration }
-
-        [Header("TextMesh Pro")]
-        
-        /// the target TMP_Text component we want to change the text on
-        [Tooltip("the target TMP_Text component we want to change the text on")]
-        public TMP_Text TargetTMPText;
-
-        [Header("Change Text")]
-
-        /// whether or not to replace the current TMP target's text on play
-        [Tooltip("whether or not to replace the current TMP target's text on play")]
-        public bool ReplaceText = false;
-        /// the new text to replace the old one with
-        [Tooltip("the new text to replace the old one with")]
-        [TextArea]
-        public string NewText = "Hello World";
-
-        [Header("Reveal")]
-        
-        /// the selected way to reveal the text (character by character, word by word, or line by line)
-        [Tooltip("the selected way to reveal the text (character by character, word by word, or line by line)")]
-        public RevealModes RevealMode = RevealModes.Character;
-        /// whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take
-        [Tooltip("whether to define duration by the time interval between two unit reveals, or by the total duration the reveal should take")]
-        public DurationModes DurationMode = DurationModes.Interval;
-        /// the interval (in seconds) between two reveals
-        [Tooltip("the interval (in seconds) between two reveals")]
-        [MMFEnumCondition("DurationMode", (int)DurationModes.Interval)]
-        public float IntervalBetweenReveals = 0.05f;
-        /// the total duration of the text reveal, in seconds
-        [Tooltip("the total duration of the text reveal, in seconds")]
-        [MMFEnumCondition("DurationMode", (int)DurationModes.TotalDuration)]
-        public float RevealDuration = 1f;
-
-        protected float _delay;
-        protected Coroutine _coroutine;
-        protected int _richTextLength;
-        
         /// <summary>
-        /// On play we change the text of our target TMPText
+        ///     On play we change the text of our target TMPText
         /// </summary>
         /// <param name="position"></param>
         /// <param name="feedbacksIntensity"></param>
         protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
         {
-            if (!Active || !FeedbackTypeAuthorized)
-            {
-                return;
-            }
+            if (!Active || !FeedbackTypeAuthorized) return;
 
-            if (TargetTMPText == null)
-            {
-                return;
-            }
+            if (TargetTMPText == null) return;
 
             if (ReplaceText)
             {
@@ -143,17 +139,23 @@ namespace MoreMountains.Feedbacks
             switch (RevealMode)
             {
                 case RevealModes.Character:
-                    _delay = (DurationMode == DurationModes.Interval) ? IntervalBetweenReveals : RevealDuration / _richTextLength;
+                    _delay = DurationMode == DurationModes.Interval
+                        ? IntervalBetweenReveals
+                        : RevealDuration / _richTextLength;
                     TargetTMPText.maxVisibleCharacters = 0;
                     _coroutine = StartCoroutine(RevealCharacters());
                     break;
                 case RevealModes.Lines:
-                    _delay = (DurationMode == DurationModes.Interval) ? IntervalBetweenReveals : RevealDuration / TargetTMPText.textInfo.lineCount;
+                    _delay = DurationMode == DurationModes.Interval
+                        ? IntervalBetweenReveals
+                        : RevealDuration / TargetTMPText.textInfo.lineCount;
                     TargetTMPText.maxVisibleLines = 0;
                     _coroutine = StartCoroutine(RevealLines());
                     break;
                 case RevealModes.Words:
-                    _delay = (DurationMode == DurationModes.Interval) ? IntervalBetweenReveals : RevealDuration / TargetTMPText.textInfo.wordCount;
+                    _delay = DurationMode == DurationModes.Interval
+                        ? IntervalBetweenReveals
+                        : RevealDuration / TargetTMPText.textInfo.wordCount;
                     TargetTMPText.maxVisibleWords = 0;
                     _coroutine = StartCoroutine(RevealWords());
                     break;
@@ -161,72 +163,63 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Reveals characters one at a time
+        ///     Reveals characters one at a time
         /// </summary>
         /// <returns></returns>
         protected virtual IEnumerator RevealCharacters()
         {
-	        float startTime = (Timing.TimescaleMode == TimescaleModes.Scaled) ? Time.time : Time.unscaledTime;
-            int totalCharacters = _richTextLength;
-            int visibleCharacters = 0;
-            float lastCharAt = 0f;
-            
+            var startTime = Timing.TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
+            var totalCharacters = _richTextLength;
+            var visibleCharacters = 0;
+            var lastCharAt = 0f;
+
             IsPlaying = true;
             while (visibleCharacters <= totalCharacters)
             {
-	            float deltaTime = (Timing.TimescaleMode == TimescaleModes.Scaled) ? Time.deltaTime : Time.unscaledDeltaTime;
-	            float time = (Timing.TimescaleMode == TimescaleModes.Scaled) ? Time.time : Time.unscaledTime;
+                var deltaTime = Timing.TimescaleMode == TimescaleModes.Scaled ? Time.deltaTime : Time.unscaledDeltaTime;
+                var time = Timing.TimescaleMode == TimescaleModes.Scaled ? Time.time : Time.unscaledTime;
 
-	            if (time - lastCharAt < IntervalBetweenReveals)
-	            {
-		            yield return null;
-	            }
-	            
-	            TargetTMPText.maxVisibleCharacters = visibleCharacters;
-                visibleCharacters++;                
+                if (time - lastCharAt < IntervalBetweenReveals) yield return null;
+
+                TargetTMPText.maxVisibleCharacters = visibleCharacters;
+                visibleCharacters++;
                 lastCharAt = time;
 
                 // we adjust our delay
-                
-                float delay = 0f;
-                
+
+                var delay = 0f;
+
                 if (DurationMode == DurationModes.Interval)
                 {
-	                _delay = Mathf.Max(IntervalBetweenReveals, deltaTime);
-	                delay = _delay - deltaTime;
+                    _delay = Mathf.Max(IntervalBetweenReveals, deltaTime);
+                    delay = _delay - deltaTime;
                 }
                 else
                 {
-	                int remainingCharacters = totalCharacters - visibleCharacters;
-	                float elapsedTime = time - startTime;
-	                if (remainingCharacters != 0)
-	                {
-		                _delay = (RevealDuration - elapsedTime) / remainingCharacters;   
-	                }
-	                delay = _delay - deltaTime;
+                    var remainingCharacters = totalCharacters - visibleCharacters;
+                    var elapsedTime = time - startTime;
+                    if (remainingCharacters != 0) _delay = (RevealDuration - elapsedTime) / remainingCharacters;
+                    delay = _delay - deltaTime;
                 }
-                
+
                 if (Timing.TimescaleMode == TimescaleModes.Scaled)
-                {
-                    yield return MMFeedbacksCoroutine.WaitFor(delay);    
-                }
+                    yield return MMFeedbacksCoroutine.WaitFor(delay);
                 else
-                {
                     yield return MMFeedbacksCoroutine.WaitForUnscaled(delay);
-                }
             }
+
             TargetTMPText.maxVisibleCharacters = _richTextLength;
             IsPlaying = false;
         }
 
         /// <summary>
-        /// Reveals lines one at a time
+        ///     Reveals lines one at a time
         /// </summary>
         /// <returns></returns>
         protected virtual IEnumerator RevealLines()
         {
-            int totalLines = TargetTMPText.textInfo.lineCount;
-            int visibleLines = 0;
+            var totalLines = TargetTMPText.textInfo.lineCount;
+            var visibleLines = 0;
 
             IsPlaying = true;
             while (visibleLines <= totalLines)
@@ -235,25 +228,22 @@ namespace MoreMountains.Feedbacks
                 visibleLines++;
 
                 if (Timing.TimescaleMode == TimescaleModes.Scaled)
-                {
-                    yield return MMFeedbacksCoroutine.WaitFor(_delay);    
-                }
+                    yield return MMFeedbacksCoroutine.WaitFor(_delay);
                 else
-                {
                     yield return MMFeedbacksCoroutine.WaitForUnscaled(_delay);
-                }
             }
+
             IsPlaying = false;
         }
 
         /// <summary>
-        /// Reveals words one at a time
+        ///     Reveals words one at a time
         /// </summary>
         /// <returns></returns>
         protected virtual IEnumerator RevealWords()
         {
-            int totalWords = TargetTMPText.textInfo.wordCount;
-            int visibleWords = 0;
+            var totalWords = TargetTMPText.textInfo.wordCount;
+            var visibleWords = 0;
 
             IsPlaying = true;
             while (visibleWords <= totalWords)
@@ -262,28 +252,22 @@ namespace MoreMountains.Feedbacks
                 visibleWords++;
 
                 if (Timing.TimescaleMode == TimescaleModes.Scaled)
-                {
-                    yield return MMFeedbacksCoroutine.WaitFor(_delay);    
-                }
+                    yield return MMFeedbacksCoroutine.WaitFor(_delay);
                 else
-                {
                     yield return MMFeedbacksCoroutine.WaitForUnscaled(_delay);
-                }
             }
+
             IsPlaying = false;
         }
 
         /// <summary>
-        /// Stops the animation if needed
+        ///     Stops the animation if needed
         /// </summary>
         /// <param name="position"></param>
         /// <param name="feedbacksIntensity"></param>
         protected override void CustomStopFeedback(Vector3 position, float feedbacksIntensity = 1)
         {
-            if (!Active || !FeedbackTypeAuthorized)
-            {
-                return;
-            }
+            if (!Active || !FeedbackTypeAuthorized) return;
             base.CustomStopFeedback(position, feedbacksIntensity);
             IsPlaying = false;
             if (_coroutine != null)
@@ -292,37 +276,34 @@ namespace MoreMountains.Feedbacks
                 _coroutine = null;
             }
         }
-        
+
         /// <summary>
-        /// Returns the length of a rich text, excluding its tags
+        ///     Returns the length of a rich text, excluding its tags
         /// </summary>
         /// <param name="richText"></param>
         /// <returns></returns>
         protected int RichTextLength(string richText)
         {
-	        int richTextLength = 0;
-	        bool insideTag = false;
+            var richTextLength = 0;
+            var insideTag = false;
 
-	        richText = richText.Replace("<br>", "-");
-	        
-	        foreach (char character in richText)
-	        {
-		        if (character == '<')
-		        {
-			        insideTag = true;
-			        continue;
-		        }
-		        else if (character == '>')
-		        {
-			        insideTag = false;
-		        }
-		        else if (!insideTag)
-		        {
-			        richTextLength++;
-		        }
-	        }
- 
-	        return richTextLength;
+            richText = richText.Replace("<br>", "-");
+
+            foreach (var character in richText)
+                if (character == '<')
+                {
+                    insideTag = true;
+                }
+                else if (character == '>')
+                {
+                    insideTag = false;
+                }
+                else if (!insideTag)
+                {
+                    richTextLength++;
+                }
+
+            return richTextLength;
         }
     }
 }

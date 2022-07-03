@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Tools
@@ -9,37 +7,37 @@ namespace MoreMountains.Tools
     [CanEditMultipleObjects]
     public class MMRadioSignalGeneratorEditor : MMRadioSignalEditor
     {
-        protected MMReorderableList _list;
-        protected SerializedProperty _globalMultiplier;
-        protected SerializedProperty _clamp;
-        protected SerializedProperty _clamps;
-        protected SerializedProperty _bias;
-
-        protected float _spectrumBoxBottomY;
-        protected Vector2 _spectrumBoxPosition;
-        protected Vector2 _spectrumBoxSize;
-        protected float _spectrumMaxColumnHeight;
         protected const float _externalMargin = 12f;
-        protected float _internalMargin = 12f;
         protected const int _rawSpectrumBoxHeight = 125;
         protected const int _numberOfAxisSpectrum = 4;
-        protected Vector3 _axisOrigin = Vector3.zero;
+        protected SerializedProperty _animatedPreview;
         protected Vector3 _axisDestination = Vector3.zero;
-        protected float _spectrumPointsCount = 200;
-        protected Color _spectrumColor = MMColors.Aqua;
-        protected Color _spectrumBoxColor = MMColors.AliceBlue;
-        protected Rect _rect;
+        protected Vector3 _axisOrigin = Vector3.zero;
+        protected SerializedProperty _bias;
+        protected SerializedProperty _clamp;
+        protected SerializedProperty _clamps;
 
-        protected double _deltaTime = 0f;
-        protected double _signalTime = 0f;
-        protected double _lastTime;
-        protected float _normalizedTime = 0f;
-        protected Vector2 _pointA;
-        protected Vector2 _pointB;
+        protected double _deltaTime;
 
 
         protected SerializedProperty _driverTime;
-        protected SerializedProperty _animatedPreview;
+        protected SerializedProperty _globalMultiplier;
+        protected float _internalMargin = 12f;
+        protected double _lastTime;
+        protected MMReorderableList _list;
+        protected float _normalizedTime;
+        protected Vector2 _pointA;
+        protected Vector2 _pointB;
+        protected Rect _rect;
+        protected double _signalTime;
+
+        protected float _spectrumBoxBottomY;
+        protected Color _spectrumBoxColor = MMColors.AliceBlue;
+        protected Vector2 _spectrumBoxPosition;
+        protected Vector2 _spectrumBoxSize;
+        protected Color _spectrumColor = MMColors.Aqua;
+        protected float _spectrumMaxColumnHeight;
+        protected float _spectrumPointsCount = 200;
 
         protected override void OnEnable()
         {
@@ -59,7 +57,7 @@ namespace MoreMountains.Tools
 
         private void OnListAdd(MMReorderableList list)
         {
-            SerializedProperty property = list.AddItem();
+            var property = list.AddItem();
 
             property.FindPropertyRelative("Active").boolValue = true;
             property.FindPropertyRelative("Frequency").floatValue = 1f;
@@ -70,7 +68,8 @@ namespace MoreMountains.Tools
 
         protected override void DrawProperties()
         {
-            DrawPropertiesExcluding(serializedObject, "AnimatedPreview", "SignalList", "GlobalMultiplier", "CurrentLevel", "Clamp", "Clamps");
+            DrawPropertiesExcluding(serializedObject, "AnimatedPreview", "SignalList", "GlobalMultiplier",
+                "CurrentLevel", "Clamp", "Clamps");
             EditorGUILayout.Space(10);
             _list.DoLayoutList();
             EditorGUILayout.PropertyField(_globalMultiplier);
@@ -80,12 +79,9 @@ namespace MoreMountains.Tools
 
         protected virtual void DrawRawSpectrum()
         {
-            _deltaTime = (EditorApplication.timeSinceStartup - _lastTime);
+            _deltaTime = EditorApplication.timeSinceStartup - _lastTime;
             _signalTime += _deltaTime;
-            if (_signalTime > _duration.floatValue)
-            {
-                _signalTime = 0f;
-            }
+            if (_signalTime > _duration.floatValue) _signalTime = 0f;
             _lastTime = EditorApplication.timeSinceStartup;
             _normalizedTime = MMMaths.Remap((float)_signalTime, 0f, _duration.floatValue, 0f, 1f);
 
@@ -96,7 +92,8 @@ namespace MoreMountains.Tools
 
             EditorGUILayout.Space(20);
             // box
-            GUILayout.Box("", GUILayout.Width(_inspectorWidth - _externalMargin), GUILayout.Height(_rawSpectrumBoxHeight));
+            GUILayout.Box("", GUILayout.Width(_inspectorWidth - _externalMargin),
+                GUILayout.Height(_rawSpectrumBoxHeight));
             _spectrumBoxPosition = GUILayoutUtility.GetLastRect().position;
             _spectrumBoxSize = GUILayoutUtility.GetLastRect().size;
             _spectrumBoxBottomY = _spectrumBoxPosition.y + _spectrumBoxSize.y;
@@ -105,7 +102,7 @@ namespace MoreMountains.Tools
 
             // horizontal axis
             Handles.color = Color.grey;
-            for (int i = 0; i <= _numberOfAxisSpectrum; i++)
+            for (var i = 0; i <= _numberOfAxisSpectrum; i++)
             {
                 _axisOrigin.x = _spectrumBoxPosition.x;
                 _axisOrigin.y = _spectrumBoxBottomY - i * (_spectrumBoxSize.y / _numberOfAxisSpectrum);
@@ -121,18 +118,19 @@ namespace MoreMountains.Tools
             _rect.height = 40;
             EditorGUI.LabelField(_rect, "1", EditorStyles.boldLabel);
 
-            float minX = _axisOrigin.x - 12;
-            float maxX = _axisOrigin.x + _spectrumBoxSize.x - 2;
+            var minX = _axisOrigin.x - 12;
+            var maxX = _axisOrigin.x + _spectrumBoxSize.x - 2;
 
 
-            float zeroX = minX;
-            float oneX = maxX;
+            var zeroX = minX;
+            var oneX = maxX;
 
             if (_animatedPreview.boolValue)
             {
-                float currentTime = (float)EditorApplication.timeSinceStartup;
-                float normalizedTime = currentTime - Mathf.Floor(currentTime);
-                zeroX = maxX - MMMaths.Remap(_normalizedTime, 0f, 1f, _spectrumBoxPosition.x + _externalMargin, _spectrumBoxPosition.x + _spectrumBoxSize.x);
+                var currentTime = (float)EditorApplication.timeSinceStartup;
+                var normalizedTime = currentTime - Mathf.Floor(currentTime);
+                zeroX = maxX - MMMaths.Remap(_normalizedTime, 0f, 1f, _spectrumBoxPosition.x + _externalMargin,
+                    _spectrumBoxPosition.x + _spectrumBoxSize.x);
                 oneX = zeroX - 10;
             }
 
@@ -166,19 +164,18 @@ namespace MoreMountains.Tools
             {
                 float boxSpectrumValue;
                 if (Application.isPlaying)
-                {
-                    boxSpectrumValue = MMMaths.Remap(_radioSignal.GraphValue(_driverTime.floatValue), 0f, 1f, 0f, _spectrumBoxSize.y);
-                }
+                    boxSpectrumValue = MMMaths.Remap(_radioSignal.GraphValue(_driverTime.floatValue), 0f, 1f, 0f,
+                        _spectrumBoxSize.y);
                 else
-                {
-                    boxSpectrumValue = MMMaths.Remap(_radioSignal.GraphValue(_normalizedTime), 0f, 1f, 0f, _spectrumBoxSize.y);
-                }
+                    boxSpectrumValue = MMMaths.Remap(_radioSignal.GraphValue(_normalizedTime), 0f, 1f, 0f,
+                        _spectrumBoxSize.y);
                 _rect.y = _spectrumBoxBottomY - boxSpectrumValue - _externalMargin / 4;
             }
             else
             {
                 _rect.y = _spectrumBoxBottomY;
             }
+
             _rect.width = _externalMargin / 2;
             _rect.height = _externalMargin / 2;
             EditorGUI.DrawRect(_rect, _spectrumBoxColor);
@@ -186,21 +183,22 @@ namespace MoreMountains.Tools
             // progress line
             if (Application.isPlaying && !_animatedPreview.boolValue)
             {
-                _rect.x = _spectrumBoxPosition.x 
-                            + MMMaths.Remap(_driverTime.floatValue, 0f, 1f, 0f, _spectrumBoxSize.x);
+                _rect.x = _spectrumBoxPosition.x
+                          + MMMaths.Remap(_driverTime.floatValue, 0f, 1f, 0f, _spectrumBoxSize.x);
                 _rect.y = _spectrumBoxBottomY - _spectrumBoxSize.y;
                 _rect.width = 1;
                 _rect.height = _spectrumBoxSize.y;
                 EditorGUI.DrawRect(_rect, _spectrumBoxColor);
             }
 
-            for (int i = 1; i < _spectrumPointsCount; i++)
+            for (var i = 1; i < _spectrumPointsCount; i++)
             {
-                float xPosition = _spectrumBoxPosition.x + _externalMargin + MMMaths.Remap(i, 0, _spectrumPointsCount, 0f, _spectrumBoxSize.x - _externalMargin * 2);
-                float deltaBetweenXandXPrevious = (_spectrumBoxSize.x - _externalMargin * 2) / _spectrumPointsCount;
+                var xPosition = _spectrumBoxPosition.x + _externalMargin + MMMaths.Remap(i, 0, _spectrumPointsCount, 0f,
+                    _spectrumBoxSize.x - _externalMargin * 2);
+                var deltaBetweenXandXPrevious = (_spectrumBoxSize.x - _externalMargin * 2) / _spectrumPointsCount;
 
-                float time = i * (1 / _spectrumPointsCount);
-                float timePrevious = (i - 1) * (1 / _spectrumPointsCount);
+                var time = i * (1 / _spectrumPointsCount);
+                var timePrevious = (i - 1) * (1 / _spectrumPointsCount);
 
                 if (_animatedPreview.boolValue)
                 {
@@ -211,23 +209,19 @@ namespace MoreMountains.Tools
                     }
                     else
                     {
-                        time += (float)_normalizedTime;
-                        timePrevious += (float)_normalizedTime;
+                        time += _normalizedTime;
+                        timePrevious += _normalizedTime;
                     }
-                    if (time > _duration.floatValue)
-                    {
-                        time = 0f;
-                    }
-                    if (timePrevious > _duration.floatValue)
-                    {
-                        timePrevious = 0f;
-                    }
+
+                    if (time > _duration.floatValue) time = 0f;
+                    if (timePrevious > _duration.floatValue) timePrevious = 0f;
                 }
 
-                float t2 = Mathf.Pow(time, _bias.floatValue);
-                
-                float spectrumValue = MMMaths.Remap(_radioSignal.GraphValue(time), 0f, 1f, 0f, _spectrumBoxSize.y);
-                float spectrumValuePrevious = MMMaths.Remap(_radioSignal.GraphValue(timePrevious), 0f, 1f, 0f, _spectrumBoxSize.y);
+                var t2 = Mathf.Pow(time, _bias.floatValue);
+
+                var spectrumValue = MMMaths.Remap(_radioSignal.GraphValue(time), 0f, 1f, 0f, _spectrumBoxSize.y);
+                var spectrumValuePrevious =
+                    MMMaths.Remap(_radioSignal.GraphValue(timePrevious), 0f, 1f, 0f, _spectrumBoxSize.y);
 
                 Handles.color = _spectrumColor;
                 _axisOrigin.x = xPosition - deltaBetweenXandXPrevious;

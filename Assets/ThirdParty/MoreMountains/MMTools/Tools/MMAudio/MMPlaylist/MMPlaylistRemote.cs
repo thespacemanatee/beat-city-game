@@ -1,24 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// A class used to pilot a MMPlaylist
+    ///     A class used to pilot a MMPlaylist
     /// </summary>
     [AddComponentMenu("More Mountains/Tools/Audio/MMPlaylistRemote")]
     public class MMPlaylistRemote : MonoBehaviour
     {
-	    public int Channel = 0;
+        public int Channel;
+
         /// The track to play when calling PlaySelectedTrack
-        public int TrackNumber = 0;
+        public int TrackNumber;
 
         [Header("Triggers")]
         /// if this is true, the selected track will be played on trigger enter (if you have a trigger collider on this)
         public bool PlaySelectedTrackOnTriggerEnter = true;
+
         /// if this is true, the selected track will be played on trigger exit (if you have a trigger collider on this)
-        public bool PlaySelectedTrackOnTriggerExit = false;
+        public bool PlaySelectedTrackOnTriggerExit;
+
         /// the tag to check for on trigger stuff
         public string TriggerTag = "Player";
 
@@ -26,21 +27,39 @@ namespace MoreMountains.Tools
         /// a play test button
         [MMInspectorButton("Play")]
         public bool PlayButton;
+
         /// a pause test button
-        [MMInspectorButton("Pause")]
-        public bool PauseButton;
+        [MMInspectorButton("Pause")] public bool PauseButton;
+
         /// a stop test button
-        [MMInspectorButton("Stop")]
-        public bool StopButton;
+        [MMInspectorButton("Stop")] public bool StopButton;
+
         /// a next track test button
-        [MMInspectorButton("PlayNextTrack")]
-        public bool NextButton;
+        [MMInspectorButton("PlayNextTrack")] public bool NextButton;
+
         /// a selected track test button
         [MMInspectorButton("PlaySelectedTrack")]
         public bool SelectedTrackButton;
 
         /// <summary>
-        /// Plays the playlist
+        ///     On trigger enter, we play the selected track if needed
+        /// </summary>
+        /// <param name="collider"></param>
+        protected virtual void OnTriggerEnter(Collider collider)
+        {
+            if (PlaySelectedTrackOnTriggerEnter && collider.CompareTag(TriggerTag)) PlaySelectedTrack();
+        }
+
+        /// <summary>
+        ///     On trigger exit, we play the selected track if needed
+        /// </summary>
+        protected virtual void OnTriggerExit(Collider collider)
+        {
+            if (PlaySelectedTrackOnTriggerExit && collider.CompareTag(TriggerTag)) PlaySelectedTrack();
+        }
+
+        /// <summary>
+        ///     Plays the playlist
         /// </summary>
         public virtual void Play()
         {
@@ -48,7 +67,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Pauses the current track
+        ///     Pauses the current track
         /// </summary>
         public virtual void Pause()
         {
@@ -56,7 +75,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Stops the playlist
+        ///     Stops the playlist
         /// </summary>
         public virtual void Stop()
         {
@@ -64,7 +83,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Plays the next track in the playlist
+        ///     Plays the next track in the playlist
         /// </summary>
         public virtual void PlayNextTrack()
         {
@@ -72,7 +91,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Plays the track selected in the inspector
+        ///     Plays the track selected in the inspector
         /// </summary>
         public virtual void PlaySelectedTrack()
         {
@@ -80,34 +99,11 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Plays the track set in parameters
+        ///     Plays the track set in parameters
         /// </summary>
         public virtual void PlayTrack(int trackIndex)
         {
             MMPlaylistPlayIndexEvent.Trigger(Channel, trackIndex);
-        }
-
-        /// <summary>
-        /// On trigger enter, we play the selected track if needed
-        /// </summary>
-        /// <param name="collider"></param>
-        protected virtual void OnTriggerEnter(Collider collider)
-        {
-            if (PlaySelectedTrackOnTriggerEnter && (collider.CompareTag(TriggerTag)))
-            {
-                PlaySelectedTrack();
-            }
-        }
-
-        /// <summary>
-        /// On trigger exit, we play the selected track if needed
-        /// </summary>
-        protected virtual void OnTriggerExit(Collider collider)
-        {
-            if (PlaySelectedTrackOnTriggerExit && (collider.CompareTag(TriggerTag)))
-            {
-                PlaySelectedTrack();
-            }
         }
     }
 }

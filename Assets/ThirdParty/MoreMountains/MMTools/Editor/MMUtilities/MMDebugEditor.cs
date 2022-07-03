@@ -1,17 +1,14 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using UnityEditor;
+﻿using UnityEditor;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// An editor class used to display menu items 
+    ///     An editor class used to display menu items
     /// </summary>
     public class MMDebugEditor
     {
         /// <summary>
-        /// Adds a menu item to enable debug logs
+        ///     Adds a menu item to enable debug logs
         /// </summary>
         [MenuItem("Tools/More Mountains/Enable Debug Logs", false, 100)]
         private static void EnableDebugLogs()
@@ -20,7 +17,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Conditional method to determine if the "enable debug log" entry should be greyed or not
+        ///     Conditional method to determine if the "enable debug log" entry should be greyed or not
         /// </summary>
         [MenuItem("Tools/More Mountains/Enable Debug Logs", true)]
         private static bool EnableDebugLogsValidation()
@@ -29,7 +26,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Adds a menu item to disable debug logs
+        ///     Adds a menu item to disable debug logs
         /// </summary>
         [MenuItem("Tools/More Mountains/Disable Debug Logs", false, 101)]
         private static void DisableDebugLogs()
@@ -38,7 +35,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Conditional method to determine if the "disable debug log" entry should be greyed or not
+        ///     Conditional method to determine if the "disable debug log" entry should be greyed or not
         /// </summary>
         [MenuItem("Tools/More Mountains/Disable Debug Logs", true)]
         private static bool DisableDebugLogsValidation()
@@ -47,7 +44,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Adds a menu item to enable debug logs
+        ///     Adds a menu item to enable debug logs
         /// </summary>
         [MenuItem("Tools/More Mountains/Enable Debug Draws", false, 102)]
         private static void EnableDebugDraws()
@@ -81,6 +78,5 @@ namespace MoreMountains.Tools
         {
             return MMDebug.DebugDrawEnabled;
         }
-
     }
 }

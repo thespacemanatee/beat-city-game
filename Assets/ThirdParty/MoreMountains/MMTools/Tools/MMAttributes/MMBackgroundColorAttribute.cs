@@ -1,7 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System;
 
 namespace MoreMountains.Tools
 {
@@ -23,7 +20,7 @@ namespace MoreMountains.Tools
 
         public MMBackgroundColorAttribute(MMBackgroundAttributeColor color = MMBackgroundAttributeColor.Yellow)
         {
-            this.Color = color;
+            Color = color;
         }
     }
 }

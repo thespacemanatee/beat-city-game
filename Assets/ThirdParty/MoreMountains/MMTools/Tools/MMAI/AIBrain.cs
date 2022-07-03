@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// the AI brain is responsible from going from one state to the other based on the defined transitions. It's basically just a collection of states, and it's where you'll link all the actions, decisions, states and transitions together.
+    ///     the AI brain is responsible from going from one state to the other based on the defined transitions. It's basically
+    ///     just a collection of states, and it's where you'll link all the actions, decisions, states and transitions
+    ///     together.
     /// </summary>
     [AddComponentMenu("More Mountains/Tools/AI/AIBrain")]
     public class AIBrain : MonoBehaviour
@@ -13,65 +14,54 @@ namespace MoreMountains.Tools
         [Header("Debug")]
         /// whether or not this brain is active
         public bool BrainActive = true;
+
         /// the owner of that AI Brain, usually the associated character
-        [MMReadOnly]
-        public GameObject Owner;
+        [MMReadOnly] public GameObject Owner;
+
         /// the collection of states
         public List<AIState> States;
-        /// this brain's current state
-        public AIState CurrentState { get; protected set; }
+
         /// the time we've spent in the current state
-        [MMReadOnly]
-        public float TimeInThisState;
+        [MMReadOnly] public float TimeInThisState;
+
         /// the current target
-        [MMReadOnly]
-        public Transform Target;
+        [MMReadOnly] public Transform Target;
+
         /// the last known world position of the target
-        [MMReadOnly]
-        public Vector3 _lastKnownTargetPosition = Vector3.zero;
+        [MMReadOnly] public Vector3 _lastKnownTargetPosition = Vector3.zero;
 
         [Header("Frequencies")]
         /// the frequency (in seconds) at which to perform actions (lower values : higher frequency, high values : lower frequency but better performance)
-        public float ActionsFrequency = 0f;
+        public float ActionsFrequency;
+
         /// the frequency (in seconds) at which to evaluate decisions
-        public float DecisionFrequency = 0f;
-        
+        public float DecisionFrequency;
+
         /// whether or not to randomize the action and decision frequencies
-        public bool RandomizeFrequencies = false;
+        public bool RandomizeFrequencies;
+
         /// the min and max values between which to randomize the action frequency
-        [MMVector("min","max")]
-        public Vector2 RandomActionFrequency = new Vector2(0.5f, 1f);
+        [MMVector("min", "max")] public Vector2 RandomActionFrequency = new(0.5f, 1f);
+
         /// the min and max values between which to randomize the decision frequency
-        [MMVector("min","max")]
-        public Vector2 RandomDecisionFrequency = new Vector2(0.5f, 1f);
+        [MMVector("min", "max")] public Vector2 RandomDecisionFrequency = new(0.5f, 1f);
+
+        protected AIAction[] _actions;
 
         protected AIDecision[] _decisions;
-        protected AIAction[] _actions;
-        protected float _lastActionsUpdate = 0f;
-        protected float _lastDecisionsUpdate = 0f;
         protected AIState _initialState;
+        protected float _lastActionsUpdate;
+        protected float _lastDecisionsUpdate;
 
-        public virtual AIAction[] GetAttachedActions()
-        {
-            AIAction[] actions = this.gameObject.GetComponentsInChildren<AIAction>();
-            return actions;
-        }
-
-        public virtual AIDecision[] GetAttachedDecisions()
-        {
-            AIDecision[] decisions = this.gameObject.GetComponentsInChildren<AIDecision>();
-            return decisions;
-        }
+        /// this brain's current state
+        public AIState CurrentState { get; protected set; }
 
         /// <summary>
-        /// On awake we set our brain for all states
+        ///     On awake we set our brain for all states
         /// </summary>
         protected virtual void Awake()
         {
-            foreach (AIState state in States)
-            {
-                state.SetBrain(this);
-            }
+            foreach (var state in States) state.SetBrain(this);
             _decisions = GetAttachedDecisions();
             _actions = GetAttachedActions();
             if (RandomizeFrequencies)
@@ -82,7 +72,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// On Start we set our first state
+        ///     On Start we set our first state
         /// </summary>
         protected virtual void Start()
         {
@@ -90,39 +80,45 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Every frame we update our current state
+        ///     Every frame we update our current state
         /// </summary>
         protected virtual void Update()
         {
-            if (!BrainActive || (CurrentState == null) || (Time.timeScale == 0f))
-            {
-                return;
-            }
+            if (!BrainActive || CurrentState == null || Time.timeScale == 0f) return;
 
             if (Time.time - _lastActionsUpdate > ActionsFrequency)
             {
                 CurrentState.PerformActions();
                 _lastActionsUpdate = Time.time;
             }
-            
-            if (!BrainActive)
-            {
-                return;
-            }
-            
+
+            if (!BrainActive) return;
+
             if (Time.time - _lastDecisionsUpdate > DecisionFrequency)
             {
                 CurrentState.EvaluateTransitions();
                 _lastDecisionsUpdate = Time.time;
             }
-            
+
             TimeInThisState += Time.deltaTime;
 
             StoreLastKnownPosition();
         }
-        
+
+        public virtual AIAction[] GetAttachedActions()
+        {
+            var actions = gameObject.GetComponentsInChildren<AIAction>();
+            return actions;
+        }
+
+        public virtual AIDecision[] GetAttachedDecisions()
+        {
+            var decisions = gameObject.GetComponentsInChildren<AIDecision>();
+            return decisions;
+        }
+
         /// <summary>
-        /// Transitions to the specified state, trigger exit and enter states events
+        ///     Transitions to the specified state, trigger exit and enter states events
         /// </summary>
         /// <param name="newStateName"></param>
         public virtual void TransitionToState(string newStateName)
@@ -130,27 +126,22 @@ namespace MoreMountains.Tools
             if (CurrentState == null)
             {
                 CurrentState = FindState(newStateName);
-                if (CurrentState != null)
-                {
-                    CurrentState.EnterState();
-                }
+                if (CurrentState != null) CurrentState.EnterState();
                 return;
             }
+
             if (newStateName != CurrentState.StateName)
             {
                 CurrentState.ExitState();
                 OnExitState();
 
                 CurrentState = FindState(newStateName);
-                if (CurrentState != null)
-                {
-                    CurrentState.EnterState();
-                }                
+                if (CurrentState != null) CurrentState.EnterState();
             }
         }
-        
+
         /// <summary>
-        /// When exiting a state we reset our time counter
+        ///     When exiting a state we reset our time counter
         /// </summary>
         protected virtual void OnExitState()
         {
@@ -158,88 +149,68 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Initializes all decisions
+        ///     Initializes all decisions
         /// </summary>
         protected virtual void InitializeDecisions()
         {
-            if (_decisions == null)
-            {
-                _decisions = GetAttachedDecisions();
-            }
-            foreach(AIDecision decision in _decisions)
-            {
-                decision.Initialization();
-            }
+            if (_decisions == null) _decisions = GetAttachedDecisions();
+            foreach (var decision in _decisions) decision.Initialization();
         }
 
         /// <summary>
-        /// Initializes all actions
+        ///     Initializes all actions
         /// </summary>
         protected virtual void InitializeActions()
         {
-            if (_actions == null)
-            {
-                _actions = GetAttachedActions();
-            }
-            foreach(AIAction action in _actions)
-            {
-                action.Initialization();
-            }
+            if (_actions == null) _actions = GetAttachedActions();
+            foreach (var action in _actions) action.Initialization();
         }
 
         /// <summary>
-        /// Returns a state based on the specified state name
+        ///     Returns a state based on the specified state name
         /// </summary>
         /// <param name="stateName"></param>
         /// <returns></returns>
         protected AIState FindState(string stateName)
         {
-            foreach (AIState state in States)
-            {
+            foreach (var state in States)
                 if (state.StateName == stateName)
-                {
                     return state;
-                }
-            }
             if (stateName != "")
-            {
-                Debug.LogError("You're trying to transition to state '" + stateName + "' in " + this.gameObject.name + "'s AI Brain, but no state of this name exists. Make sure your states are named properly, and that your transitions states match existing states.");
-            }            
+                Debug.LogError("You're trying to transition to state '" + stateName + "' in " + gameObject.name +
+                               "'s AI Brain, but no state of this name exists. Make sure your states are named properly, and that your transitions states match existing states.");
             return null;
         }
 
         /// <summary>
-        /// Stores the last known position of the target
+        ///     Stores the last known position of the target
         /// </summary>
         protected virtual void StoreLastKnownPosition()
         {
-            if (Target != null)
-            {
-                _lastKnownTargetPosition = Target.transform.position;
-            }
+            if (Target != null) _lastKnownTargetPosition = Target.transform.position;
         }
 
         /// <summary>
-        /// Resets the brain, forcing it to enter its first state
+        ///     Resets the brain, forcing it to enter its first state
         /// </summary>
         public virtual void ResetBrain()
         {
             InitializeDecisions();
             InitializeActions();
             BrainActive = true;
-            this.enabled = true;
+            enabled = true;
 
             if (CurrentState != null)
             {
                 CurrentState.ExitState();
                 OnExitState();
             }
-            
+
             if (States.Count > 0)
             {
                 CurrentState = States[0];
                 CurrentState?.EnterState();
-            }  
+            }
         }
     }
 }

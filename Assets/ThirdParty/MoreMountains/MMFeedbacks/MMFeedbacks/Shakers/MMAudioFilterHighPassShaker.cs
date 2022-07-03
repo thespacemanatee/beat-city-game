@@ -1,11 +1,9 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace MoreMountains.Feedbacks
 {
     /// <summary>
-    /// Add this to an audio high pass filter to shake its values remapped along a curve 
+    ///     Add this to an audio high pass filter to shake its values remapped along a curve
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Audio/MMAudioFilterHighPassShaker")]
     [RequireComponent(typeof(AudioHighPassFilter))]
@@ -14,39 +12,32 @@ namespace MoreMountains.Feedbacks
         [Header("High Pass")]
         /// whether or not to add to the initial value
         [Tooltip("whether or not to add to the initial value")]
-        public bool RelativeHighPass = false;
+        public bool RelativeHighPass;
+
         /// the curve used to animate the intensity value on
         [Tooltip("the curve used to animate the intensity value on")]
-        public AnimationCurve ShakeHighPass = new AnimationCurve(new Keyframe(0, 0f), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
+        public AnimationCurve ShakeHighPass = new(new Keyframe(0, 0f), new Keyframe(0.5f, 1f), new Keyframe(1, 0f));
+
         /// the value to remap the curve's 0 to
-        [Tooltip("the value to remap the curve's 0 to")]
-        [Range(10f, 22000f)]
-        public float RemapHighPassZero = 0f;
+        [Tooltip("the value to remap the curve's 0 to")] [Range(10f, 22000f)]
+        public float RemapHighPassZero;
+
         /// the value to remap the curve's 1 to
-        [Tooltip("the value to remap the curve's 1 to")]
-        [Range(10f, 22000f)]
+        [Tooltip("the value to remap the curve's 1 to")] [Range(10f, 22000f)]
         public float RemapHighPassOne = 10000f;
+
+        protected float _initialHighPass;
+        protected bool _originalRelativeHighPass;
+        protected float _originalRemapHighPassOne;
+        protected float _originalRemapHighPassZero;
+        protected float _originalShakeDuration;
+        protected AnimationCurve _originalShakeHighPass;
 
         /// the audio source to pilot
         protected AudioHighPassFilter _targetAudioHighPassFilter;
-        protected float _initialHighPass;
-        protected float _originalShakeDuration;
-        protected bool _originalRelativeHighPass;
-        protected AnimationCurve _originalShakeHighPass;
-        protected float _originalRemapHighPassZero;
-        protected float _originalRemapHighPassOne;
 
         /// <summary>
-        /// On init we initialize our values
-        /// </summary>
-        protected override void Initialization()
-        {
-            base.Initialization();
-            _targetAudioHighPassFilter = this.gameObject.GetComponent<AudioHighPassFilter>();
-        }
-
-        /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
+        ///     When that shaker gets added, we initialize its shake duration
         /// </summary>
         protected virtual void Reset()
         {
@@ -54,16 +45,26 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Shakes values over time
+        ///     On init we initialize our values
+        /// </summary>
+        protected override void Initialization()
+        {
+            base.Initialization();
+            _targetAudioHighPassFilter = gameObject.GetComponent<AudioHighPassFilter>();
+        }
+
+        /// <summary>
+        ///     Shakes values over time
         /// </summary>
         protected override void Shake()
         {
-            float newHighPassLevel = ShakeFloat(ShakeHighPass, RemapHighPassZero, RemapHighPassOne, RelativeHighPass, _initialHighPass);
+            var newHighPassLevel = ShakeFloat(ShakeHighPass, RemapHighPassZero, RemapHighPassOne, RelativeHighPass,
+                _initialHighPass);
             _targetAudioHighPassFilter.cutoffFrequency = newHighPassLevel;
         }
 
         /// <summary>
-        /// Collects initial values on the target
+        ///     Collects initial values on the target
         /// </summary>
         protected override void GrabInitialValues()
         {
@@ -71,7 +72,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// When we get the appropriate event, we trigger a shake
+        ///     When we get the appropriate event, we trigger a shake
         /// </summary>
         /// <param name="highPassCurve"></param>
         /// <param name="duration"></param>
@@ -79,20 +80,20 @@ namespace MoreMountains.Feedbacks
         /// <param name="relativeHighPass"></param>
         /// <param name="feedbacksIntensity"></param>
         /// <param name="channel"></param>
-        public virtual void OnMMAudioFilterHighPassShakeEvent(AnimationCurve highPassCurve, float duration, float remapMin, float remapMax, bool relativeHighPass = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
+        public virtual void OnMMAudioFilterHighPassShakeEvent(AnimationCurve highPassCurve, float duration,
+            float remapMin, float remapMax, bool relativeHighPass = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
-            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking))
-            {
-                return;
-            }
-            
+            if (!CheckEventAllowed(channel) || (!Interruptible && Shaking)) return;
+
             if (stop)
             {
                 Stop();
                 return;
             }
-            
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 
@@ -117,7 +118,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the target's values
+        ///     Resets the target's values
         /// </summary>
         protected override void ResetTargetValues()
         {
@@ -126,7 +127,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Resets the shaker's values
+        ///     Resets the shaker's values
         /// </summary>
         protected override void ResetShakerValues()
         {
@@ -139,7 +140,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -148,7 +149,7 @@ namespace MoreMountains.Feedbacks
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -158,29 +159,37 @@ namespace MoreMountains.Feedbacks
     }
 
     /// <summary>
-    /// An event used to trigger vignette shakes
+    ///     An event used to trigger vignette shakes
     /// </summary>
     public struct MMAudioFilterHighPassShakeEvent
     {
-        public delegate void Delegate(AnimationCurve highPassCurve, float duration, float remapMin, float remapMax, bool relativeHighPass = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false);
-        static private event Delegate OnEvent;
+        public delegate void Delegate(AnimationCurve highPassCurve, float duration, float remapMin, float remapMax,
+            bool relativeHighPass = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(AnimationCurve highPassCurve, float duration, float remapMin, float remapMax, bool relativeHighPass = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
+        public static void Trigger(AnimationCurve highPassCurve, float duration, float remapMin, float remapMax,
+            bool relativeHighPass = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
             OnEvent?.Invoke(highPassCurve, duration, remapMin, remapMax, relativeHighPass,
-                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection, timescaleMode, stop);
+                feedbacksIntensity, channel, resetShakerValuesAfterShake, resetTargetValuesAfterShake, forwardDirection,
+                timescaleMode, stop);
         }
     }
 }

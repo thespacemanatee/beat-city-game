@@ -1,28 +1,32 @@
-﻿using UnityEngine;
-
-namespace MoreMountains.Tools
+﻿namespace MoreMountains.Tools
 {
     /// <summary>
-    /// An event used to broadcast checkbox events from a MMDebugMenu
+    ///     An event used to broadcast checkbox events from a MMDebugMenu
     /// </summary>
     public struct MMDebugMenuCheckboxEvent
     {
-        public enum EventModes { FromCheckbox, SetCheckbox }
+        public enum EventModes
+        {
+            FromCheckbox,
+            SetCheckbox
+        }
 
-        public delegate void Delegate(string checkboxEventName, bool value, EventModes eventMode = EventModes.FromCheckbox);
-        static private event Delegate OnEvent;
+        public delegate void Delegate(string checkboxEventName, bool value,
+            EventModes eventMode = EventModes.FromCheckbox);
 
-        static public void Register(Delegate callback)
+        private static event Delegate OnEvent;
+
+        public static void Register(Delegate callback)
         {
             OnEvent += callback;
         }
 
-        static public void Unregister(Delegate callback)
+        public static void Unregister(Delegate callback)
         {
             OnEvent -= callback;
         }
 
-        static public void Trigger(string checkboxEventName, bool value, EventModes eventMode = EventModes.FromCheckbox)
+        public static void Trigger(string checkboxEventName, bool value, EventModes eventMode = EventModes.FromCheckbox)
         {
             OnEvent?.Invoke(checkboxEventName, value, eventMode);
         }

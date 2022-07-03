@@ -1,13 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Cinemachine;
+﻿using Cinemachine;
 using MoreMountains.Feedbacks;
+using UnityEngine;
 
 namespace MoreMountains.FeedbacksForThirdParty
 {
     /// <summary>
-    /// Add this to a Cinemachine virtual camera and it'll let you control its field of view over time, can be piloted by a MMFeedbackCameraFieldOfView
+    ///     Add this to a Cinemachine virtual camera and it'll let you control its field of view over time, can be piloted by a
+    ///     MMFeedbackCameraFieldOfView
     /// </summary>
     [AddComponentMenu("More Mountains/Feedbacks/Shakers/Cinemachine/MMCinemachineFieldOfViewShaker")]
     [RequireComponent(typeof(CinemachineVirtualCamera))]
@@ -16,38 +15,31 @@ namespace MoreMountains.FeedbacksForThirdParty
         [Header("Field of View")]
         /// whether or not to add to the initial value
         [Tooltip("whether or not to add to the initial value")]
-        public bool RelativeFieldOfView = false;
+        public bool RelativeFieldOfView;
+
         /// the curve used to animate the intensity value on
         [Tooltip("the curve used to animate the intensity value on")]
-        public AnimationCurve ShakeFieldOfView = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+        public AnimationCurve ShakeFieldOfView = new(new Keyframe(0, 0), new Keyframe(0.5f, 1), new Keyframe(1, 0));
+
         /// the value to remap the curve's 0 to
-        [Tooltip("the value to remap the curve's 0 to")]
-        [Range(0f, 179f)]
+        [Tooltip("the value to remap the curve's 0 to")] [Range(0f, 179f)]
         public float RemapFieldOfViewZero = 60f;
+
         /// the value to remap the curve's 1 to
-        [Tooltip("the value to remap the curve's 1 to")]
-        [Range(0f, 179f)]
+        [Tooltip("the value to remap the curve's 1 to")] [Range(0f, 179f)]
         public float RemapFieldOfViewOne = 120f;
 
-        protected CinemachineVirtualCamera _targetCamera;
         protected float _initialFieldOfView;
-        protected float _originalShakeDuration;
         protected bool _originalRelativeFieldOfView;
-        protected AnimationCurve _originalShakeFieldOfView;
-        protected float _originalRemapFieldOfViewZero;
         protected float _originalRemapFieldOfViewOne;
+        protected float _originalRemapFieldOfViewZero;
+        protected float _originalShakeDuration;
+        protected AnimationCurve _originalShakeFieldOfView;
+
+        protected CinemachineVirtualCamera _targetCamera;
 
         /// <summary>
-        /// On init we initialize our values
-        /// </summary>
-        protected override void Initialization()
-        {
-            base.Initialization();
-            _targetCamera = this.gameObject.GetComponent<CinemachineVirtualCamera>();
-        }
-
-        /// <summary>
-        /// When that shaker gets added, we initialize its shake duration
+        ///     When that shaker gets added, we initialize its shake duration
         /// </summary>
         protected virtual void Reset()
         {
@@ -55,16 +47,26 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Shakes values over time
+        ///     On init we initialize our values
+        /// </summary>
+        protected override void Initialization()
+        {
+            base.Initialization();
+            _targetCamera = gameObject.GetComponent<CinemachineVirtualCamera>();
+        }
+
+        /// <summary>
+        ///     Shakes values over time
         /// </summary>
         protected override void Shake()
         {
-            float newFieldOfView = ShakeFloat(ShakeFieldOfView, RemapFieldOfViewZero, RemapFieldOfViewOne, RelativeFieldOfView, _initialFieldOfView);
+            var newFieldOfView = ShakeFloat(ShakeFieldOfView, RemapFieldOfViewZero, RemapFieldOfViewOne,
+                RelativeFieldOfView, _initialFieldOfView);
             _targetCamera.m_Lens.FieldOfView = newFieldOfView;
         }
 
         /// <summary>
-        /// Collects initial values on the target
+        ///     Collects initial values on the target
         /// </summary>
         protected override void GrabInitialValues()
         {
@@ -72,7 +74,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// When we get the appropriate event, we trigger a shake
+        ///     When we get the appropriate event, we trigger a shake
         /// </summary>
         /// <param name="distortionCurve"></param>
         /// <param name="duration"></param>
@@ -80,25 +82,22 @@ namespace MoreMountains.FeedbacksForThirdParty
         /// <param name="relativeDistortion"></param>
         /// <param name="feedbacksIntensity"></param>
         /// <param name="channel"></param>
-        public virtual void OnMMCameraFieldOfViewShakeEvent(AnimationCurve distortionCurve, float duration, float remapMin, float remapMax, bool relativeDistortion = false,
-            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true, bool resetTargetValuesAfterShake = true, bool forwardDirection = true, TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
+        public virtual void OnMMCameraFieldOfViewShakeEvent(AnimationCurve distortionCurve, float duration,
+            float remapMin, float remapMax, bool relativeDistortion = false,
+            float feedbacksIntensity = 1.0f, int channel = 0, bool resetShakerValuesAfterShake = true,
+            bool resetTargetValuesAfterShake = true, bool forwardDirection = true,
+            TimescaleModes timescaleMode = TimescaleModes.Scaled, bool stop = false)
         {
-            if (!CheckEventAllowed(channel))
-            {
-                return;
-            }
-            
+            if (!CheckEventAllowed(channel)) return;
+
             if (stop)
             {
                 Stop();
                 return;
             }
-            
-            if (!Interruptible && Shaking)
-            {
-                return;
-            }
-            
+
+            if (!Interruptible && Shaking) return;
+
             _resetShakerValuesAfterShake = resetShakerValuesAfterShake;
             _resetTargetValuesAfterShake = resetTargetValuesAfterShake;
 
@@ -123,7 +122,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Resets the target's values
+        ///     Resets the target's values
         /// </summary>
         protected override void ResetTargetValues()
         {
@@ -132,7 +131,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Resets the shaker's values
+        ///     Resets the shaker's values
         /// </summary>
         protected override void ResetShakerValues()
         {
@@ -145,7 +144,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Starts listening for events
+        ///     Starts listening for events
         /// </summary>
         public override void StartListening()
         {
@@ -154,7 +153,7 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
 
         /// <summary>
-        /// Stops listening for events
+        ///     Stops listening for events
         /// </summary>
         public override void StopListening()
         {
@@ -163,4 +162,3 @@ namespace MoreMountains.FeedbacksForThirdParty
         }
     }
 }
-

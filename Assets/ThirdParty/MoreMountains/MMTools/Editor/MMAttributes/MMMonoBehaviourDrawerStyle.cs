@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace MoreMountains.Tools
 {
-    static class MMMonoBehaviourDrawerStyle
+    internal static class MMMonoBehaviourDrawerStyle
     {
         public static GUIStyle ContainerStyle;
         public static GUIStyle BoxChildStyle;
@@ -16,7 +13,7 @@ namespace MoreMountains.Tools
         public static bool IsProSkin = EditorGUIUtility.isProSkin;
         public static Texture2D GroupClosedTriangle = Resources.Load<Texture2D>("IN foldout focus-6510");
         public static Texture2D GroupOpenTriangle = Resources.Load<Texture2D>("IN foldout focus on-5718");
-        public static Texture2D NoTexture = new Texture2D(0, 0);
+        public static Texture2D NoTexture = new(0, 0);
 
         static MMMonoBehaviourDrawerStyle()
         {
@@ -25,13 +22,13 @@ namespace MoreMountains.Tools
             TextStyle = new GUIStyle(EditorStyles.largeLabel);
             TextStyle.richText = true;
             TextStyle.contentOffset = new Vector2(0, 5);
-            
+
             //TextStyle.font = Font.CreateDynamicFontFromOSFont(new[] { "Terminus (TTF) for Windows", "Calibri" }, 14);
 
             // GROUP STYLE --------------------------------------------------------------------------------------------------------------
 
             GroupStyle = new GUIStyle(EditorStyles.foldout);
-            
+
             GroupStyle.active.background = GroupClosedTriangle;
             GroupStyle.focused.background = GroupClosedTriangle;
             GroupStyle.hover.background = GroupClosedTriangle;
@@ -76,18 +73,14 @@ namespace MoreMountains.Tools
             EditorStyles.foldout.*/
         }
 
-        static Texture2D MakeTex(int width, int height, Color col)
+        private static Texture2D MakeTex(int width, int height, Color col)
         {
-            Color[] pix = new Color[width * height];
-            for (int i = 0; i < pix.Length; ++i)
-            {
-                pix[i] = col;
-            }
-            Texture2D result = new Texture2D(width, height);
+            var pix = new Color[width * height];
+            for (var i = 0; i < pix.Length; ++i) pix[i] = col;
+            var result = new Texture2D(width, height);
             result.SetPixels(pix);
             result.Apply();
             return result;
         }
-
     }
 }

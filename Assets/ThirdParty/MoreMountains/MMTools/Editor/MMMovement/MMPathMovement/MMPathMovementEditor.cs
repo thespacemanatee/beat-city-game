@@ -1,78 +1,68 @@
 ﻿#if UNITY_EDITOR
 
-using UnityEngine;
 using UnityEditor;
-using System.Collections;
+using UnityEngine;
 
 namespace MoreMountains.Tools
 {
 	/// <summary>
-	/// This class adds names for each LevelMapPathElement next to it on the scene view, for easier setup
+	///     This class adds names for each LevelMapPathElement next to it on the scene view, for easier setup
 	/// </summary>
-	[CustomEditor(typeof(MMPathMovement),true)]
-	[InitializeOnLoad]
-	public class MMPathMovementEditor : Editor 
-	{		
-		public MMPathMovement pathMovementTarget
-		{
-			get
-			{
-				return (MMPathMovement)target;
-			}
-		}
+	[CustomEditor(typeof(MMPathMovement), true)]
+    [InitializeOnLoad]
+    public class MMPathMovementEditor : Editor
+    {
+        public MMPathMovement pathMovementTarget => (MMPathMovement)target;
 
-		public override void OnInspectorGUI()
-		{
-			serializedObject.Update ();
+        /// <summary>
+        ///     OnSceneGUI, draws repositionable handles at every point in the path, for easier setup
+        /// </summary>
+        protected virtual void OnSceneGUI()
+        {
+            Handles.color = Color.green;
+            var t = target as MMPathMovement;
 
-			if (pathMovementTarget.AccelerationType == MMPathMovement.PossibleAccelerationType.AnimationCurve)
-			{
-				DrawDefaultInspector ();
-			}
-			else
-			{
-				Editor.DrawPropertiesExcluding (serializedObject, new string [] { "Acceleration" });
-			}
+            if (t.GetOriginalTransformPositionStatus() == false) return;
 
-			serializedObject.ApplyModifiedProperties ();
-		}
+            for (var i = 0; i < t.PathElements.Count; i++)
+            {
+                EditorGUI.BeginChangeCheck();
 
-		/// <summary>
-		/// OnSceneGUI, draws repositionable handles at every point in the path, for easier setup
-		/// </summary>
-		protected virtual void OnSceneGUI()
-	    {
-			Handles.color=Color.green;
-			MMPathMovement t = (target as MMPathMovement);
+                var oldPoint = t.GetOriginalTransformPosition() + t.PathElements[i].PathElementPosition;
+                var style = new GUIStyle();
 
-			if (t.GetOriginalTransformPositionStatus() == false)
-			{
-				return;
-			}
+                // draws the path item number
+                style.normal.textColor = Color.yellow;
+                Handles.Label(
+                    t.GetOriginalTransformPosition() + t.PathElements[i].PathElementPosition + Vector3.down * 0.4f +
+                    Vector3.right * 0.4f, "" + i, style);
 
-			for (int i=0;i<t.PathElements.Count;i++)
-			{
-	       		EditorGUI.BeginChangeCheck();
+                // draws a movable handle
+                var fmh_65_57_637918038871884790 = Quaternion.identity;
+                var newPoint = Handles.FreeMoveHandle(oldPoint, .5f, new Vector3(.25f, .25f, .25f),
+                    Handles.CircleHandleCap);
 
-				Vector3 oldPoint = t.GetOriginalTransformPosition()+t.PathElements[i].PathElementPosition;
-				GUIStyle style = new GUIStyle();
+                // records changes
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(target, "Free Move Handle");
+                    t.PathElements[i].PathElementPosition = newPoint - t.GetOriginalTransformPosition();
+                }
+            }
+        }
 
-				// draws the path item number
-		        style.normal.textColor = Color.yellow;	 
-				Handles.Label(t.GetOriginalTransformPosition()+t.PathElements[i].PathElementPosition+(Vector3.down*0.4f)+(Vector3.right*0.4f), ""+i,style);
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
 
-				// draws a movable handle
-				var fmh_65_57_637918038871884790 = Quaternion.identity; Vector3 newPoint = Handles.FreeMoveHandle(oldPoint,.5f,new Vector3(.25f,.25f,.25f),Handles.CircleHandleCap);
+            if (pathMovementTarget.AccelerationType == MMPathMovement.PossibleAccelerationType.AnimationCurve)
+                DrawDefaultInspector();
+            else
+                DrawPropertiesExcluding(serializedObject, "Acceleration");
 
-				// records changes
-				if (EditorGUI.EndChangeCheck())
-		        {
-		            Undo.RecordObject(target, "Free Move Handle");
-					t.PathElements[i].PathElementPosition = newPoint - t.GetOriginalTransformPosition();
-		        }
-			}	        
-	    }
-	}
+            serializedObject.ApplyModifiedProperties();
+        }
+    }
 }
 
 #endif

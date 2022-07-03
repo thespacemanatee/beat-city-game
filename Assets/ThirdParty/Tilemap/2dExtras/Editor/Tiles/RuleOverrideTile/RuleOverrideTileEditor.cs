@@ -1,28 +1,56 @@
-﻿using UnityEngine;
-using UnityEngine.Tilemaps;
+﻿using System.Collections.Generic;
 using UnityEditorInternal;
-using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 namespace UnityEditor
 {
     /// <summary>
-    /// The Editor for a RuleOverrideTileEditor.
+    ///     The Editor for a RuleOverrideTileEditor.
     /// </summary>
     [CustomEditor(typeof(RuleOverrideTile))]
     public class RuleOverrideTileEditor : Editor
     {
-        private static class Styles
-        {
-            public static readonly GUIContent overrideTile = EditorGUIUtility.TrTextContent("Tile"
-                , "The Rule Tile to override.");
-        }
+        /// <summary>
+        ///     Height for a Sprite Element
+        /// </summary>
+        public static float k_SpriteElementHeight = 48;
 
         /// <summary>
-        /// The RuleOverrideTile being edited
+        ///     Height for a GameObject Element
+        /// </summary>
+        public static float k_GameObjectElementHeight = 16;
+
+        /// <summary>
+        ///     Padding between Rule Elements
+        /// </summary>
+        public static float k_PaddingBetweenRules = 4;
+
+        /// <summary>
+        ///     List of Sprites and overriding Sprites
+        /// </summary>
+        public List<KeyValuePair<Sprite, Sprite>> m_Sprites = new();
+
+        /// <summary>
+        ///     List of GameObjects and overriding GameObjects
+        /// </summary>
+        public List<KeyValuePair<GameObject, GameObject>> m_GameObjects = new();
+
+        private ReorderableList m_GameObjectList;
+        private int m_MissingOriginalGameObjectIndex;
+        private int m_MissingOriginalSpriteIndex;
+
+        private RuleTileEditor m_RuleTileEditor;
+        private RuleTile m_RuleTileEditorTarget;
+        private ReorderableList m_SpriteList;
+
+        /// <summary>
+        ///     The RuleOverrideTile being edited
         /// </summary>
         public RuleOverrideTile overrideTile => target as RuleOverrideTile;
+
         /// <summary>
-        /// The RuleTileEditor for the overridden instance of the RuleTile
+        ///     The RuleTileEditor for the overridden instance of the RuleTile
         /// </summary>
         public RuleTileEditor ruleTileEditor
         {
@@ -31,57 +59,32 @@ namespace UnityEditor
                 if (m_RuleTileEditorTarget != overrideTile.m_Tile)
                 {
                     DestroyImmediate(m_RuleTileEditor);
-                    m_RuleTileEditor = Editor.CreateEditor(overrideTile.m_InstanceTile) as RuleTileEditor;
+                    m_RuleTileEditor = CreateEditor(overrideTile.m_InstanceTile) as RuleTileEditor;
                     m_RuleTileEditorTarget = overrideTile.m_Tile;
                 }
+
                 return m_RuleTileEditor;
             }
         }
 
-        RuleTileEditor m_RuleTileEditor;
-        RuleTile m_RuleTileEditorTarget;
-
         /// <summary>
-        /// List of Sprites and overriding Sprites
-        /// </summary>
-        public List<KeyValuePair<Sprite, Sprite>> m_Sprites = new List<KeyValuePair<Sprite, Sprite>>();
-        /// <summary>
-        /// List of GameObjects and overriding GameObjects
-        /// </summary>
-        public List<KeyValuePair<GameObject, GameObject>> m_GameObjects = new List<KeyValuePair<GameObject, GameObject>>();
-        private ReorderableList m_SpriteList;
-        private ReorderableList m_GameObjectList;
-        private int m_MissingOriginalSpriteIndex;
-        private int m_MissingOriginalGameObjectIndex;
-
-        /// <summary>
-        /// Height for a Sprite Element
-        /// </summary>
-        public static float k_SpriteElementHeight = 48;
-        /// <summary>
-        /// Height for a GameObject Element
-        /// </summary>
-        public static float k_GameObjectElementHeight = 16;
-        /// <summary>
-        /// Padding between Rule Elements
-        /// </summary>
-        public static float k_PaddingBetweenRules = 4;
-
-        /// <summary>
-        /// OnEnable for the RuleOverrideTileEditor
+        ///     OnEnable for the RuleOverrideTileEditor
         /// </summary>
         public virtual void OnEnable()
         {
             if (m_SpriteList == null)
             {
-                m_SpriteList = new ReorderableList(m_Sprites, typeof(KeyValuePair<Sprite, Sprite>), false, true, false, false);
+                m_SpriteList = new ReorderableList(m_Sprites, typeof(KeyValuePair<Sprite, Sprite>), false, true, false,
+                    false);
                 m_SpriteList.drawHeaderCallback = DrawSpriteListHeader;
                 m_SpriteList.drawElementCallback = DrawSpriteElement;
                 m_SpriteList.elementHeightCallback = GetSpriteElementHeight;
             }
+
             if (m_GameObjectList == null)
             {
-                m_GameObjectList = new ReorderableList(m_GameObjects, typeof(KeyValuePair<Sprite, Sprite>), false, true, false, false);
+                m_GameObjectList = new ReorderableList(m_GameObjects, typeof(KeyValuePair<Sprite, Sprite>), false, true,
+                    false, false);
                 m_GameObjectList.drawHeaderCallback = DrawGameObjectListHeader;
                 m_GameObjectList.drawElementCallback = DrawGameObjectElement;
                 m_GameObjectList.elementHeightCallback = GetGameObjectElementHeight;
@@ -89,7 +92,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// OnDisable for the RuleOverrideTileEditor
+        ///     OnDisable for the RuleOverrideTileEditor
         /// </summary>
         public virtual void OnDisable()
         {
@@ -98,7 +101,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Draws the Inspector GUI for the RuleOverrideTileEditor
+        ///     Draws the Inspector GUI for the RuleOverrideTileEditor
         /// </summary>
         public override void OnInspectorGUI()
         {
@@ -128,12 +131,12 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Draws the header for the Sprite list
+        ///     Draws the header for the Sprite list
         /// </summary>
         /// <param name="rect">GUI Rect to draw the header at</param>
         public void DrawSpriteListHeader(Rect rect)
         {
-            float xMax = rect.xMax;
+            var xMax = rect.xMax;
             rect.xMax = rect.xMax / 2.0f;
             GUI.Label(rect, "Original Sprite", EditorStyles.label);
             rect.xMin = rect.xMax;
@@ -142,12 +145,12 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Draws the header for the GameObject list
+        ///     Draws the header for the GameObject list
         /// </summary>
         /// <param name="rect">GUI Rect to draw the header at</param>
         public void DrawGameObjectListHeader(Rect rect)
         {
-            float xMax = rect.xMax;
+            var xMax = rect.xMax;
             rect.xMax = rect.xMax / 2.0f;
             GUI.Label(rect, "Original GameObject", EditorStyles.label);
             rect.xMin = rect.xMax;
@@ -156,15 +159,15 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Gets the GUI element height for a Sprite element with the given index
+        ///     Gets the GUI element height for a Sprite element with the given index
         /// </summary>
         /// <param name="index">Index of the Sprite element</param>
         /// <returns>GUI element height for the Sprite element</returns>
         public float GetSpriteElementHeight(int index)
         {
-            float height = k_SpriteElementHeight + k_PaddingBetweenRules;
+            var height = k_SpriteElementHeight + k_PaddingBetweenRules;
 
-            bool isMissing = index >= m_MissingOriginalSpriteIndex;
+            var isMissing = index >= m_MissingOriginalSpriteIndex;
             if (isMissing)
                 height += 16;
 
@@ -172,15 +175,15 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Gets the GUI element height for a GameObject element with the given index
+        ///     Gets the GUI element height for a GameObject element with the given index
         /// </summary>
         /// <param name="index">Index of the GameObject element</param>
         /// <returns>GUI element height for the GameObject element</returns>
         public float GetGameObjectElementHeight(int index)
         {
-            float height = k_GameObjectElementHeight + k_PaddingBetweenRules;
+            var height = k_GameObjectElementHeight + k_PaddingBetweenRules;
 
-            bool isMissing = index >= m_MissingOriginalGameObjectIndex;
+            var isMissing = index >= m_MissingOriginalGameObjectIndex;
             if (isMissing)
                 height += 16;
 
@@ -188,7 +191,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Draws the Sprite element for the RuleOverride list
+        ///     Draws the Sprite element for the RuleOverride list
         /// </summary>
         /// <param name="rect">Rect to draw the Sprite Element in</param>
         /// <param name="index">Index of the Sprite Element to draw</param>
@@ -196,33 +199,39 @@ namespace UnityEditor
         /// <param name="focused">Whether the Sprite Element is focused</param>
         public void DrawSpriteElement(Rect rect, int index, bool active, bool focused)
         {
-            bool isMissing = index >= m_MissingOriginalSpriteIndex;
+            var isMissing = index >= m_MissingOriginalSpriteIndex;
             if (isMissing)
             {
-                EditorGUI.HelpBox(new Rect(rect.xMin, rect.yMin, rect.width, 16), "Original Sprite missing", MessageType.Warning);
+                EditorGUI.HelpBox(new Rect(rect.xMin, rect.yMin, rect.width, 16), "Original Sprite missing",
+                    MessageType.Warning);
                 rect.yMin += 16;
             }
 
-            Sprite originalSprite = m_Sprites[index].Key;
-            Sprite overrideSprite = m_Sprites[index].Value;
+            var originalSprite = m_Sprites[index].Key;
+            var overrideSprite = m_Sprites[index].Value;
 
             rect.y += 2;
             rect.height -= k_PaddingBetweenRules;
 
             rect.xMax = rect.xMax / 2.0f;
             using (new EditorGUI.DisabledScope(true))
-                EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.height, rect.height), originalSprite, typeof(Sprite), false);
+            {
+                EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.height, rect.height), originalSprite,
+                    typeof(Sprite), false);
+            }
+
             rect.xMin = rect.xMax;
             rect.xMax *= 2.0f;
 
             EditorGUI.BeginChangeCheck();
-            overrideSprite = EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.height, rect.height), overrideSprite, typeof(Sprite), false) as Sprite;
+            overrideSprite = EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.height, rect.height),
+                overrideSprite, typeof(Sprite), false) as Sprite;
             if (EditorGUI.EndChangeCheck())
                 m_Sprites[index] = new KeyValuePair<Sprite, Sprite>(originalSprite, overrideSprite);
         }
 
         /// <summary>
-        /// Draws the GameObject element for the RuleOverride list
+        ///     Draws the GameObject element for the RuleOverride list
         /// </summary>
         /// <param name="rect">Rect to draw the GameObject Element in</param>
         /// <param name="index">Index of the GameObject Element to draw</param>
@@ -230,38 +239,46 @@ namespace UnityEditor
         /// <param name="focused">Whether the GameObject Element is focused</param>
         public void DrawGameObjectElement(Rect rect, int index, bool active, bool focused)
         {
-            bool isMissing = index >= m_MissingOriginalGameObjectIndex;
+            var isMissing = index >= m_MissingOriginalGameObjectIndex;
             if (isMissing)
             {
-                EditorGUI.HelpBox(new Rect(rect.xMin, rect.yMin, rect.width, 16), "Original GameObject missing", MessageType.Warning);
+                EditorGUI.HelpBox(new Rect(rect.xMin, rect.yMin, rect.width, 16), "Original GameObject missing",
+                    MessageType.Warning);
                 rect.yMin += 16;
             }
 
-            GameObject originalGameObject = m_GameObjects[index].Key;
-            GameObject overrideGameObject = m_GameObjects[index].Value;
+            var originalGameObject = m_GameObjects[index].Key;
+            var overrideGameObject = m_GameObjects[index].Value;
 
             rect.y += 2;
             rect.height -= k_PaddingBetweenRules;
 
             rect.xMax = rect.xMax / 2.0f;
             using (new EditorGUI.DisabledScope(true))
-                EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.width, rect.height), originalGameObject, typeof(GameObject), false);
+            {
+                EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.width, rect.height), originalGameObject,
+                    typeof(GameObject), false);
+            }
+
             rect.xMin = rect.xMax;
             rect.xMax *= 2.0f;
 
             EditorGUI.BeginChangeCheck();
-            overrideGameObject = EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.width, rect.height), overrideGameObject, typeof(GameObject), false) as GameObject;
+            overrideGameObject = EditorGUI.ObjectField(new Rect(rect.xMin, rect.yMin, rect.width, rect.height),
+                overrideGameObject, typeof(GameObject), false) as GameObject;
             if (EditorGUI.EndChangeCheck())
                 m_GameObjects[index] = new KeyValuePair<GameObject, GameObject>(originalGameObject, overrideGameObject);
         }
 
         /// <summary>
-        /// Draws a field for the RuleTile be overridden
+        ///     Draws a field for the RuleTile be overridden
         /// </summary>
         public void DrawTileField()
         {
             EditorGUI.BeginChangeCheck();
-            RuleTile tile = EditorGUILayout.ObjectField(Styles.overrideTile, overrideTile.m_Tile, typeof(RuleTile), false) as RuleTile;
+            var tile =
+                EditorGUILayout.ObjectField(Styles.overrideTile, overrideTile.m_Tile, typeof(RuleTile), false) as
+                    RuleTile;
             if (EditorGUI.EndChangeCheck())
             {
                 if (!LoopCheck(tile))
@@ -280,7 +297,7 @@ namespace UnityEditor
                 if (!overrideTile.m_InstanceTile)
                     return false;
 
-                HashSet<RuleTile> renferenceTils = new HashSet<RuleTile>();
+                var renferenceTils = new HashSet<RuleTile>();
                 Add(overrideTile.m_InstanceTile);
 
                 return renferenceTils.Contains(checkTile);
@@ -301,7 +318,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Draw editor fields for custom properties for the RuleOverrideTile
+        ///     Draw editor fields for custom properties for the RuleOverrideTile
         /// </summary>
         public void DrawCustomFields()
         {
@@ -315,33 +332,30 @@ namespace UnityEditor
 
         private void SaveInstanceTileAsset()
         {
-            bool assetChanged = false;
+            var assetChanged = false;
 
             if (overrideTile.m_InstanceTile)
-            {
                 if (!overrideTile.m_Tile || overrideTile.m_InstanceTile.GetType() != overrideTile.m_Tile.GetType())
                 {
                     DestroyImmediate(overrideTile.m_InstanceTile, true);
                     overrideTile.m_InstanceTile = null;
                     assetChanged = true;
                 }
-            }
+
             if (!overrideTile.m_InstanceTile)
-            {
                 if (overrideTile.m_Tile)
                 {
                     var t = overrideTile.m_Tile.GetType();
-                    RuleTile instanceTile = ScriptableObject.CreateInstance(t) as RuleTile;
+                    var instanceTile = CreateInstance(t) as RuleTile;
                     instanceTile.hideFlags = HideFlags.NotEditable;
                     AssetDatabase.AddObjectToAsset(instanceTile, overrideTile);
                     overrideTile.m_InstanceTile = instanceTile;
                     assetChanged = true;
                 }
-            }
 
             if (overrideTile.m_InstanceTile)
             {
-                string instanceTileName = overrideTile.m_Tile.name + " (Override)";
+                var instanceTileName = overrideTile.m_Tile.name + " (Override)";
                 if (overrideTile.m_InstanceTile.name != instanceTileName)
                 {
                     overrideTile.m_InstanceTile.name = instanceTileName;
@@ -354,7 +368,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Saves any changes to the RuleOverrideTile
+        ///     Saves any changes to the RuleOverrideTile
         /// </summary>
         public void SaveTile()
         {
@@ -362,7 +376,7 @@ namespace UnityEditor
             SceneView.RepaintAll();
 
             SaveInstanceTileAsset();
-        
+
             if (overrideTile.m_InstanceTile)
             {
                 overrideTile.Override();
@@ -370,14 +384,12 @@ namespace UnityEditor
             }
 
             if (ruleTileEditor && ruleTileEditor.m_PreviewTilemaps != null)
-            {
                 foreach (var tilemap in ruleTileEditor.m_PreviewTilemaps)
                     tilemap.RefreshAllTiles();
-            }
         }
 
         /// <summary>
-        /// Renders a static preview Texture2D for a RuleOverrideTile asset
+        ///     Renders a static preview Texture2D for a RuleOverrideTile asset
         /// </summary>
         /// <param name="assetPath">Asset path of the RuleOverrideTile</param>
         /// <param name="subAssets">Arrays of assets from the given Asset path</param>
@@ -393,7 +405,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Whether the RuleOverrideTile has a preview GUI
+        ///     Whether the RuleOverrideTile has a preview GUI
         /// </summary>
         /// <returns>True if RuleOverrideTile has a preview GUI. False if not.</returns>
         public override bool HasPreviewGUI()
@@ -405,7 +417,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Updates preview settings for the RuleOverrideTile.
+        ///     Updates preview settings for the RuleOverrideTile.
         /// </summary>
         public override void OnPreviewSettings()
         {
@@ -414,7 +426,7 @@ namespace UnityEditor
         }
 
         /// <summary>
-        /// Draws the preview GUI for the RuleTile
+        ///     Draws the preview GUI for the RuleTile
         /// </summary>
         /// <param name="rect">Rect to draw the preview GUI</param>
         /// <param name="background">The GUIStyle of the background for the preview</param>
@@ -422,6 +434,12 @@ namespace UnityEditor
         {
             if (ruleTileEditor)
                 ruleTileEditor.OnPreviewGUI(rect, background);
+        }
+
+        private static class Styles
+        {
+            public static readonly GUIContent overrideTile = EditorGUIUtility.TrTextContent("Tile"
+                , "The Rule Tile to override.");
         }
     }
 }

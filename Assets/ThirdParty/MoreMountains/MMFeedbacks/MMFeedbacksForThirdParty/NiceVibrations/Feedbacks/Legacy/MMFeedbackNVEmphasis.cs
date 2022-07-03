@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Feedbacks;
+using UnityEngine;
 #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
 using Lofelt.NiceVibrations;
 #endif
@@ -7,16 +7,18 @@ using Lofelt.NiceVibrations;
 namespace MoreMountains.FeedbacksForThirdParty
 {
     /// <summary>
-    /// Use this feedback to play an Emphasis haptics, short haptic bursts whose amplitude and frequency can be controlled in real time, also called Transients in CoreHaptics/iOS
+    ///     Use this feedback to play an Emphasis haptics, short haptic bursts whose amplitude and frequency can be controlled
+    ///     in real time, also called Transients in CoreHaptics/iOS
     /// </summary>
     [AddComponentMenu("")]
-    #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
     [FeedbackPath("Haptics/Haptic Emphasis")]
-    #endif
-    [FeedbackHelp("Use this feedback to play an Emphasis haptics, short haptic bursts whose amplitude and frequency can be controlled in real time, also called Transients in CoreHaptics/iOS")]
+#endif
+    [FeedbackHelp(
+        "Use this feedback to play an Emphasis haptics, short haptic bursts whose amplitude and frequency can be controlled in real time, also called Transients in CoreHaptics/iOS")]
     public class MMFeedbackNVEmphasis : MMFeedback
     {
-	    #if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
+#if MOREMOUNTAINS_NICEVIBRATIONS_INSTALLED
         /// a static bool used to disable all feedbacks of this type at once
         public static bool FeedbackTypeAuthorized = true;
         #if UNITY_EDITOR
@@ -65,8 +67,10 @@ namespace MoreMountains.FeedbacksForThirdParty
             HapticSettings.SetGamepad();
             HapticPatterns.PlayEmphasis(amplitude, frequency);
         }
-	    #else
-	    protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f) { }
-	    #endif
-    }    
+#else
+        protected override void CustomPlayFeedback(Vector3 position, float feedbacksIntensity = 1.0f)
+        {
+        }
+#endif
+    }
 }

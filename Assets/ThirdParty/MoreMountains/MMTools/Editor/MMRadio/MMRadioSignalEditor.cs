@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
+﻿using UnityEditor;
 
 namespace MoreMountains.Tools
 {
@@ -9,23 +6,23 @@ namespace MoreMountains.Tools
     [CanEditMultipleObjects]
     public class MMRadioSignalEditor : Editor
     {
-        protected MMRadioSignal _radioSignal;
-
-        protected float _inspectorWidth;
-        
-        protected SerializedProperty _duration;
         protected SerializedProperty _currentLevel;
 
-        public override bool RequiresConstantRepaint()
-        {
-            return true;
-        }
+        protected SerializedProperty _duration;
+
+        protected float _inspectorWidth;
+        protected MMRadioSignal _radioSignal;
 
         protected virtual void OnEnable()
         {
             _radioSignal = target as MMRadioSignal;
             _duration = serializedObject.FindProperty("Duration");
             _currentLevel = serializedObject.FindProperty("CurrentLevel");
+        }
+
+        public override bool RequiresConstantRepaint()
+        {
+            return true;
         }
 
         public override void OnInspectorGUI()
@@ -42,7 +39,5 @@ namespace MoreMountains.Tools
         {
             DrawPropertiesExcluding(serializedObject, "AnimatedPreview", "CurrentLevel");
         }
-
-        
     }
 }
