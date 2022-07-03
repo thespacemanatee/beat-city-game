@@ -35,7 +35,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &2607690268747968917
 MeshFilter:
@@ -128,13 +128,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 895b80bff0dad433d9ab1503b1c2567e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: baa3a02914c274aa9b3ee92d8dd5f96b, type: 2}
-  Response:
+  event: {fileID: 11400000, guid: baa3a02914c274aa9b3ee92d8dd5f96b, type: 2}
+  response:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: -9205288257413402167}
         m_TargetAssemblyTypeName: TileController, Assembly-CSharp
-        m_MethodName: dropTile
+        m_MethodName: DropTile
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

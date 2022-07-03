@@ -1,57 +1,56 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
 {
     public GameConstants gameConstants;
-    public bool timerIsRunning = false;
+    public bool timerIsRunning;
     public Text timeText;
     public UnityEvent onTimerFired;
-    private float timeRemaining;
-    private float dropCutoffTime;
+    private float _dropCutoffTime;
+    private float _timeRemaining;
+
     private void Start()
     {
         // Starts the timer automatically
-        timeRemaining = gameConstants.gameDurationInSeconds;
+        _timeRemaining = gameConstants.gameDurationInSeconds;
         timerIsRunning = true;
-        dropCutoffTime = timeRemaining * 0.75f;
+        _dropCutoffTime = _timeRemaining * 0.75f;
     }
-    void Update()
+
+    private void Update()
     {
         if (timerIsRunning)
         {
-            if (timeRemaining > 0)
+            if (_timeRemaining > 0)
             {
-                timeRemaining -= Time.deltaTime;
+                _timeRemaining -= Time.deltaTime;
                 // Calculate whether tiles should be dropped
-                if(timeRemaining < dropCutoffTime){
+                if (_timeRemaining < _dropCutoffTime)
+                {
                     onTimerFired.Invoke();
-                    dropCutoffTime = dropCutoffTime * 0.75f;
+                    _dropCutoffTime *= 0.75f;
                 }
             }
             else
             {
                 Debug.Log("Time has run out!");
-                timeRemaining = 0;
-                dropCutoffTime = 0;
+                _timeRemaining = 0;
+                _dropCutoffTime = 0;
                 timerIsRunning = false;
-
             }
-            DisplayTime(timeRemaining);
 
+            DisplayTime(_timeRemaining);
         }
     }
 
-    void DisplayTime(float timeToDisplay)
+    private void DisplayTime(float timeToDisplay)
     {
-        float minutes = Mathf.FloorToInt(timeToDisplay / 60);  
+        float minutes = Mathf.FloorToInt(timeToDisplay / 60);
         float seconds = Mathf.FloorToInt(timeToDisplay % 60);
-        timeText.text = string.Format("{0:00}:{1:00}", minutes, seconds);
-        float milliSeconds = (timeToDisplay % 1) * 1000;
-        timeText.text = string.Format("{0:00}:{1:00}:{2:000}", minutes, seconds, milliSeconds);
-
+        timeText.text = $"{minutes:00}:{seconds:00}";
+        var milliSeconds = timeToDisplay % 1 * 1000;
+        timeText.text = $"{minutes:00}:{seconds:00}:{milliSeconds:000}";
     }
 }
