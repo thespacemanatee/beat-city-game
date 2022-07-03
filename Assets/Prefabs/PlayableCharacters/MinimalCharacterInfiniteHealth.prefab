@@ -26,6 +26,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4564073364419608}
   - {fileID: 4397824079406274}
@@ -72,6 +73,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4586608631069042}
   m_Father: {fileID: 0}
@@ -126,6 +128,7 @@ MonoBehaviour:
   Gravity: 40
   GravityActive: 1
   CrouchedRaycastLengthMultiplier: 1
+  PerformCardinalObstacleRaycastDetection: 0
   Speed: {x: 0, y: 0, z: 0}
   Velocity: {x: 0, y: 0, z: 0}
   VelocityLastFrame: {x: 0, y: 0, z: 0}
@@ -140,12 +143,14 @@ MonoBehaviour:
   InputMoveDirection: {x: 0, y: 0, z: 0}
   UpdateMode: 1
   VelocityTransferMethod: 2
-  GroundLayerMask:
-    serializedVersion: 2
-    m_Bits: 512
   ObstaclesLayerMask:
     serializedVersion: 2
     m_Bits: 1057536
+  GroundedRaycastLength: 5
+  MinimumGroundedDistance: 0.2
+  GroundedComputationMode: 1
+  GroundNormalHeightThreshold: 0.2
+  AllowPhysicsInteractions: 1
   ImpactFalloff: 5
   PushPower: 50
   MaximumFallSpeed: 40
@@ -182,6 +187,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  GroundNormal: {x: 0, y: 0, z: 0}
   SlideOnSteepSurfaces: 1
   SlidingSpeed: 15
   SlidingSpeedControl: 0.4
@@ -201,13 +207,13 @@ MonoBehaviour:
   CharacterDimension: 0
   CharacterType: 0
   PlayerID: Player1
-  DirectionOnSpawn: 0
   CharacterAnimator: {fileID: 0}
   UseDefaultMecanim: 1
-  PerformAnimatorSanityChecks: 1
+  RunAnimatorSanityChecks: 0
+  DisableAnimatorLogs: 1
   CharacterModel: {fileID: 1130127693270128}
+  CharacterHealth: {fileID: 0}
   SendStateChangeEvents: 1
-  SendStateUpdateEvents: 1
   AdditionalAbilityNodes: []
   CharacterBrain: {fileID: 0}
   OptimizeForMobile: 1
@@ -247,6 +253,7 @@ MonoBehaviour:
   AbsoluteThresholdWeapon: 0.5
   LockVerticalRotation: 1
   RotationSpeedResetSpeed: 2
+  RotationOffsetSmoothSpeed: 1
   ForcedRotation: 0
   ForcedRotationDirection: {x: 0, y: 0, z: 0}
 --- !u!114 &114524877107183236
@@ -272,6 +279,7 @@ MonoBehaviour:
   Movement: 0
   InputAuthorized: 1
   AnalogInput: 0
+  ScriptDrivenInput: 0
   WalkSpeed: 4
   ShouldSetMovement: 1
   IdleThreshold: 0.05
@@ -330,6 +338,8 @@ MonoBehaviour:
   MinimumPressTime: 0.4
   JumpForce: 800
   JumpHeight: 4
+  CanJumpOnTooSteepSlopes: 1
+  ResetJumpsOnTooSteepSlopes: 0
   NumberOfJumps: 1
   NumberOfJumpsLeft: 0
   JumpStartFeedback: {fileID: 0}
@@ -412,6 +422,7 @@ MonoBehaviour:
     CanInterruptRefill: 1
     CooldownState: 0
     CurrentDurationLeft: 0
+  InvincibleWhileDashing: 0
   DashFeedback: {fileID: 0}
 --- !u!114 &114945670543429980
 MonoBehaviour:
@@ -453,8 +464,9 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  Mode: 1
   TimeScale: 0.5
-  Duration: 1
+  OneTimeDuration: 1
   LerpTimeScale: 1
   LerpSpeed: 5
   Cooldown:
@@ -496,6 +508,7 @@ MonoBehaviour:
   AutoIK: 1
   ContinuousPress: 0
   GettingHitInterruptsAttack: 0
+  UseSecondaryAxisThresholdToShoot: 0
   BufferInput: 0
   NewInputExtendsBuffer: 0
   MaximumBufferDuration: 0.25
@@ -521,9 +534,11 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
+  PlayerID: Player1
   MainInventoryName: SuitMainInventory
   WeaponInventoryName: SuitWeaponInventory
   HotbarInventoryName: 
+  InventoryTransform: {fileID: 0}
   WeaponRotationMode: 0
   AutoPickItems: []
   AutoEquipWeaponOnStart: {fileID: 0}
@@ -556,6 +571,7 @@ Transform:
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071067}
   m_LocalPosition: {x: -0.00018257141, y: -0.012912755, z: 0.021240003}
   m_LocalScale: {x: 0.07, y: 0.07000001, z: 0.040000007}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4397824079406274}
   m_RootOrder: 0
@@ -567,7 +583,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1749803945586204}
-  m_Mesh: {fileID: 4300000, guid: 68e83e9e49482f04b895b0ab335332fb, type: 3}
+  m_Mesh: {fileID: 4300000, guid: e60528e5459644b909c78843e11a2557, type: 3}
 --- !u!23 &23125405360769016
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -579,10 +595,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -607,6 +625,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1768778062450486
 GameObject:
   m_ObjectHideFlags: 0
@@ -635,6 +654,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 50, y: 50.000015, z: 50.000015}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4794836682858754}
   m_Father: {fileID: 4586608631069042}
@@ -647,7 +667,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1768778062450486}
-  m_Mesh: {fileID: 4300000, guid: 5de4a37320be3e348aebe2c58a1fbd8d, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 85d9ee5d1d7c14323ac937bf03a5a0a1, type: 3}
 --- !u!23 &23574501634781586
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -659,10 +679,12 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -687,6 +709,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1839541656858402
 GameObject:
   m_ObjectHideFlags: 0
@@ -713,6 +736,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.665, y: 1.334, z: 0.7049999}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4586608631069042}
   m_RootOrder: 0
