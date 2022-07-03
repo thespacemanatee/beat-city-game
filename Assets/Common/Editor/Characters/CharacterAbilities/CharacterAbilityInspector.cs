@@ -1,103 +1,94 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using MoreMountains.Tools;
 using UnityEditor;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
 {
-
-	[CustomEditor (typeof(CharacterAbility),true)]
-	[CanEditMultipleObjects]
-
-	/// <summary>
-	/// Adds custom labels to the Character inspector
-	/// </summary>
-
-	public class CharacterAbilityInspector : Editor 
-	{		
-		SerializedProperty AbilityStartSfx, AbilityInProgressSfx, AbilityStopSfx, AbilityStartFeedbacks, AbilityStopFeedbacks;
-
-        protected List<String> _propertiesToHide;
-        protected bool _hasHiddenProperties = false;
+    [CustomEditor(typeof(CharacterAbility), true)]
+    [CanEditMultipleObjects]
+    /// <summary>
+    /// Adds custom labels to the Character inspector
+    /// </summary>
+    public class CharacterAbilityInspector : Editor
+    {
         protected bool _foldout;
+        protected bool _hasHiddenProperties;
 
-		protected virtual void OnEnable()
+        protected List<string> _propertiesToHide;
+
+        private SerializedProperty AbilityStartSfx,
+            AbilityInProgressSfx,
+            AbilityStopSfx,
+            AbilityStartFeedbacks,
+            AbilityStopFeedbacks;
+
+        protected virtual void OnEnable()
         {
             _propertiesToHide = new List<string>();
 
-            AbilityStartSfx = this.serializedObject.FindProperty("AbilityStartSfx");
-			AbilityInProgressSfx = this.serializedObject.FindProperty("AbilityInProgressSfx");
-			AbilityStopSfx = this.serializedObject.FindProperty("AbilityStopSfx");
-            AbilityStartFeedbacks = this.serializedObject.FindProperty("AbilityStartFeedbacks");
-            AbilityStopFeedbacks = this.serializedObject.FindProperty("AbilityStopFeedbacks");
+            AbilityStartSfx = serializedObject.FindProperty("AbilityStartSfx");
+            AbilityInProgressSfx = serializedObject.FindProperty("AbilityInProgressSfx");
+            AbilityStopSfx = serializedObject.FindProperty("AbilityStopSfx");
+            AbilityStartFeedbacks = serializedObject.FindProperty("AbilityStartFeedbacks");
+            AbilityStopFeedbacks = serializedObject.FindProperty("AbilityStopFeedbacks");
 
-            MMHiddenPropertiesAttribute[] attributes = (MMHiddenPropertiesAttribute[])target.GetType().GetCustomAttributes(typeof(MMHiddenPropertiesAttribute), false);
+            var attributes =
+                (MMHiddenPropertiesAttribute[])target.GetType()
+                    .GetCustomAttributes(typeof(MMHiddenPropertiesAttribute), false);
             if (attributes != null)
-            {
                 if (attributes.Length != 0)
-                {
                     if (attributes[0].PropertiesNames != null)
                     {
-                        _propertiesToHide = new List<String>(attributes[0].PropertiesNames);
+                        _propertiesToHide = new List<string>(attributes[0].PropertiesNames);
                         _hasHiddenProperties = true;
                     }
-                }
-            }
         }
 
-		/// <summary>
-		/// When inspecting a Character, adds to the regular inspector some labels, useful for debugging
-		/// </summary>
-		public override void OnInspectorGUI()
-		{
-			CharacterAbility t = (target as CharacterAbility);
+        /// <summary>
+        ///     When inspecting a Character, adds to the regular inspector some labels, useful for debugging
+        /// </summary>
+        public override void OnInspectorGUI()
+        {
+            var t = target as CharacterAbility;
 
-			serializedObject.Update();
+            serializedObject.Update();
             EditorGUI.BeginChangeCheck();
 
-            if (t.HelpBoxText() != "")
-			{
-				EditorGUILayout.HelpBox(t.HelpBoxText(),MessageType.Info);
-			}
+            if (t.HelpBoxText() != "") EditorGUILayout.HelpBox(t.HelpBoxText(), MessageType.Info);
 
-			Editor.DrawPropertiesExcluding(serializedObject, new string[] { "AbilityStartSfx","AbilityInProgressSfx", "AbilityStopSfx", "AbilityStartFeedbacks", "AbilityStopFeedbacks" });
+            DrawPropertiesExcluding(serializedObject, "AbilityStartSfx", "AbilityInProgressSfx", "AbilityStopSfx",
+                "AbilityStartFeedbacks", "AbilityStopFeedbacks");
 
-			EditorGUILayout.Space();
+            EditorGUILayout.Space();
 
-	        EditorGUILayout.GetControlRect (true, 16f, EditorStyles.foldout);
-	        Rect foldRect = GUILayoutUtility.GetLastRect ();
-	        if (Event.current.type == EventType.MouseUp && foldRect.Contains (Event.current.mousePosition)) 
-	        {
-	            _foldout = !_foldout;
-	            GUI.changed = true;
-	            Event.current.Use ();
-	        }
-	        _foldout = EditorGUI.Foldout (foldRect, _foldout, "Ability Sounds");	      
+            EditorGUILayout.GetControlRect(true, 16f, EditorStyles.foldout);
+            var foldRect = GUILayoutUtility.GetLastRect();
+            if (Event.current.type == EventType.MouseUp && foldRect.Contains(Event.current.mousePosition))
+            {
+                _foldout = !_foldout;
+                GUI.changed = true;
+                Event.current.Use();
+            }
 
-	        if (_foldout) 
-	        {
-				EditorGUI.indentLevel++;
-				EditorGUILayout.PropertyField(AbilityStartSfx);
-				EditorGUILayout.PropertyField(AbilityInProgressSfx);
-				EditorGUILayout.PropertyField(AbilityStopSfx);
-		        EditorGUI.indentLevel--;
-	         }
+            _foldout = EditorGUI.Foldout(foldRect, _foldout, "Ability Sounds");
+
+            if (_foldout)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(AbilityStartSfx);
+                EditorGUILayout.PropertyField(AbilityInProgressSfx);
+                EditorGUILayout.PropertyField(AbilityStopSfx);
+                EditorGUI.indentLevel--;
+            }
 
             if (_propertiesToHide.Count > 0)
             {
-                if (_propertiesToHide.Count < 2)
-                {
-                    EditorGUILayout.LabelField("Feedbacks", EditorStyles.boldLabel);
-                }
+                if (_propertiesToHide.Count < 2) EditorGUILayout.LabelField("Feedbacks", EditorStyles.boldLabel);
                 if (!_propertiesToHide.Contains("AbilityStartFeedbacks"))
-                {
                     EditorGUILayout.PropertyField(AbilityStartFeedbacks);
-                }
                 if (!_propertiesToHide.Contains("AbilityStopFeedbacks"))
-                {
                     EditorGUILayout.PropertyField(AbilityStopFeedbacks);
-                }
             }
             else
             {
@@ -106,10 +97,7 @@ namespace MoreMountains.TopDownEngine
                 EditorGUILayout.PropertyField(AbilityStopFeedbacks);
             }
 
-            if (EditorGUI.EndChangeCheck())
-            {
-                serializedObject.ApplyModifiedProperties();
-            }
-        }	
-	}
+            if (EditorGUI.EndChangeCheck()) serializedObject.ApplyModifiedProperties();
+        }
+    }
 }

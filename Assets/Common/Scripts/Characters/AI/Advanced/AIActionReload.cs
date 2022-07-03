@@ -1,12 +1,10 @@
 ﻿using MoreMountains.Tools;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// An AIACtion used to request a reload on the weapon
+    ///     An AIACtion used to request a reload on the weapon
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/AI/Actions/AIActionReload")]
     public class AIActionReload : AIAction
@@ -14,36 +12,30 @@ namespace MoreMountains.TopDownEngine
         public bool OnlyReloadOnceInThisSate = true;
 
         protected CharacterHandleWeapon _characterHandleWeapon;
-        protected bool _reloadedOnce = false;
+        protected bool _reloadedOnce;
 
         /// <summary>
-        /// On init we grab our components
+        ///     On init we grab our components
         /// </summary>
         public override void Initialization()
         {
             base.Initialization();
-            _characterHandleWeapon = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterHandleWeapon>();
+            _characterHandleWeapon = gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterHandleWeapon>();
         }
 
         /// <summary>
-        /// Requests a reload
+        ///     Requests a reload
         /// </summary>
         public override void PerformAction()
         {
-            if (OnlyReloadOnceInThisSate && _reloadedOnce)
-            {
-                return;
-            }
-            if (_characterHandleWeapon == null)
-            {
-                return;
-            }
+            if (OnlyReloadOnceInThisSate && _reloadedOnce) return;
+            if (_characterHandleWeapon == null) return;
             _characterHandleWeapon.Reload();
             _reloadedOnce = true;
         }
 
         /// <summary>
-        /// On enter state we reset our counter
+        ///     On enter state we reset our counter
         /// </summary>
         public override void OnEnterState()
         {

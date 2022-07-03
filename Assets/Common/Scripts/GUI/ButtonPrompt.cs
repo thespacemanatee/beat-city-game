@@ -1,8 +1,6 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using MoreMountains.Tools;
-using UnityEngine.Events;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace MoreMountains.TopDownEngine
@@ -14,12 +12,15 @@ namespace MoreMountains.TopDownEngine
         /// the image to use as the prompt's border
         [Tooltip("the image to use as the prompt's border")]
         public Image Border;
+
         /// the image to use as background
         [Tooltip("the image to use as background")]
         public Image Background;
+
         /// the canvas group of the prompt's container
         [Tooltip("the canvas group of the prompt's container")]
         public CanvasGroup ContainerCanvasGroup;
+
         /// the Text component of the prompt
         [Tooltip("the Text component of the prompt")]
         public Text PromptText;
@@ -28,12 +29,14 @@ namespace MoreMountains.TopDownEngine
         /// the duration of the fade in, in seconds
         [Tooltip("the duration of the fade in, in seconds")]
         public float FadeInDuration = 0.2f;
+
         /// the duration of the fade out, in seconds
         [Tooltip("the duration of the fade out, in seconds")]
         public float FadeOutDuration = 0.2f;
-        
-        protected Color _alphaZero = new Color(1f, 1f, 1f, 0f);
-        protected Color _alphaOne = new Color(1f, 1f, 1f, 1f);
+
+        protected Color _alphaOne = new(1f, 1f, 1f, 1f);
+
+        protected Color _alphaZero = new(1f, 1f, 1f, 0f);
         protected Coroutine _hideCoroutine;
 
         protected Color _tempColor;
@@ -60,30 +63,24 @@ namespace MoreMountains.TopDownEngine
 
         public virtual void Show()
         {
-            this.gameObject.SetActive(true);
-            if (_hideCoroutine != null)
-            {
-                StopCoroutine(_hideCoroutine);
-            }
+            gameObject.SetActive(true);
+            if (_hideCoroutine != null) StopCoroutine(_hideCoroutine);
             ContainerCanvasGroup.alpha = 0f;
-            StartCoroutine(MMFade.FadeCanvasGroup(ContainerCanvasGroup, FadeInDuration, 1f, true));
+            StartCoroutine(MMFade.FadeCanvasGroup(ContainerCanvasGroup, FadeInDuration, 1f));
         }
 
         public virtual void Hide()
         {
-            if (!this.gameObject.activeInHierarchy)
-            {
-                return;
-            }
+            if (!gameObject.activeInHierarchy) return;
             _hideCoroutine = StartCoroutine(HideCo());
         }
 
         protected virtual IEnumerator HideCo()
         {
             ContainerCanvasGroup.alpha = 1f;
-            StartCoroutine(MMFade.FadeCanvasGroup(ContainerCanvasGroup, FadeOutDuration, 0f, true));
+            StartCoroutine(MMFade.FadeCanvasGroup(ContainerCanvasGroup, FadeOutDuration, 0f));
             yield return new WaitForSeconds(FadeOutDuration);
-            this.gameObject.SetActive(false);
+            gameObject.SetActive(false);
         }
     }
 }

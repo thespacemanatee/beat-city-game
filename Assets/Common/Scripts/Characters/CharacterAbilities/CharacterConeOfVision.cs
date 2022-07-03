@@ -1,51 +1,45 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using MoreMountains.InventoryEngine;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// An ability that casts a cone of vision around the character.
+    ///     An ability that casts a cone of vision around the character.
     /// </summary>
     [RequireComponent(typeof(MMConeOfVision))]
     [AddComponentMenu("TopDown Engine/Character/Abilities/Character Cone of Vision")]
     public class CharacterConeOfVision : MonoBehaviour
     {
-        protected MMConeOfVision _coneOfVision;
         protected CharacterOrientation3D _characterOrientation;
+        protected MMConeOfVision _coneOfVision;
 
         /// <summary>
-        /// On awake, we grab our components
+        ///     On awake, we grab our components
         /// </summary>
         protected virtual void Awake()
         {
-            _characterOrientation = this.gameObject.GetComponentInParent<CharacterOrientation3D>();
-            _coneOfVision = this.gameObject.GetComponent<MMConeOfVision>();
+            _characterOrientation = gameObject.GetComponentInParent<CharacterOrientation3D>();
+            _coneOfVision = gameObject.GetComponent<MMConeOfVision>();
         }
 
         /// <summary>
-        /// On update, we update our cone of vision
+        ///     On update, we update our cone of vision
         /// </summary>
         protected virtual void Update()
         {
-            UpdateDirection();   
+            UpdateDirection();
         }
 
         /// <summary>
-        /// Sends the character orientation's angle to the cone of vision
+        ///     Sends the character orientation's angle to the cone of vision
         /// </summary>
         protected virtual void UpdateDirection()
         {
             if (_characterOrientation == null)
-            {
-                _coneOfVision.SetDirectionAndAngles(this.transform.forward, this.transform.eulerAngles);              
-            }
+                _coneOfVision.SetDirectionAndAngles(transform.forward, transform.eulerAngles);
             else
-            {
-                _coneOfVision.SetDirectionAndAngles(_characterOrientation.ModelDirection, _characterOrientation.ModelAngles);              
-            }
+                _coneOfVision.SetDirectionAndAngles(_characterOrientation.ModelDirection,
+                    _characterOrientation.ModelAngles);
         }
     }
 }

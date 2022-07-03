@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using MoreMountains.Tools;
 using UnityEngine;
-using MoreMountains.Tools;
 
 namespace MoreMountains.TopDownEngine
 {
@@ -11,22 +9,24 @@ namespace MoreMountains.TopDownEngine
     {
         [Header("Lock Rotation")]
         /// whether or not to lock the X rotation. If set to false, the model will rotate on the x axis, to aim up or down 
-        [Tooltip("whether or not to lock the X rotation. If set to false, the model will rotate on the x axis, to aim up or down")]
-        public bool LockRotationX = false;
+        [Tooltip(
+            "whether or not to lock the X rotation. If set to false, the model will rotate on the x axis, to aim up or down")]
+        public bool LockRotationX;
 
         protected CharacterOrientation3D _characterOrientation3D;
         protected Vector3 _targetPosition;
 
         /// <summary>
-        /// On init we grab our CharacterOrientation3D ability
+        ///     On init we grab our CharacterOrientation3D ability
         /// </summary>
         public override void Initialization()
         {
-            _characterOrientation3D = this.gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterOrientation3D>();
+            _characterOrientation3D =
+                gameObject.GetComponentInParent<Character>()?.FindAbility<CharacterOrientation3D>();
         }
 
         /// <summary>
-        /// On PerformAction we move
+        ///     On PerformAction we move
         /// </summary>
         public override void PerformAction()
         {
@@ -34,20 +34,14 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Makes the orientation 3D ability rotate towards the brain target
+        ///     Makes the orientation 3D ability rotate towards the brain target
         /// </summary>
         protected virtual void Rotate()
         {
-            if (_brain.Target == null)
-            {
-                return;
-            }
+            if (_brain.Target == null) return;
             _targetPosition = _brain.Target.transform.position;
-            if (LockRotationX)
-            {
-                _targetPosition.y = this.transform.position.y;
-            }
-            _characterOrientation3D.ForcedRotationDirection = (_targetPosition - this.transform.position).normalized;
+            if (LockRotationX) _targetPosition.y = transform.position.y;
+            _characterOrientation3D.ForcedRotationDirection = (_targetPosition - transform.position).normalized;
         }
     }
 }

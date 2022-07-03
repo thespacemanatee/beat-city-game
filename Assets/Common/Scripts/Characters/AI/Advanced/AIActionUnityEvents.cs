@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using MoreMountains.Tools;
+﻿using MoreMountains.Tools;
+using UnityEngine;
 using UnityEngine.Events;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// This action is used to trigger a UnityEvent
+    ///     This action is used to trigger a UnityEvent
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/AI/Actions/AIActionUnityEvents")]
     public class AIActionUnityEvents : AIAction
@@ -13,14 +13,16 @@ namespace MoreMountains.TopDownEngine
         /// The UnityEvent to trigger when this action gets performed by the AIBrain
         [Tooltip("The UnityEvent to trigger when this action gets performed by the AIBrain")]
         public UnityEvent TargetEvent;
+
         /// If this is false, the Unity Event will be triggered every PerformAction (by default every frame while in this state), otherwise it'll only play once, when entering the state
-        [Tooltip("If this is false, the Unity Event will be triggered every PerformAction (by default every frame while in this state), otherwise it'll only play once, when entering the state")]
+        [Tooltip(
+            "If this is false, the Unity Event will be triggered every PerformAction (by default every frame while in this state), otherwise it'll only play once, when entering the state")]
         public bool OnlyPlayWhenEnteringState = true;
 
-        protected bool _played = false;
+        protected bool _played;
 
         /// <summary>
-        /// On PerformAction we trigger our event
+        ///     On PerformAction we trigger our event
         /// </summary>
         public override void PerformAction()
         {
@@ -28,14 +30,11 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Triggers the target event
+        ///     Triggers the target event
         /// </summary>
         protected virtual void TriggerEvent()
         {
-            if (OnlyPlayWhenEnteringState && _played)
-            {
-                return;
-            }
+            if (OnlyPlayWhenEnteringState && _played) return;
 
             if (TargetEvent != null)
             {
@@ -45,7 +44,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// On enter state we initialize our _played bool
+        ///     On enter state we initialize our _played bool
         /// </summary>
         public override void OnEnterState()
         {

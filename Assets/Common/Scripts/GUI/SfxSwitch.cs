@@ -1,10 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using System;
-using System.Collections.Generic;
-using UnityEngine.Audio;
-using MoreMountains.Feedbacks;
+﻿using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
@@ -13,12 +8,14 @@ namespace MoreMountains.TopDownEngine
     {
         public virtual void On()
         {
-            MMSoundManagerTrackEvent.Trigger(MMSoundManagerTrackEventTypes.UnmuteTrack, MMSoundManager.MMSoundManagerTracks.Sfx);
+            MMSoundManagerTrackEvent.Trigger(MMSoundManagerTrackEventTypes.UnmuteTrack,
+                MMSoundManager.MMSoundManagerTracks.Sfx);
         }
 
         public virtual void Off()
         {
-            MMSoundManagerTrackEvent.Trigger(MMSoundManagerTrackEventTypes.MuteTrack, MMSoundManager.MMSoundManagerTracks.Sfx);
+            MMSoundManagerTrackEvent.Trigger(MMSoundManagerTrackEventTypes.MuteTrack,
+                MMSoundManager.MMSoundManagerTracks.Sfx);
         }
     }
 }

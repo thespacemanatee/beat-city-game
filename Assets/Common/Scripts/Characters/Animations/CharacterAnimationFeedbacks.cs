@@ -1,12 +1,11 @@
 ﻿using MoreMountains.Feedbacks;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// This class can be used to trigger feedbacks from an animator, typically used to trigger footstep particles and/or sounds
+    ///     This class can be used to trigger feedbacks from an animator, typically used to trigger footstep particles and/or
+    ///     sounds
     /// </summary>
     public class CharacterAnimationFeedbacks : MonoBehaviour
     {
@@ -19,7 +18,7 @@ namespace MoreMountains.Tools
         public MMFeedbacks RunFeedbacks;
 
         /// <summary>
-        /// Plays the walk feedback if there's one, when a foot touches the ground (triggered via animation events)
+        ///     Plays the walk feedback if there's one, when a foot touches the ground (triggered via animation events)
         /// </summary>
         public virtual void WalkStep()
         {
@@ -27,7 +26,7 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Plays the run feedback if there's one, when a foot touches the ground (triggered via animation events)
+        ///     Plays the run feedback if there's one, when a foot touches the ground (triggered via animation events)
         /// </summary>
         public virtual void RunStep()
         {
