@@ -23,6 +23,12 @@ public class SpawnManager : MonoBehaviour
         {
             item.transform.position = new Vector3(Random.Range(-10f, 10f), 10, Random.Range(-10f, 10f));
             item.SetActive(true);
+            
+            // TODO: Clean this up
+            for (var i = 0; i < item.transform.childCount; i++)
+            {
+                item.transform.GetChild(i).gameObject.SetActive(true);
+            }
         }
         else
         {
