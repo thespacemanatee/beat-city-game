@@ -4830,7 +4830,7 @@ GameObject:
   - component: {fileID: 114852181900910388}
   - component: {fileID: 114542905634708538}
   m_Layer: 18
-  m_Name: LoftShotgunBullet
+  m_Name: ShotgunBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

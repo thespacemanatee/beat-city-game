@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 225231164854481260}
   - component: {fileID: 114858502067260912}
   m_Layer: 5
-  m_Name: LoftUIReticle
+  m_Name: UIReticle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
