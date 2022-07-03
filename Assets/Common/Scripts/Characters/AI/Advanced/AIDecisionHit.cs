@@ -1,12 +1,11 @@
 ﻿using MoreMountains.Tools;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// This decision returns true if the Character got hit this frame, or after the specified number of hits has been reached.
+    ///     This decision returns true if the Character got hit this frame, or after the specified number of hits has been
+    ///     reached.
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/AI/Decisions/AIDecisionHit")]
     //[RequireComponent(typeof(Health))]
@@ -16,11 +15,30 @@ namespace MoreMountains.TopDownEngine
         [Tooltip("The number of hits required to return true")]
         public int NumberOfHits = 1;
 
-        protected int _hitCounter;
         protected Health _health;
 
+        protected int _hitCounter;
+
         /// <summary>
-        /// On init we grab our Health component
+        ///     Grabs our health component and starts listening for OnHit events
+        /// </summary>
+        protected virtual void OnEnable()
+        {
+            if (_health == null) _health = _brain.gameObject.GetComponentInParent<Health>();
+
+            if (_health != null) _health.OnHit += OnHit;
+        }
+
+        /// <summary>
+        ///     Stops listening for OnHit events
+        /// </summary>
+        protected virtual void OnDisable()
+        {
+            if (_health != null) _health.OnHit -= OnHit;
+        }
+
+        /// <summary>
+        ///     On init we grab our Health component
         /// </summary>
         public override void Initialization()
         {
@@ -29,7 +47,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// On Decide we check whether we've been hit
+        ///     On Decide we check whether we've been hit
         /// </summary>
         /// <returns></returns>
         public override bool Decide()
@@ -38,16 +56,16 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Checks whether we've been hit enough times
+        ///     Checks whether we've been hit enough times
         /// </summary>
         /// <returns></returns>
         protected virtual bool EvaluateHits()
         {
-            return (_hitCounter >= NumberOfHits);
+            return _hitCounter >= NumberOfHits;
         }
 
         /// <summary>
-        /// On EnterState, resets the hit counter
+        ///     On EnterState, resets the hit counter
         /// </summary>
         public override void OnEnterState()
         {
@@ -56,7 +74,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// On exit state, resets the hit counter
+        ///     On exit state, resets the hit counter
         /// </summary>
         public override void OnExitState()
         {
@@ -65,38 +83,11 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// When we get hit we increase our hit counter
+        ///     When we get hit we increase our hit counter
         /// </summary>
         protected virtual void OnHit()
         {
             _hitCounter++;
-        }
-
-        /// <summary>
-        /// Grabs our health component and starts listening for OnHit events
-        /// </summary>
-        protected virtual void OnEnable()
-        {
-            if (_health == null)
-            {
-                _health = _brain.gameObject.GetComponentInParent<Health>();
-            }
-
-            if (_health != null)
-            {
-                _health.OnHit += OnHit;
-            }
-        }
-
-        /// <summary>
-        /// Stops listening for OnHit events
-        /// </summary>
-        protected virtual void OnDisable()
-        {
-            if (_health != null)
-            {
-                _health.OnHit -= OnHit;
-            }
         }
     }
 }

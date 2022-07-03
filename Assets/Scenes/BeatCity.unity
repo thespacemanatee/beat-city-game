@@ -328,6 +328,13 @@ MonoBehaviour:
   m_ChannelMask: 1
   m_Gain: 1
   m_Use2DDistance: 0
+  m_UseCameraSpace: 0
+  m_ReactionSettings:
+    m_SecondaryNoise: {fileID: 0}
+    m_AmplitudeGain: 0
+    m_FrequencyGain: 0
+    m_Duration: 0
+    m_NoiseOffsets: {x: 0, y: 0, z: 0}
 --- !u!114 &202575668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -453,7 +460,7 @@ MonoBehaviour:
     Dutch: 0
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
-    GateFit: 0
+    GateFit: 2
     m_SensorSize: {x: 1.8785167, y: 1}
   m_Transitions:
     m_BlendHint: 0
@@ -2291,7 +2298,7 @@ GameObject:
   - component: {fileID: 1745941836}
   - component: {fileID: 1745941838}
   m_Layer: 0
-  m_Name: GroundController
+  m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

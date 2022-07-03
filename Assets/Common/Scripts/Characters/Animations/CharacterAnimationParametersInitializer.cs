@@ -1,7 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 using MoreMountains.Tools;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor.Animations;
 #endif
@@ -9,12 +8,14 @@ using UnityEditor.Animations;
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// A struct used to store character animation parameter definitions, to be used by the CharacterAnimationParametersInitializer class
+    ///     A struct used to store character animation parameter definitions, to be used by the
+    ///     CharacterAnimationParametersInitializer class
     /// </summary>
     public struct TopDownCharacterAnimationParameter
     {
         /// the name of the parameter
         public string ParameterName;
+
         /// the type of the parameter
         public AnimatorControllerParameterType ParameterType;
 
@@ -26,7 +27,6 @@ namespace MoreMountains.TopDownEngine
     }
 
     /// <summary>
-    /// 
     /// </summary>
     public class CharacterAnimationParametersInitializer : MonoBehaviour
     {
@@ -34,100 +34,89 @@ namespace MoreMountains.TopDownEngine
         /// if this is true, this component will remove itself after adding the character parameters
         [Tooltip("if this is true, this component will remove itself after adding the character parameters")]
         public bool AutoRemoveAfterInitialization = true;
+
         [MMInspectorButton("AddAnimationParameters")]
         public bool AddAnimationParametersButton;
-
-        protected TopDownCharacterAnimationParameter[] ParametersArray = new TopDownCharacterAnimationParameter[]
-        {
-            new TopDownCharacterAnimationParameter("Alive", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Grounded", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Idle", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Walking", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Running", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Activating", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Crouching", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Crawling", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Damage", AnimatorControllerParameterType.Trigger),
-            new TopDownCharacterAnimationParameter("Dashing", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("DashingDirectionX", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("DashingDirectionY", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("DashingDirectionZ", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("DashStarted", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Death", AnimatorControllerParameterType.Trigger),
-            new TopDownCharacterAnimationParameter("FallingDownHole", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("WeaponEquipped", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("WeaponEquippedID", AnimatorControllerParameterType.Int),
-            new TopDownCharacterAnimationParameter("Jumping", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("HitTheGround", AnimatorControllerParameterType.Bool),
-            new TopDownCharacterAnimationParameter("Random", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RandomConstant", AnimatorControllerParameterType.Int),
-            new TopDownCharacterAnimationParameter("Direction", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("Speed", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("xSpeed", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("ySpeed", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("zSpeed", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("HorizontalDirection", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("VerticalDirection", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RelativeForwardSpeed", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RelativeLateralSpeed", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RelativeForwardSpeedNormalized", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RelativeLateralSpeedNormalized", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RemappedForwardSpeedNormalized", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RemappedLateralSpeedNormalized", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("RemappedSpeedNormalized", AnimatorControllerParameterType.Float),
-            new TopDownCharacterAnimationParameter("YRotationSpeed", AnimatorControllerParameterType.Float),
-        };
 
         protected Animator _animator;
 #if UNITY_EDITOR
         protected AnimatorController _controller;
 #endif
-        protected List<string> _parameters = new List<string>();
+        protected List<string> _parameters = new();
+
+        protected TopDownCharacterAnimationParameter[] ParametersArray =
+        {
+            new("Alive", AnimatorControllerParameterType.Bool),
+            new("Grounded", AnimatorControllerParameterType.Bool),
+            new("Idle", AnimatorControllerParameterType.Bool),
+            new("Walking", AnimatorControllerParameterType.Bool),
+            new("Running", AnimatorControllerParameterType.Bool),
+            new("Activating", AnimatorControllerParameterType.Bool),
+            new("Crouching", AnimatorControllerParameterType.Bool),
+            new("Crawling", AnimatorControllerParameterType.Bool),
+            new("Damage", AnimatorControllerParameterType.Trigger),
+            new("Dashing", AnimatorControllerParameterType.Bool),
+            new("DashingDirectionX", AnimatorControllerParameterType.Float),
+            new("DashingDirectionY", AnimatorControllerParameterType.Float),
+            new("DashingDirectionZ", AnimatorControllerParameterType.Float),
+            new("DashStarted", AnimatorControllerParameterType.Bool),
+            new("Death", AnimatorControllerParameterType.Trigger),
+            new("FallingDownHole", AnimatorControllerParameterType.Bool),
+            new("WeaponEquipped", AnimatorControllerParameterType.Bool),
+            new("WeaponEquippedID", AnimatorControllerParameterType.Int),
+            new("Jumping", AnimatorControllerParameterType.Bool),
+            new("HitTheGround", AnimatorControllerParameterType.Bool),
+            new("Random", AnimatorControllerParameterType.Float),
+            new("RandomConstant", AnimatorControllerParameterType.Int),
+            new("Direction", AnimatorControllerParameterType.Float),
+            new("Speed", AnimatorControllerParameterType.Float),
+            new("xSpeed", AnimatorControllerParameterType.Float),
+            new("ySpeed", AnimatorControllerParameterType.Float),
+            new("zSpeed", AnimatorControllerParameterType.Float),
+            new("HorizontalDirection", AnimatorControllerParameterType.Float),
+            new("VerticalDirection", AnimatorControllerParameterType.Float),
+            new("RelativeForwardSpeed", AnimatorControllerParameterType.Float),
+            new("RelativeLateralSpeed", AnimatorControllerParameterType.Float),
+            new("RelativeForwardSpeedNormalized", AnimatorControllerParameterType.Float),
+            new("RelativeLateralSpeedNormalized", AnimatorControllerParameterType.Float),
+            new("RemappedForwardSpeedNormalized", AnimatorControllerParameterType.Float),
+            new("RemappedLateralSpeedNormalized", AnimatorControllerParameterType.Float),
+            new("RemappedSpeedNormalized", AnimatorControllerParameterType.Float),
+            new("YRotationSpeed", AnimatorControllerParameterType.Float)
+        };
 
         /// <summary>
-        /// Adds all the default animation parameters on your character's animator
+        ///     Adds all the default animation parameters on your character's animator
         /// </summary>
         public virtual void AddAnimationParameters()
         {
             // we grab the animator
-            _animator = this.gameObject.GetComponent<Animator>();
+            _animator = gameObject.GetComponent<Animator>();
             if (_animator == null)
-            {
-                Debug.LogError("You need to add the AnimationParameterInitializer class to a gameobject with an Animator.");
-            }
+                Debug.LogError(
+                    "You need to add the AnimationParameterInitializer class to a gameobject with an Animator.");
 
             // we grab the controller
 #if UNITY_EDITOR
             _controller = _animator.runtimeAnimatorController as AnimatorController;
-            if (_controller == null)
-            {
-                Debug.LogError("You need an animator controller on this Animator.");
-            }
+            if (_controller == null) Debug.LogError("You need an animator controller on this Animator.");
 #endif
 
             // we store its parameters
             _parameters.Clear();
-            foreach (AnimatorControllerParameter param in _animator.parameters)
-            {
-                _parameters.Add(param.name);
-            }
+            foreach (var param in _animator.parameters) _parameters.Add(param.name);
 
             // we add all the listed parameters
-            foreach (TopDownCharacterAnimationParameter parameter in ParametersArray)
-            {
+            foreach (var parameter in ParametersArray)
                 if (!_parameters.Contains(parameter.ParameterName))
                 {
 #if UNITY_EDITOR
                     _controller.AddParameter(parameter.ParameterName, parameter.ParameterType);
 #endif
                 }
-            }
 
             // we remove this component if needed
-            if (AutoRemoveAfterInitialization)
-            {
-                DestroyImmediate(this);
-            }
+            if (AutoRemoveAfterInitialization) DestroyImmediate(this);
         }
     }
 }

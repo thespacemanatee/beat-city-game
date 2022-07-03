@@ -1,7 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
-using MoreMountains.Tools;
-using UnityEngine.UI;
+﻿using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
@@ -13,27 +11,68 @@ namespace MoreMountains.TopDownEngine
     [AddComponentMenu("TopDown Engine/Weapons/Weapon Aim 2D")]
     public class WeaponAim2D : WeaponAim
     {
+        protected bool _facingRightLastFrame;
+        protected bool _hasOrientation2D;
         protected Vector2 _inputMovement;
         protected Camera _mainCamera;
-        protected bool _hasOrientation2D = false;
-        protected bool _facingRightLastFrame;
 
         /// <summary>
-        /// On init, we grab our camera and init our last non null movement
+        ///     the current angle the weapon is aiming at, adjusted to compensate for the current orientation of the character
+        /// </summary>
+        public override float CurrentAngleRelative
+        {
+            get
+            {
+                if (_weapon != null)
+                    if (_weapon.Owner != null)
+                        if (_hasOrientation2D)
+                        {
+                            if (_weapon.Owner.Orientation2D.IsFacingRight)
+                                return CurrentAngle;
+                            return -CurrentAngle;
+                        }
+
+                return 0;
+            }
+        }
+
+        /// <summary>
+        ///     Every frame, we compute the aim direction and rotate the weapon accordingly
+        /// </summary>
+        protected override void Update()
+        {
+            HideMousePointer();
+            HideReticle();
+            if (GameManager.Instance.Paused) return;
+            GetCurrentAim();
+            DetermineWeaponRotation();
+        }
+
+        /// <summary>
+        ///     At fixed update we move the target and reticle
+        /// </summary>
+        protected virtual void FixedUpdate()
+        {
+            if (GameManager.Instance.Paused) return;
+            MoveTarget();
+            MoveReticle();
+        }
+
+        /// <summary>
+        ///     On init, we grab our camera and init our last non null movement
         /// </summary>
         protected override void Initialization()
         {
-            if (_initialized)
-            {
-                return;
-            }
+            if (_initialized) return;
             base.Initialization();
             _mainCamera = Camera.main;
-            
-            if (_weapon.Owner?.gameObject.MMGetComponentNoAlloc<Character>()?.FindAbility<CharacterOrientation2D>() != null)
+
+            if (_weapon.Owner?.gameObject.MMGetComponentNoAlloc<Character>()?.FindAbility<CharacterOrientation2D>() !=
+                null)
             {
                 _hasOrientation2D = true;
-                switch (_weapon.Owner?.gameObject.MMGetComponentNoAlloc<Character>()?.FindAbility<CharacterOrientation2D>().CurrentFacingDirection)
+                switch (_weapon.Owner?.gameObject.MMGetComponentNoAlloc<Character>()
+                            ?.FindAbility<CharacterOrientation2D>().CurrentFacingDirection)
                 {
                     case Character.FacingDirections.East:
                         _lastNonNullMovement = Vector2.right;
@@ -52,54 +91,21 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// the current angle the weapon is aiming at, adjusted to compensate for the current orientation of the character
-        /// </summary>
-        public override float CurrentAngleRelative
-        {
-            get
-            {
-                if (_weapon != null)
-                {
-                    if (_weapon.Owner != null)
-                    {
-                        if (_hasOrientation2D)
-                        {
-                            if (_weapon.Owner.Orientation2D.IsFacingRight)
-                            {
-                                return CurrentAngle;
-                            }
-                            else
-                            {
-                                return -CurrentAngle;
-                            }                        
-                        }
-                    }
-                }
-                return 0;
-            }
-        }
-
-        /// <summary>
-        /// Computes the current aim direction
+        ///     Computes the current aim direction
         /// </summary>
         protected override void GetCurrentAim()
         {
-            if (_weapon.Owner == null)
-            {
-                return;
-            }
+            if (_weapon.Owner == null) return;
 
-            if ((_weapon.Owner.LinkedInputManager == null) && (_weapon.Owner.CharacterType == Character.CharacterTypes.Player))
-            {
-                return;
-            }
+            if (_weapon.Owner.LinkedInputManager == null &&
+                _weapon.Owner.CharacterType == Character.CharacterTypes.Player) return;
 
             AutoDetectWeaponMode();
 
             switch (AimControl)
             {
                 case AimControls.Off:
-                    if (_weapon.Owner == null) { return; }
+                    if (_weapon.Owner == null) return;
                     GetOffAim();
                     break;
 
@@ -108,92 +114,64 @@ namespace MoreMountains.TopDownEngine
                     break;
 
                 case AimControls.PrimaryMovement:
-                    if ((_weapon.Owner == null) || (_weapon.Owner.LinkedInputManager == null))
-                    {
-                        return;
-                    }
-                    GetPrimaryMovementAim();                    
+                    if (_weapon.Owner == null || _weapon.Owner.LinkedInputManager == null) return;
+                    GetPrimaryMovementAim();
                     break;
 
                 case AimControls.SecondaryMovement:
-                    if ((_weapon.Owner == null) || (_weapon.Owner.LinkedInputManager == null))
-                    {
-                        return;
-                    }
-                    GetSecondaryMovementAim();                    
-                    break;                    
+                    if (_weapon.Owner == null || _weapon.Owner.LinkedInputManager == null) return;
+                    GetSecondaryMovementAim();
+                    break;
 
                 case AimControls.PrimaryThenSecondaryMovement:
-                    if ((_weapon.Owner == null) || (_weapon.Owner.LinkedInputManager == null))
-                    {
-                        return;
-                    }
+                    if (_weapon.Owner == null || _weapon.Owner.LinkedInputManager == null) return;
 
                     if (_weapon.Owner.LinkedInputManager.PrimaryMovement.magnitude > MinimumMagnitude)
-                    {
                         GetPrimaryMovementAim();
-                    }
                     else
-                    {
                         GetSecondaryMovementAim();
-                    }
                     break;
 
                 case AimControls.SecondaryThenPrimaryMovement:
-                    if ((_weapon.Owner == null) || (_weapon.Owner.LinkedInputManager == null))
-                    {
-                        return;
-                    }
+                    if (_weapon.Owner == null || _weapon.Owner.LinkedInputManager == null) return;
 
                     if (_weapon.Owner.LinkedInputManager.SecondaryMovement.magnitude > MinimumMagnitude)
-                    {
                         GetSecondaryMovementAim();
-                    }
                     else
-                    {
                         GetPrimaryMovementAim();
-                    }
 
                     break;
 
                 case AimControls.Mouse:
-                    if (_weapon.Owner == null)
-                    {
-                        return;
-                    }
-                    GetMouseAim();                    
+                    if (_weapon.Owner == null) return;
+                    GetMouseAim();
                     break;
 
                 case AimControls.CharacterRotateCameraDirection:
-                    if (_weapon.Owner == null)
-                    {
-                        return;
-                    }
+                    if (_weapon.Owner == null) return;
                     _currentAim = _weapon.Owner.CameraDirection;
                     _currentAimAbsolute = _weapon.Owner.CameraDirection;
                     if (_hasOrientation2D)
-                    {
-                        _currentAim = (_weapon.Owner.Orientation2D.IsFacingRight) ? _currentAim : -_currentAim;    
-                    }
+                        _currentAim = _weapon.Owner.Orientation2D.IsFacingRight ? _currentAim : -_currentAim;
                     _direction = -(transform.position - _currentAim);
                     break;
             }
         }
-        
+
         /// <summary>
-        /// Aims the weapon towards a new point
+        ///     Aims the weapon towards a new point
         /// </summary>
         /// <param name="newAim">New aim.</param>
         public override void SetCurrentAim(Vector3 newAim, bool setAimAsLastNonNullMovement = false)
         {
             base.SetCurrentAim(newAim, setAimAsLastNonNullMovement);
-	        
+
             _lastNonNullMovement.x = newAim.x;
             _lastNonNullMovement.y = newAim.y;
         }
 
         /// <summary>
-        /// Resets the aim
+        ///     Resets the aim
         /// </summary>
         public virtual void GetOffAim()
         {
@@ -203,32 +181,24 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Computes the current aim and direction based on the current aim provided by script
+        ///     Computes the current aim and direction based on the current aim provided by script
         /// </summary>
         public virtual void GetScriptAim()
         {
             _currentAimAbsolute = _currentAim;
-            if (_hasOrientation2D)
-            {
-                _currentAim = (_weapon.Owner.Orientation2D.IsFacingRight) ? _currentAim : -_currentAim;    
-            }
+            if (_hasOrientation2D) _currentAim = _weapon.Owner.Orientation2D.IsFacingRight ? _currentAim : -_currentAim;
             _direction = -(transform.position - _currentAim);
         }
 
         /// <summary>
-        /// Grabs primary input (left stick, by default) movement
+        ///     Grabs primary input (left stick, by default) movement
         /// </summary>
         public virtual void GetPrimaryMovementAim()
         {
-            if ((_weapon.Owner == null) || (_weapon.Owner.LinkedInputManager == null))
-            {
-                return;
-            }
+            if (_weapon.Owner == null || _weapon.Owner.LinkedInputManager == null) return;
 
             if (_lastNonNullMovement == Vector2.zero)
-            {
                 _lastNonNullMovement = _weapon.Owner.LinkedInputManager.LastNonNullPrimaryMovement;
-            }
 
             _inputMovement = _weapon.Owner.LinkedInputManager.PrimaryMovement;
 
@@ -248,7 +218,7 @@ namespace MoreMountains.TopDownEngine
                 {
                     _currentAim = -_inputMovement;
                     _direction = -(transform.position - _currentAim);
-                }    
+                }
             }
             else
             {
@@ -260,19 +230,14 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Grabs secondary movement (right stick by default)
+        ///     Grabs secondary movement (right stick by default)
         /// </summary>
         public virtual void GetSecondaryMovementAim()
         {
-            if ((_weapon.Owner == null) || (_weapon.Owner.LinkedInputManager == null))
-            {
-                return;
-            }
+            if (_weapon.Owner == null || _weapon.Owner.LinkedInputManager == null) return;
 
             if (_lastNonNullMovement == Vector2.zero)
-            {
                 _lastNonNullMovement = _weapon.Owner.LinkedInputManager.LastNonNullSecondaryMovement;
-            }
 
             _inputMovement = _weapon.Owner.LinkedInputManager.SecondaryMovement;
             TestLastMovement();
@@ -290,19 +255,19 @@ namespace MoreMountains.TopDownEngine
                 {
                     _currentAim = -_inputMovement;
                     _direction = -(transform.position - _currentAim);
-                }    
+                }
             }
             else
             {
                 _currentAim = _inputMovement;
                 _direction = transform.position + _currentAim;
             }
-            
+
             StoreLastMovement();
         }
 
         /// <summary>
-        /// Grabs mouse aim
+        ///     Grabs mouse aim
         /// </summary>
         public virtual void GetMouseAim()
         {
@@ -317,7 +282,7 @@ namespace MoreMountains.TopDownEngine
             _currentAimAbsolute = _direction - _weapon.Owner.transform.position;
 
             _currentAim = _direction - _weapon.Owner.transform.position;
-            
+
             if (_hasOrientation2D)
             {
                 if (_weapon.Owner.Orientation2D.IsFacingRight)
@@ -329,11 +294,11 @@ namespace MoreMountains.TopDownEngine
                 {
                     _currentAim = _weapon.Owner.transform.position - _direction;
                 }
-            }            
+            }
         }
 
         /// <summary>
-        /// Grabs the last movement stored value if necessary
+        ///     Grabs the last movement stored value if necessary
         /// </summary>
         protected virtual void TestLastMovement()
         {
@@ -341,7 +306,7 @@ namespace MoreMountains.TopDownEngine
             {
                 _inputMovement.x = Mathf.Abs(_inputMovement.x) > 0 ? _inputMovement.x : _lastNonNullMovement.x;
                 _inputMovement.y = Mathf.Abs(_inputMovement.y) > 0 ? _inputMovement.y : _lastNonNullMovement.y;
-            }            
+            }
             else
             {
                 _inputMovement = _inputMovement.magnitude > 0 ? _inputMovement : _lastNonNullMovement;
@@ -349,7 +314,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Stores the movement value for use next frame
+        ///     Stores the movement value for use next frame
         /// </summary>
         protected virtual void StoreLastMovement()
         {
@@ -365,35 +330,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Every frame, we compute the aim direction and rotate the weapon accordingly
-        /// </summary>
-        protected override void Update()
-        {
-            HideMousePointer();
-            HideReticle();
-            if (GameManager.Instance.Paused)
-            {
-                return;
-            }
-            GetCurrentAim();
-            DetermineWeaponRotation();
-        }
-
-        /// <summary>
-        /// At fixed update we move the target and reticle
-        /// </summary>
-        protected virtual void FixedUpdate()
-        {
-            if (GameManager.Instance.Paused)
-            {
-                return;
-            }
-            MoveTarget();
-            MoveReticle();
-        }
-
-        /// <summary>
-        /// Determines the weapon rotation based on the current aim direction
+        ///     Determines the weapon rotation based on the current aim direction
         /// </summary>
         protected override void DetermineWeaponRotation()
         {
@@ -403,30 +340,22 @@ namespace MoreMountains.TopDownEngine
                 {
                     CurrentAngle = Mathf.Atan2(_currentAim.y, _currentAim.x) * Mathf.Rad2Deg;
                     CurrentAngleAbsolute = Mathf.Atan2(_currentAimAbsolute.y, _currentAimAbsolute.x) * Mathf.Rad2Deg;
-                    if (RotationMode == RotationModes.Strict4Directions || RotationMode == RotationModes.Strict8Directions)
-                    {
+                    if (RotationMode == RotationModes.Strict4Directions ||
+                        RotationMode == RotationModes.Strict8Directions)
                         CurrentAngle = MMMaths.RoundToClosest(CurrentAngle, _possibleAngleValues);
-                    }
-                    if (RotationMode == RotationModes.Strict2Directions)
-                    {
-                        CurrentAngle = 0f;
-                    }
+                    if (RotationMode == RotationModes.Strict2Directions) CurrentAngle = 0f;
 
                     // we add our additional angle
                     CurrentAngle += _additionalAngle;
 
-                    bool flip = false;
+                    var flip = false;
                     // we clamp the angle to the min/max values set in the inspector
                     if (_hasOrientation2D)
                     {
                         if (_weapon.Owner.Orientation2D.IsFacingRight)
-                        {
                             CurrentAngle = Mathf.Clamp(CurrentAngle, MinimumAngle, MaximumAngle);
-                        }
                         else
-                        {
                             CurrentAngle = Mathf.Clamp(CurrentAngle, -MaximumAngle, -MinimumAngle);
-                        }
                         flip = _facingRightLastFrame != _weapon.Owner.Orientation2D.IsFacingRight;
                         _facingRightLastFrame = _weapon.Owner.Orientation2D.IsFacingRight;
                     }
@@ -434,7 +363,7 @@ namespace MoreMountains.TopDownEngine
                     {
                         CurrentAngle = Mathf.Clamp(CurrentAngle, MinimumAngle, MaximumAngle);
                     }
-                    
+
                     _lookRotation = Quaternion.Euler(CurrentAngle * Vector3.forward);
                     RotateWeapon(_lookRotation, flip);
                 }
@@ -444,52 +373,50 @@ namespace MoreMountains.TopDownEngine
                 CurrentAngle = 0f;
                 RotateWeapon(_initialRotation);
             }
-            MMDebug.DebugDrawArrow(this.transform.position, _currentAimAbsolute.normalized, Color.green);
+
+            MMDebug.DebugDrawArrow(transform.position, _currentAimAbsolute.normalized, Color.green);
         }
-        
+
         /// <summary>
-        /// If a reticle has been set, instantiates the reticle and positions it
+        ///     If a reticle has been set, instantiates the reticle and positions it
         /// </summary>
         protected override void InitializeReticle()
         {
-            if (_weapon.Owner == null) { return; }
-            if (Reticle == null) { return; }
-            if (ReticleType == ReticleTypes.None) { return; }
+            if (_weapon.Owner == null) return;
+            if (Reticle == null) return;
+            if (ReticleType == ReticleTypes.None) return;
 
             if (ReticleType == ReticleTypes.Scene)
             {
-                _reticle = (GameObject)Instantiate(Reticle);
+                _reticle = Instantiate(Reticle);
 
                 if (!ReticleAtMousePosition)
-                {
                     if (_weapon.Owner != null)
                     {
                         _reticle.transform.SetParent(_weapon.transform);
                         _reticle.transform.localPosition = ReticleDistance * Vector3.right;
                     }
-                }                
             }
 
             if (ReticleType == ReticleTypes.UI)
             {
-                _reticle = (GameObject)Instantiate(Reticle);
+                _reticle = Instantiate(Reticle);
                 _reticle.transform.SetParent(GUIManager.Instance.MainCanvas.transform);
                 _reticle.transform.localScale = Vector3.one;
                 if (_reticle.gameObject.MMGetComponentNoAlloc<MMUIFollowMouse>() != null)
-                {
-                    _reticle.gameObject.MMGetComponentNoAlloc<MMUIFollowMouse>().TargetCanvas = GUIManager.Instance.MainCanvas;
-                }
+                    _reticle.gameObject.MMGetComponentNoAlloc<MMUIFollowMouse>().TargetCanvas =
+                        GUIManager.Instance.MainCanvas;
             }
         }
 
         /// <summary>
-        /// Every frame, moves the reticle if it's been told to follow the pointer
+        ///     Every frame, moves the reticle if it's been told to follow the pointer
         /// </summary>
         protected override void MoveReticle()
         {
-            if (ReticleType == ReticleTypes.None) { return; }
-            if (_reticle == null) { return; }
-            if (_weapon.Owner.ConditionState.CurrentState == CharacterStates.CharacterConditions.Paused) { return; }
+            if (ReticleType == ReticleTypes.None) return;
+            if (_reticle == null) return;
+            if (_weapon.Owner.ConditionState.CurrentState == CharacterStates.CharacterConditions.Paused) return;
 
             if (ReticleType == ReticleTypes.Scene)
             {
@@ -500,60 +427,52 @@ namespace MoreMountains.TopDownEngine
                 }
                 else
                 {
-                    if (ReticleAtMousePosition)
-                    {
-                        _reticle.transform.rotation = _lookRotation;
-                    }
+                    if (ReticleAtMousePosition) _reticle.transform.rotation = _lookRotation;
                 }
 
                 // if we're in follow mouse mode and the current control scheme is mouse, we move the reticle to the mouse's position
                 if (ReticleAtMousePosition && AimControl == AimControls.Mouse)
-                {
                     _reticle.transform.position = _reticlePosition;
-                }                
             }
         }
 
         /// <summary>
-        /// Moves the camera target
+        ///     Moves the camera target
         /// </summary>
         protected override void MoveTarget()
         {
-            if (_weapon.Owner == null)
-            {
-                return;
-            }
-            
+            if (_weapon.Owner == null) return;
+
             if (MoveCameraTargetTowardsReticle)
             {
                 if (ReticleType != ReticleTypes.None)
                 {
                     _newCamTargetPosition = _reticlePosition;
-                    _newCamTargetDirection = _newCamTargetPosition - this.transform.position;
+                    _newCamTargetDirection = _newCamTargetPosition - transform.position;
                     if (_newCamTargetDirection.magnitude > CameraTargetMaxDistance)
-                    {
                         _newCamTargetDirection = _newCamTargetDirection.normalized * CameraTargetMaxDistance;
-                    }
 
-                    _newCamTargetPosition = this.transform.position + _newCamTargetDirection;
+                    _newCamTargetPosition = transform.position + _newCamTargetDirection;
 
                     _newCamTargetPosition = Vector3.Lerp(_weapon.Owner.CameraTarget.transform.position,
-                        Vector3.Lerp(this.transform.position, _newCamTargetPosition, CameraTargetOffset),
+                        Vector3.Lerp(transform.position, _newCamTargetPosition, CameraTargetOffset),
                         Time.deltaTime * CameraTargetSpeed);
 
                     _weapon.Owner.CameraTarget.transform.position = _newCamTargetPosition;
                 }
                 else
                 {
-                    _newCamTargetPosition = this.transform.position + _currentAimAbsolute.normalized * CameraTargetMaxDistance;
-                    _newCamTargetDirection = _newCamTargetPosition - this.transform.position;
-		            
-                    _newCamTargetPosition = this.transform.position + _newCamTargetDirection;
+                    _newCamTargetPosition =
+                        transform.position + _currentAimAbsolute.normalized * CameraTargetMaxDistance;
+                    _newCamTargetDirection = _newCamTargetPosition - transform.position;
 
-                    _newCamTargetPosition = Vector3.Lerp(_weapon.Owner.CameraTarget.transform.position, Vector3.Lerp(this.transform.position, _newCamTargetPosition, CameraTargetOffset), Time.deltaTime * CameraTargetSpeed);
+                    _newCamTargetPosition = transform.position + _newCamTargetDirection;
+
+                    _newCamTargetPosition = Vector3.Lerp(_weapon.Owner.CameraTarget.transform.position,
+                        Vector3.Lerp(transform.position, _newCamTargetPosition, CameraTargetOffset),
+                        Time.deltaTime * CameraTargetSpeed);
 
                     _weapon.Owner.CameraTarget.transform.position = _newCamTargetPosition;
-                    
                 }
             }
         }

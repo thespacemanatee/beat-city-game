@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
-using MoreMountains.Feedbacks;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// This action is used to play a MMFeedbacks
+    ///     This action is used to play a MMFeedbacks
     /// </summary>
     [AddComponentMenu("TopDown Engine/Character/AI/Actions/AIActionMMFeedbacks")]
     public class AIActionMMFeedbacks : AIAction
@@ -15,14 +13,16 @@ namespace MoreMountains.TopDownEngine
         /// The MMFeedbacks to play when this action gets performed by the AIBrain
         [Tooltip("The MMFeedbacks to play when this action gets performed by the AIBrain")]
         public MMFeedbacks TargetFeedbacks;
+
         /// If this is false, the feedback will be played every PerformAction (by default every frame while in this state), otherwise it'll only play once, when entering the state
-        [Tooltip("If this is false, the feedback will be played every PerformAction (by default every frame while in this state), otherwise it'll only play once, when entering the state")]
+        [Tooltip(
+            "If this is false, the feedback will be played every PerformAction (by default every frame while in this state), otherwise it'll only play once, when entering the state")]
         public bool OnlyPlayWhenEnteringState = true;
 
-        protected bool _played = false;
+        protected bool _played;
 
         /// <summary>
-        /// On PerformAction we play our MMFeedbacks
+        ///     On PerformAction we play our MMFeedbacks
         /// </summary>
         public override void PerformAction()
         {
@@ -30,14 +30,11 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Plays the target MMFeedbacks
+        ///     Plays the target MMFeedbacks
         /// </summary>
         protected virtual void PlayFeedbacks()
         {
-            if (OnlyPlayWhenEnteringState && _played)
-            {
-                return;
-            }
+            if (OnlyPlayWhenEnteringState && _played) return;
 
             if (TargetFeedbacks != null)
             {
@@ -47,7 +44,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// On enter state we initialize our _played bool
+        ///     On enter state we initialize our _played bool
         /// </summary>
         public override void OnEnterState()
         {

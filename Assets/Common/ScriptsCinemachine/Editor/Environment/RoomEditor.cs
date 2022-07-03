@@ -1,13 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using MoreMountains.Tools;
 using UnityEditor;
-using MoreMountains.Tools;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// Custom editor for Rooms that draws their name in scene view
+    ///     Custom editor for Rooms that draws their name in scene view
     /// </summary>
     [CanEditMultipleObjects]
     [CustomEditor(typeof(Room), true)]
@@ -15,15 +13,15 @@ namespace MoreMountains.TopDownEngine
     public class RoomEditor : Editor
     {
         [DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.NotInSelectionHierarchy)]
-        static void DrawHandles(Room room, GizmoType gizmoType)
+        private static void DrawHandles(Room room, GizmoType gizmoType)
         {
-            Room t = (room as Room);
+            var t = room;
 
-            GUIStyle style = new GUIStyle();
+            var style = new GUIStyle();
 
             // draws the path item number
             style.normal.textColor = MMColors.Pink;
-            Handles.Label(t.transform.position + (Vector3.up * 2f) + (Vector3.right * 2f), t.name, style);
+            Handles.Label(t.transform.position + Vector3.up * 2f + Vector3.right * 2f, t.name, style);
         }
     }
 }

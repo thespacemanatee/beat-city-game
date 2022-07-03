@@ -1,12 +1,11 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Cinemachine;
 using MoreMountains.Tools;
-using Cinemachine;
+using UnityEngine;
 
 namespace MoreMountains.TopDownEngine
 {
     /// <summary>
-    /// This CinemachineExtension allows you to lock a Cinemachine on one or more axis
+    ///     This CinemachineExtension allows you to lock a Cinemachine on one or more axis
     /// </summary>
     [ExecuteInEditMode]
     [SaveDuringPlay]
@@ -14,36 +13,46 @@ namespace MoreMountains.TopDownEngine
     public class CinemachineAxisLocker : CinemachineExtension
     {
         /// the possible methods to lock axis on
-        public enum Methods { ForcedPosition, InitialPosition, ColliderBoundsCenter, Collider2DBoundsCenter }
+        public enum Methods
+        {
+            ForcedPosition,
+            InitialPosition,
+            ColliderBoundsCenter,
+            Collider2DBoundsCenter
+        }
+
         /// whether or not axis should be locked on X
         [Tooltip("whether or not axis should be locked on X")]
-        public bool LockXAxis = false;
+        public bool LockXAxis;
+
         /// whether or not axis should be locked on Y
         [Tooltip("whether or not axis should be locked on Y")]
-        public bool LockYAxis = false;
+        public bool LockYAxis;
+
         /// whether or not axis should be locked on Z
         [Tooltip("whether or not axis should be locked on Z")]
-        public bool LockZAxis = false;
-        /// the selected method to lock axis on 
+        public bool LockZAxis;
+
+        /// the selected method to lock axis on
         [Tooltip("the selected method to lock axis on ")]
         public Methods Method = Methods.InitialPosition;
+
         /// the position to lock axis based on
-        [MMEnumCondition("Method", (int)Methods.ForcedPosition)]
-        [Tooltip("the position to lock axis based on")]
+        [MMEnumCondition("Method", (int)Methods.ForcedPosition)] [Tooltip("the position to lock axis based on")]
         public Vector3 ForcedPosition;
+
         /// the collider to lock axis on
-        [MMEnumCondition("Method", (int)Methods.ColliderBoundsCenter)]
-        [Tooltip("the collider to lock axis on")]
+        [MMEnumCondition("Method", (int)Methods.ColliderBoundsCenter)] [Tooltip("the collider to lock axis on")]
         public Collider TargetCollider;
+
         /// the 2D collider to lock axis on
-        [MMEnumCondition("Method", (int)Methods.Collider2DBoundsCenter)]
-        [Tooltip("the 2D collider to lock axis on")]
+        [MMEnumCondition("Method", (int)Methods.Collider2DBoundsCenter)] [Tooltip("the 2D collider to lock axis on")]
         public Collider2D TargetCollider2D;
 
         protected Vector3 _forcedPosition;
 
         /// <summary>
-        /// On Start we initialize our forced position based on the selected choice
+        ///     On Start we initialize our forced position based on the selected choice
         /// </summary>
         protected virtual void Start()
         {
@@ -54,7 +63,7 @@ namespace MoreMountains.TopDownEngine
                     break;
 
                 case Methods.InitialPosition:
-                    _forcedPosition = this.transform.position;
+                    _forcedPosition = transform.position;
                     break;
 
                 case Methods.ColliderBoundsCenter:
@@ -68,7 +77,7 @@ namespace MoreMountains.TopDownEngine
         }
 
         /// <summary>
-        /// Locks position
+        ///     Locks position
         /// </summary>
         /// <param name="vcam"></param>
         /// <param name="stage"></param>
@@ -81,18 +90,9 @@ namespace MoreMountains.TopDownEngine
             if (enabled && stage == CinemachineCore.Stage.Body)
             {
                 var pos = state.RawPosition;
-                if (LockXAxis)
-                {
-                    pos.x = _forcedPosition.x;
-                }
-                if (LockYAxis)
-                {
-                    pos.y = _forcedPosition.y;
-                }
-                if (LockZAxis)
-                {
-                    pos.z = _forcedPosition.z;
-                }
+                if (LockXAxis) pos.x = _forcedPosition.x;
+                if (LockYAxis) pos.y = _forcedPosition.y;
+                if (LockZAxis) pos.z = _forcedPosition.z;
                 state.RawPosition = pos;
             }
         }

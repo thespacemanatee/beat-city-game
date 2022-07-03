@@ -1,28 +1,27 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace MoreMountains.Tools
 {
     /// <summary>
-    /// This setup uses two sprite masks, bound in the inspector, to enable one and then disable the other to mask specific parts of a level
+    ///     This setup uses two sprite masks, bound in the inspector, to enable one and then disable the other to mask specific
+    ///     parts of a level
     /// </summary>
     public class MMDoubleSpriteMask : MonoBehaviour, MMEventListener<MMSpriteMaskEvent>
     {
         [Header("Masks")]
-
         /// the first sprite mask
         [Tooltip("the first sprite mask")]
         public MMSpriteMask Mask1;
+
         /// the second sprite mask
-        [Tooltip("the second sprite mask")]
-        public MMSpriteMask Mask2;
+        [Tooltip("the second sprite mask")] public MMSpriteMask Mask2;
 
         protected MMSpriteMask _currentMask;
         protected MMSpriteMask _dormantMask;
 
         /// <summary>
-        /// On awake we initialize our masks
+        ///     On awake we initialize our masks
         /// </summary>
         protected virtual void Awake()
         {
@@ -33,31 +32,23 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// Sets new values for current and dormant masks
+        ///     On enable we start listening for events
         /// </summary>
-        protected virtual void SwitchCurrentMask()
+        protected virtual void OnEnable()
         {
-            _currentMask = (_currentMask == Mask1) ? Mask2 : Mask1;
-            _dormantMask = (_currentMask == Mask1) ? Mask2 : Mask1;
+            this.MMEventStartListening();
         }
 
         /// <summary>
-        /// A coroutine designed to mask the first mask after having activated and moved the dormant one to the new position
+        ///     On disable we stop listening for events
         /// </summary>
-        /// <param name="spriteMaskEvent"></param>
-        /// <returns></returns>
-        protected virtual IEnumerator DoubleMaskCo(MMSpriteMaskEvent spriteMaskEvent)
+        protected virtual void OnDisable()
         {
-            _dormantMask.transform.position = spriteMaskEvent.NewPosition;
-            _dormantMask.transform.localScale = spriteMaskEvent.NewSize * _dormantMask.ScaleMultiplier;
-            _dormantMask.gameObject.SetActive(true);
-            yield return new WaitForSeconds(spriteMaskEvent.Duration);
-            _currentMask.gameObject.SetActive(false);
-            SwitchCurrentMask();
+            this.MMEventStopListening();
         }
 
         /// <summary>
-        /// When we catch a double mask event, we handle it
+        ///     When we catch a double mask event, we handle it
         /// </summary>
         /// <param name="spriteMaskEvent"></param>
         public virtual void OnMMEvent(MMSpriteMaskEvent spriteMaskEvent)
@@ -71,19 +62,27 @@ namespace MoreMountains.Tools
         }
 
         /// <summary>
-        /// On enable we start listening for events
+        ///     Sets new values for current and dormant masks
         /// </summary>
-        protected virtual void OnEnable()
+        protected virtual void SwitchCurrentMask()
         {
-            this.MMEventStartListening<MMSpriteMaskEvent>();
+            _currentMask = _currentMask == Mask1 ? Mask2 : Mask1;
+            _dormantMask = _currentMask == Mask1 ? Mask2 : Mask1;
         }
 
         /// <summary>
-        /// On disable we stop listening for events
+        ///     A coroutine designed to mask the first mask after having activated and moved the dormant one to the new position
         /// </summary>
-        protected virtual void OnDisable()
+        /// <param name="spriteMaskEvent"></param>
+        /// <returns></returns>
+        protected virtual IEnumerator DoubleMaskCo(MMSpriteMaskEvent spriteMaskEvent)
         {
-            this.MMEventStopListening<MMSpriteMaskEvent>();
+            _dormantMask.transform.position = spriteMaskEvent.NewPosition;
+            _dormantMask.transform.localScale = spriteMaskEvent.NewSize * _dormantMask.ScaleMultiplier;
+            _dormantMask.gameObject.SetActive(true);
+            yield return new WaitForSeconds(spriteMaskEvent.Duration);
+            _currentMask.gameObject.SetActive(false);
+            SwitchCurrentMask();
         }
     }
 }
