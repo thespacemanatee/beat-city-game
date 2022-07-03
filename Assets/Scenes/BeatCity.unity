@@ -3854,9 +3854,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerPrefabs:
   - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
-  - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
-  - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
-  - {fileID: 114839196621103566, guid: a334c56bef6fad74fb26c663cac2e260, type: 3}
+  - {fileID: 114839196621103566, guid: 1144e7001ab03ce4ba50859f28a2c58d, type: 3}
+  - {fileID: 114839196621103566, guid: 771e7d3cf3b89ca45976784e83e32cdd, type: 3}
+  - {fileID: 114839196621103566, guid: 3df7074986fd4dc49ba49b55f80cfe33, type: 3}
   AutoAttributePlayerIDs: 1
   SceneCharacters: []
   InitialSpawnPoint: {fileID: 1364623527}
