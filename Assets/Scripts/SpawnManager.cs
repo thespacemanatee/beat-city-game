@@ -25,9 +25,10 @@ public class SpawnManager : MonoBehaviour
             item.SetActive(true);
             
             // TODO: Clean this up
-            for (var i = 0; i < item.transform.childCount; i++)
+            item.GetComponent<BoxCollider>().enabled = true;
+            foreach (Transform child in item.transform)
             {
-                item.transform.GetChild(i).gameObject.SetActive(true);
+                child.gameObject.SetActive(true);
             }
         }
         else
