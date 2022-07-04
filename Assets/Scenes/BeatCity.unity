@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -524,33 +524,33 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4407977586509776, guid: 2936bdb693c644a9ea0410f86778902f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 50.18
+      value: -9.52
       objectReference: {fileID: 0}
     - target: {fileID: 4407977586509776, guid: 2936bdb693c644a9ea0410f86778902f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -5.65
+      value: 20.334724
       objectReference: {fileID: 0}
     - target: {fileID: 4407977586509776, guid: 2936bdb693c644a9ea0410f86778902f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -40.690002
+      value: -23.75
       objectReference: {fileID: 0}
     - target: {fileID: 4407977586509776, guid: 2936bdb693c644a9ea0410f86778902f, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.8887373
       objectReference: {fileID: 0}
     - target: {fileID: 4407977586509776, guid: 2936bdb693c644a9ea0410f86778902f, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0.45841685
       objectReference: {fileID: 0}
     - target: {fileID: 20055413374703424, guid: 2936bdb693c644a9ea0410f86778902f,
         type: 3}
       propertyPath: near clip plane
-      value: 0.1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 20055413374703424, guid: 2936bdb693c644a9ea0410f86778902f,
         type: 3}
       propertyPath: orthographic size
-      value: 6.9
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 114121691902595616, guid: 2936bdb693c644a9ea0410f86778902f,
         type: 3}
@@ -2912,7 +2912,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7788944, y: 1}
+    m_SensorSize: {x: 3.0498443, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -9724,7 +9724,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7788944, y: 1}
+    m_SensorSize: {x: 3.0498443, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -10299,7 +10299,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7788944, y: 1}
+    m_SensorSize: {x: 3.0498443, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -14506,7 +14506,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7788944, y: 1}
+    m_SensorSize: {x: 3.0498443, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
