@@ -6,17 +6,17 @@ public class NewCharacter : Character
 {
     public NewHealth NewCharacterHealth;
     public CustomKDEvent onPlayerDeath;
-    private bool dropped;
+    //private bool dropped;
 
     protected override void Update()
     {
         base.Update();
-        if (GetComponent<Transform>().position.y < 0.0f && !dropped)
-        {
-            var victim = GetComponent<Character>().PlayerID;
-            onPlayerDeath.Invoke(victim, victim);
-            dropped = true;
-        }
+        // if (GetComponent<Transform>().position.y < 0.0f && !dropped)
+        // {
+        //     var victim = GetComponent<Character>().PlayerID;
+        //     onPlayerDeath.Invoke(victim, victim);
+        //     dropped = true;
+        // }
     }
 
     /// <summary>
