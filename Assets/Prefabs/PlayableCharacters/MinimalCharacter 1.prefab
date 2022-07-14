@@ -830,8 +830,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9135815cd8402e949be799b758eb1480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RespawnOnPlayerRespawn: 1
-  RepositionToInitOnPlayerRespawn: 0
+  RespawnOnPlayerRespawn: 0
+  RepositionToInitOnPlayerRespawn: 1
   DisableAllComponentsOnKill: 0
   DisableGameObjectOnKill: 1
   IgnoreCheckpointsAlwaysRespawn: 1

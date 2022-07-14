@@ -79,8 +79,8 @@ public class NewAutoRespawn : AutoRespawn
 
     }
     IEnumerator CheckPosition() {
-        yield return new WaitForSeconds(1);
-        if(GetComponent<Transform>().position.y < 0.0f)
+        yield return new WaitForSeconds(0.5f);
+        if(GetComponent<Transform>().position.y <= 0.0f)
         {
             ChangePosition();
         } else
