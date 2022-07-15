@@ -72,6 +72,7 @@ public class NewHealth : Health
             if (CurrentHealth <= 0)
             {
                 CurrentHealth = 0;
+                Destroy(gameObject);
                 NewKill(instigator);
             }
         }
