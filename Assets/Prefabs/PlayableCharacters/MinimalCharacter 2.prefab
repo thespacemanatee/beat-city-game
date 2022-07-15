@@ -60,6 +60,7 @@ GameObject:
   - component: {fileID: 3649422232105351005}
   - component: {fileID: 2931949030259794541}
   - component: {fileID: 2712783647569780224}
+  - component: {fileID: 7393054221049117611}
   m_Layer: 10
   m_Name: MinimalCharacter 2
   m_TagString: Player
@@ -817,6 +818,30 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &7393054221049117611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167761570092420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9135815cd8402e949be799b758eb1480, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  RespawnOnPlayerRespawn: 0
+  RepositionToInitOnPlayerRespawn: 1
+  DisableAllComponentsOnKill: 0
+  DisableGameObjectOnKill: 1
+  IgnoreCheckpointsAlwaysRespawn: 1
+  AssociatedCheckpoints: []
+  AutoRespawnDuration: 1
+  AutoRespawnAmount: -1
+  AutoRespawnRemainingAmount: 3
+  RespawnEffect: {fileID: 0}
+  RespawnSfx: {fileID: 0}
+  _newHealth: {fileID: 2931949030259794541}
 --- !u!1 &1749803945586204
 GameObject:
   m_ObjectHideFlags: 0
