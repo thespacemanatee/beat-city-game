@@ -148,3 +148,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 245a91b1a8b30dc479ea9c354ba36cb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MousePositionAction:
+    m_Name: Mouse Position
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 5cb6abe9-99a5-49cd-910f-7396a5d3fe18
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
