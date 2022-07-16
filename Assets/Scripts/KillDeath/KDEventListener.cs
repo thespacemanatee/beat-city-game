@@ -1,8 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-
-[System.Serializable]
+[Serializable]
 public class CustomKDEvent : UnityEvent<string, string>
 {
 }
@@ -11,7 +11,8 @@ public class KDEventListener : MonoBehaviour
 {
     public KDEvent Event;
     public CustomKDEvent Response;
-     private void OnEnable()
+
+    private void OnEnable()
     {
         Event.RegisterListener(this);
     }
@@ -23,6 +24,6 @@ public class KDEventListener : MonoBehaviour
 
     public void OnEventRaised(string k, string d)
     {
-        Response.Invoke(k,d);
+        Response.Invoke(k, d);
     }
 }

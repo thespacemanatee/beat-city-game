@@ -4,34 +4,29 @@ using UnityEngine;
 public class IntVariable : ScriptableObject
 {
 #if UNITY_EDITOR
-    [Multiline]
-    public string DeveloperDescription = "";
+    [Multiline] public string DeveloperDescription = "";
 #endif
-    private int _value = 0;
-    public int Value{
-        get{
-            return _value;
-        }
-    }
+
+    public int Value { get; private set; }
 
     public void SetValue(int value)
     {
-        _value = value;
+        Value = value;
     }
 
     // overload
     public void SetValue(IntVariable value)
     {
-        _value = value._value;
+        Value = value.Value;
     }
 
     public void ApplyChange(int amount)
     {
-        _value += amount;
+        Value += amount;
     }
 
     public void ApplyChange(IntVariable amount)
     {
-        _value += amount._value;
+        Value += amount.Value;
     }
 }

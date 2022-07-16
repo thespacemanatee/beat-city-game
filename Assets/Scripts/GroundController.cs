@@ -19,8 +19,8 @@ public class GroundController : MonoBehaviour
     public GameConstants gameConstants;
     public GameObject tilePrefab;
     public CustomDropTileEvent dropTiles;
-    private int _dropRound;
     private readonly List<TileObject> _tiles = new();
+    private int _dropRound;
 
     private void Awake()
     {

@@ -1,7 +1,6 @@
 using System.Collections;
 using MoreMountains.Tools;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class SpawnManager : MonoBehaviour
 {
@@ -15,7 +14,7 @@ public class SpawnManager : MonoBehaviour
         StartCoroutine(SpawnLooper());
     }
 
-    void SpawnFromPooler()
+    private void SpawnFromPooler()
     {
         // static method access
         var item = pooler.GetPooledGameObject();
@@ -23,13 +22,10 @@ public class SpawnManager : MonoBehaviour
         {
             item.transform.position = new Vector3(Random.Range(-10f, 10f), 10, Random.Range(-10f, 10f));
             item.SetActive(true);
-            
+
             // TODO: Clean this up
             item.GetComponent<BoxCollider>().enabled = true;
-            foreach (Transform child in item.transform)
-            {
-                child.gameObject.SetActive(true);
-            }
+            foreach (Transform child in item.transform) child.gameObject.SetActive(true);
         }
         else
         {

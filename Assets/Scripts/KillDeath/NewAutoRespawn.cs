@@ -1,15 +1,16 @@
 using System.Collections;
-using System.Collections.Generic;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
 
 public class NewAutoRespawn : AutoRespawn
 {
-    protected bool _dropped=false;
     public NewHealth _newHealth;
+    protected bool _dropped;
+
     protected override void Update()
     {
-        if (GetComponent<Transform>().position.y < 0.0f && !_dropped){
+        if (GetComponent<Transform>().position.y < 0.0f && !_dropped)
+        {
             Debug.Log("DROPPED detected by auto respawn");
             if (AutoRespawnDuration <= 0f)
             {
@@ -18,7 +19,7 @@ public class NewAutoRespawn : AutoRespawn
             }
             else
             {
-                if (DisableAllComponentsOnKill) 
+                if (DisableAllComponentsOnKill)
                     foreach (var component in _otherComponents)
                         if (component != this)
                             component.enabled = false;
@@ -30,7 +31,8 @@ public class NewAutoRespawn : AutoRespawn
                 _timeOfDeath = Time.time;
             }
         }
-         if (_reviving)
+
+        if (_reviving)
             if (_timeOfDeath + AutoRespawnDuration < Time.time)
             {
                 if (AutoRespawnAmount == 0) return;
@@ -44,6 +46,7 @@ public class NewAutoRespawn : AutoRespawn
                 _reviving = false;
             }
     }
+
     public override void Revive()
     {
         if (AutoRespawnDuration <= 0f)
@@ -66,9 +69,7 @@ public class NewAutoRespawn : AutoRespawn
         //if (_health != null) _health.Revive();
         if (_newHealth != null) _newHealth.Damage(50, gameObject, 1.0f, 3.0f, GetComponent<Transform>().position);
         if (_aiBrain != null) _aiBrain.ResetBrain();
-        if (_newHealth.CurrentHealth > 0){
-            ChangePosition();
-        }
+        if (_newHealth.CurrentHealth > 0) ChangePosition();
     }
 
     protected virtual void ChangePosition()
@@ -76,27 +77,30 @@ public class NewAutoRespawn : AutoRespawn
         Debug.Log("Change Position Called");
         transform.position = _initialPosition;
         StartCoroutine(CheckPosition());
-
     }
-    IEnumerator CheckPosition() {
+
+    private IEnumerator CheckPosition()
+    {
         yield return new WaitForSeconds(0.5f);
-        if(GetComponent<Transform>().position.y <= 0.0f)
+        if (GetComponent<Transform>().position.y <= 0.0f)
         {
             ChangePosition();
-        } else
+        }
+        else
         {
             _dropped = false;
-            yield return null;     
+            yield return null;
         }
     }
+
     protected override void InstantiateRespawnEffect()
+    {
+        Debug.Log("New Auto Respawn effect");
+        // instantiates the destroy effect
+        if (RespawnEffect != null)
         {
-            Debug.Log("New Auto Respawn effect");
-            // instantiates the destroy effect
-            if (RespawnEffect != null)
-            {
-                var instantiatedEffect = Instantiate(RespawnEffect, transform.position, transform.rotation);
-                instantiatedEffect.transform.localScale = transform.localScale;
-            }
+            var instantiatedEffect = Instantiate(RespawnEffect, transform.position, transform.rotation);
+            instantiatedEffect.transform.localScale = transform.localScale;
         }
+    }
 }

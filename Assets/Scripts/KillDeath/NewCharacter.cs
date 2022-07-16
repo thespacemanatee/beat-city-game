@@ -1,10 +1,10 @@
-using System;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
 
 public class NewCharacter : Character
 {
     public NewHealth NewCharacterHealth;
+
     public CustomKDEvent onPlayerDeath;
     //private bool dropped;
 
