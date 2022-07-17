@@ -27,6 +27,30 @@ public struct EnergyChangeEvent
 }
 
 /// <summary>
+/// An event triggered when energy is dropped
+/// </summary>
+public struct EnergyDropEvent
+{
+    public Vector3 Position;
+    public int Count;
+
+    public EnergyDropEvent(Vector3 position, int count)
+    {
+        Position = position;
+        Count = count;
+    }
+
+    static EnergyDropEvent e;
+
+    public static void Trigger(Vector3 position, int count)
+    {
+        e.Position = position;
+        e.Count = count;
+        MMEventManager.TriggerEvent(e);
+    }
+}
+
+/// <summary>
 /// This class manages the energy of an object, pilots its potential energy bar, handles what happens when it takes damage,
 /// and what happens when it dies.
 /// </summary>
@@ -145,10 +169,11 @@ public class Energy : MMMonoBehaviour
     /// <summary>
     /// Called when the character loses energy (from usage or damage)
     /// </summary>
-    /// <param name="energy">The energy the character gets.</param>
     public virtual void EnergyPenaltyFromDamage()
     {
-        SetEnergy(Mathf.Max(0, CurrentEnergy / 2));
+        var energyPenalty = (int)Mathf.Max(0, CurrentEnergy / 2);
+        EnergyDropEvent.Trigger(_character.transform.position, energyPenalty);
+        SetEnergy(CurrentEnergy - energyPenalty);
         UpdateEnergyBars();
     }
 

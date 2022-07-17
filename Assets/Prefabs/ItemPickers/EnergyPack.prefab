@@ -5811,7 +5811,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 122
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!114 &3940382301089915644
 MonoBehaviour:
@@ -5834,7 +5834,7 @@ MonoBehaviour:
   TargetObjectToDisable: {fileID: 0}
   TargetObjectDisableDelay: 1
   Model: {fileID: 154168062526626126}
-  HealthToGive: 10
+  EnergyToGive: 1
   OnlyForPlayerCharacter: 1
 --- !u!114 &4135046742940837405
 MonoBehaviour:
