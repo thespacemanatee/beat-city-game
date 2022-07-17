@@ -13,6 +13,10 @@ public class BeatCityHUD : MonoBehaviour, MMEventListener<TopDownEngineEvent>
     [Tooltip("the progress bar to use to show the healthbar")]
     public MMProgressBar HealthBar;
 
+    /// the progress bar to use to show the energybar
+    [Tooltip("the progress bar to use to show the energybar")]
+    public MMProgressBar EnergyBar;
+
     /// the Text comp to use to display the player name
     [Tooltip("the Text comp to use to display the player name")]
     public Text PlayerName;

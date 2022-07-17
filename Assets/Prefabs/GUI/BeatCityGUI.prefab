@@ -694,6 +694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerID: Player1
   HealthBar: {fileID: 4845287608936410962}
+  EnergyBar: {fileID: 4021102425933941684}
   PlayerName: {fileID: 4803188867100092300}
   AvatarBar: {fileID: 4841508416651971226}
   DeadMask: {fileID: 4792492970908136277}

@@ -14,14 +14,9 @@ public class BeatCityGUIManager : MultiplayerGUIManager
     /// <param name="minEnergy">Minimum energy.</param>
     /// <param name="maxEnergy">Max energy.</param>
     /// <param name="playerID">Player I.</param>
-    public void UpdateEnergyBar(float currentEnergy, float minEnergy, float maxEnergy, string playerID)
+    public void UpdateEnergyBars(float currentEnergy, float minEnergy, float maxEnergy, string playerID)
     {
         if (EnergyBars == null)
-        {
-            return;
-        }
-
-        if (EnergyBars.Length <= 0)
         {
             return;
         }

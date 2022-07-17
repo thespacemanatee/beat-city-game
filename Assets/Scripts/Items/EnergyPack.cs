@@ -10,7 +10,7 @@ public class EnergyPack : PickableItem
     [Header("EnergyPack")]
     /// The amount of points to add when collected
     [Tooltip("The amount of points to add when collected")]
-    public float HealthToGive = 10f;
+    public float EnergyToGive = 1f;
 
     /// if this is true, only player characters can pick this up
     [Tooltip("if this is true, only player characters can pick this up")]
@@ -29,11 +29,11 @@ public class EnergyPack : PickableItem
             return;
         }
 
-        var characterHealth = picker.gameObject.MMGetComponentNoAlloc<Health>();
+        var characterEnergy = picker.gameObject.MMGetComponentNoAlloc<Energy>();
         // else, we give health to the player
-        if (characterHealth != null)
+        if (characterEnergy != null)
         {
-            characterHealth.ReceiveHealth(HealthToGive, gameObject);
+            characterEnergy.ReceiveEnergy(EnergyToGive);
         }
     }
 }
