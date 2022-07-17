@@ -540,6 +540,7 @@ MonoBehaviour:
   Interruptable: 0
   Flipped: 0
   ProjectileSpawnOffset: {x: 0, y: 0.16, z: 0.57}
+  DefaultProjectileDirection: {x: 0, y: 0, z: 1}
   ProjectilesPerShot: 5
   SpawnTransforms: []
   SpawnTransformsMode: 1
@@ -587,7 +588,7 @@ MonoBehaviour:
   MinimumAngle: -180
   MaximumAngle: 180
   MinimumMagnitude: 0.2
-  ReticleType: 2
+  ReticleType: 0
   Reticle: {fileID: 1373789777524232, guid: f8d2cd427805b416588f8a6a8bec2ef8, type: 3}
   ReticleDistance: 0
   ReticleHeight: 0
@@ -606,6 +607,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   MaximumSlopeElevation: 50
+  AvoidNullAim: 1
+  MousePositionAction:
+    m_Name: Mouse Position
+    m_Type: 0
+    m_ExpectedControlType: 
+    m_Id: 4e639118-b0a2-4e5b-a2fa-47cec9f4e858
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings: []
+    m_Flags: 0
 --- !u!114 &114602549670299862
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20575,10 +20586,14 @@ MonoBehaviour:
   AutoChangeDirectionOnEnd: 0
   AutoPlayOnStart: 0
   AutoPlayOnEnable: 0
+  ForceTimescaleMode: 0
+  ForcedTimescaleMode: 1
   DurationMultiplier: 1
   DisplayFullDurationDetails: 0
+  PlayerTimescaleMode: 1
   CooldownDuration: 0
   InitialDelay: 0
+  CanPlay: 1
   CanPlayWhileAlreadyPlaying: 1
   ChanceToPlay: 100
   FeedbacksIntensity: 1
