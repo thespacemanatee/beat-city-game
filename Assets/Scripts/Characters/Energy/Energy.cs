@@ -47,6 +47,10 @@ public class Energy : MMMonoBehaviour
     [Tooltip("the initial amount of energy of the object")]
     public float InitialEnergy;
 
+    /// the minimum amount of energy of the object
+    [Tooltip("the minimum amount of energy of the object")]
+    public float MinimumEnergy = -0.01f;
+
     /// the maximum amount of energy of the object
     [Tooltip("the maximum amount of energy of the object")]
     public float MaximumEnergy = 7;
@@ -63,7 +67,7 @@ public class Energy : MMMonoBehaviour
     /// <summary>
     /// On Start, we initialize our energy
     /// </summary>
-    protected virtual void Awake()
+    protected virtual void Start()
     {
         Initialization();
         InitializeCurrentEnergy();
@@ -150,7 +154,7 @@ public class Energy : MMMonoBehaviour
                 // We update the energy bar
                 if (BeatCityGUIManager.HasInstance)
                 {
-                    ((BeatCityGUIManager)BeatCityGUIManager.Instance).UpdateEnergyBars(CurrentEnergy, -0.01f,
+                    ((BeatCityGUIManager)BeatCityGUIManager.Instance).UpdateEnergyBars(CurrentEnergy, MinimumEnergy,
                         MaximumEnergy, _character.PlayerID);
                 }
             }
