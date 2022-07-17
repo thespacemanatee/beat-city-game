@@ -97,7 +97,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &339537200880915047
 RectTransform:
   m_ObjectHideFlags: 0
@@ -247,8 +247,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4735025654416790448}
   - component: {fileID: 5537716069566428249}
+  - component: {fileID: 4827050355354359492}
+  - component: {fileID: 2992901452009314610}
+  - component: {fileID: 7225860563550245588}
   m_Layer: 0
-  m_Name: GrasslandsHUD
+  m_Name: BeatCityGUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -287,7 +290,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4804087224219151714}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bc414d7b663c0e4b88617e76274e06a, type: 3}
   m_Name: 
@@ -299,6 +302,78 @@ MonoBehaviour:
   CoinCounter: {fileID: 6873214922828897842}
   DeadMask: {fileID: 4792492970908136277}
   WinnerScreen: {fileID: 6535510183179943956}
+--- !u!114 &4827050355354359492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4804087224219151714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2a009c7d8bf429fb4be21db2ec13973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerID: Player1
+  HealthBar: {fileID: 4845287608936410962}
+  PlayerName: {fileID: 4803188867100092300}
+  AvatarBar: {fileID: 4841508416651971226}
+  DeadMask: {fileID: 4792492970908136277}
+  WinnerScreen: {fileID: 6535510183179943956}
+--- !u!114 &2992901452009314610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4804087224219151714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0a2bad4ac44f744af0cda3145212cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: f9818ecd4347f5445bcd2a9da3a9de91, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 7225860563550245588}
+        m_TargetAssemblyTypeName: WinEventController, Assembly-CSharp
+        m_MethodName: SetScreenActive
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 11400000, guid: f80f9a5e01782d94999c742f02e5761f, type: 2}
+        m_TargetAssemblyTypeName: IntVariable, Assembly-CSharp
+        m_MethodName: ApplyChange
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &7225860563550245588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4804087224219151714}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9c24f9758800b46a40695be0b4c7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerId: MinimalCharacter
+  WinnerScreen: {fileID: 8085697583571887646}
 --- !u!1 &4804220276458347516
 GameObject:
   m_ObjectHideFlags: 0
@@ -1282,7 +1357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &5391199430285553439
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1326,7 +1401,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0.16470589, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
