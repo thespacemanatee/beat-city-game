@@ -992,7 +992,6 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      DungeonGroundOrange_33: 21300066
       DungeonGroundOrange_17: 21300034
       DungeonGroundOrange_21: 21300042
       DungeonGroundOrange_12: 21300024
@@ -1026,8 +1025,9 @@ TextureImporter:
       DungeonGroundOrange_23: 21300046
       DungeonGroundOrange_34: 21300068
       DungeonGroundOrange_5: 21300010
-      DungeonGroundOrange_30: 21300060
+      DungeonGroundOrange_33: 21300066
       DungeonGroundOrange_31: 21300062
+      DungeonGroundOrange_30: 21300060
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 

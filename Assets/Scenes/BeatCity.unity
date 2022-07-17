@@ -7949,7 +7949,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.6010205, y: 1}
+    m_SensorSize: {x: 1.7767441, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -54085,7 +54085,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.6010205, y: 1}
+    m_SensorSize: {x: 1.7767441, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -58100,7 +58100,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.6010205, y: 1}
+    m_SensorSize: {x: 1.7767441, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -71356,6 +71356,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GroundTile (20)
       objectReference: {fileID: 0}
+    - target: {fileID: 4444429552789480929, guid: 81eacb89c3e6e41738bc0f0a49e68f55,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 81eacb89c3e6e41738bc0f0a49e68f55, type: 3}
@@ -83138,7 +83143,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.6010205, y: 1}
+    m_SensorSize: {x: 1.7767441, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -90356,6 +90361,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: GroundTile (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4444429552789480929, guid: 81eacb89c3e6e41738bc0f0a49e68f55,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []

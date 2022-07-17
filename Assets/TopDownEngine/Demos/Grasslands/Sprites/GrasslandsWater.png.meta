@@ -980,9 +980,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      RetroBluePlatform_24: 21300048
+      RetroBluePlatform_21: 21300042
       RetroBluePlatform_7: 21300014
-      GrassWater_0: 21300060
       RetroBluePlatform_2: 21300004
       RetroBluePlatform_18: 21300036
       GrassWater_2: 21300064
@@ -1007,14 +1006,15 @@ TextureImporter:
       RetroBluePlatform_11: 21300022
       RetroBluePlatform_0: 21300000
       RetroBluePlatform_27: 21300054
+      RetroBluePlatform_24: 21300048
+      GrassWater_0: 21300060
       RetroBluePlatform_8: 21300016
-      RetroBluePlatform_21: 21300042
       RetroBluePlatform_17: 21300034
       RetroBluePlatform_19: 21300038
-      RetroBluePlatform_29: 21300058
-      RetroBluePlatform_12: 21300024
       RetroBluePlatform_23: 21300046
+      RetroBluePlatform_29: 21300058
       RetroBluePlatform_25: 21300050
+      RetroBluePlatform_12: 21300024
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
