@@ -4900,7 +4900,7 @@ GameObject:
   - component: {fileID: 114564512680273234}
   - component: {fileID: 114520861229986060}
   - component: {fileID: 114102311241470466}
-  - component: {fileID: 114692968763625280}
+  - component: {fileID: -4822918156278383562}
   - component: {fileID: 65720217773407688}
   - component: {fileID: 54994276034465240}
   - component: {fileID: 114852181900910388}
@@ -5028,7 +5028,7 @@ MonoBehaviour:
   TargetDamageResistanceProcessor: {fileID: 0}
   TargetAnimator: {fileID: 0}
   DisableAnimatorLogs: 1
---- !u!114 &114692968763625280
+--- !u!114 &-4822918156278383562
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5037,7 +5037,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1854097648223014}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76891b3b532f84acaaeed44c357bd00c, type: 3}
+  m_Script: {fileID: 11500000, guid: 91138aa8cd0c4971bd4cd64f2e94bac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   TargetLayerMask:
@@ -5049,7 +5049,7 @@ MonoBehaviour:
   MaxDamageCaused: 10
   TypedDamages: []
   DamageCausedKnockbackType: 1
-  DamageCausedKnockbackDirection: 3
+  DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 10, y: 2, z: 0}
   InvincibilityDuration: 0.1
   RepeatDamageOverTime: 0
