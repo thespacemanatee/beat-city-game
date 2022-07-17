@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
@@ -116,7 +115,7 @@ public class Energy : MMMonoBehaviour
     /// Sets the current energy to the specified new value, and updates the energy bar
     /// </summary>
     /// <param name="newValue"></param>
-    public virtual void SetEnergy(float newValue)
+    protected virtual void SetEnergy(float newValue)
     {
         CurrentEnergy = newValue;
         UpdateEnergyBars();
@@ -124,13 +123,32 @@ public class Energy : MMMonoBehaviour
     }
 
     /// <summary>
-    /// Called when the character gets energy (from a stimpack for example)
+    /// Called when the character gets energy (from a energypack for example)
     /// </summary>
     /// <param name="energy">The energy the character gets.</param>
-    /// <param name="instigator">The thing that gives the character energy.</param>
     public virtual void ReceiveEnergy(float energy)
     {
         SetEnergy(Mathf.Min(CurrentEnergy + energy, MaximumEnergy));
+        UpdateEnergyBars();
+    }
+
+    /// <summary>
+    /// Called when the character spends energy (from using abilities for example)
+    /// </summary>
+    /// <param name="energy">The energy the character spends.</param>
+    public virtual void SpendEnergy(float energy)
+    {
+        SetEnergy(Mathf.Max(0, CurrentEnergy - energy));
+        UpdateEnergyBars();
+    }
+
+    /// <summary>
+    /// Called when the character loses energy (from usage or damage)
+    /// </summary>
+    /// <param name="energy">The energy the character gets.</param>
+    public virtual void EnergyPenaltyFromDamage()
+    {
+        SetEnergy(Mathf.Max(0, CurrentEnergy / 2));
         UpdateEnergyBars();
     }
 
@@ -145,19 +163,14 @@ public class Energy : MMMonoBehaviour
     /// <summary>
     /// Forces a refresh of the character's energy bar
     /// </summary>
-    public virtual void UpdateEnergyBars()
+    protected virtual void UpdateEnergyBars()
     {
-        if (_character != null)
+        if (_character == null || _character.CharacterType != Character.CharacterTypes.Player) return;
+        // We update the energy bar
+        if (BeatCityGUIManager.HasInstance)
         {
-            if (_character.CharacterType == Character.CharacterTypes.Player)
-            {
-                // We update the energy bar
-                if (BeatCityGUIManager.HasInstance)
-                {
-                    ((BeatCityGUIManager)BeatCityGUIManager.Instance).UpdateEnergyBars(CurrentEnergy, MinimumEnergy,
-                        MaximumEnergy, _character.PlayerID);
-                }
-            }
+            ((BeatCityGUIManager)BeatCityGUIManager.Instance).UpdateEnergyBars(CurrentEnergy, MinimumEnergy,
+                MaximumEnergy, _character.PlayerID);
         }
     }
 

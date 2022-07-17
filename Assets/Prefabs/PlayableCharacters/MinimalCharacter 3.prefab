@@ -823,6 +823,7 @@ MonoBehaviour:
   TargetDamageResistanceProcessor: {fileID: 0}
   TargetAnimator: {fileID: 0}
   DisableAnimatorLogs: 1
+  CharacterEnergy: {fileID: 5029227804454485112}
 --- !u!114 &5029227804454485112
 MonoBehaviour:
   m_ObjectHideFlags: 0
