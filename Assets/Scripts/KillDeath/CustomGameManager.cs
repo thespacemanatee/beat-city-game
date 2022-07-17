@@ -5,7 +5,7 @@ public class CustomGameManager : MonoBehaviour
 {
     public UnityEvent onApplicationExit;
 
-	void OnApplicationQuit()
+    private void OnApplicationQuit()
     {
         onApplicationExit.Invoke();
     }
