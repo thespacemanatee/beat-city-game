@@ -16,12 +16,16 @@ public class TileController : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        if(transform.position.y <= -50.0f) 
+            transform.gameObject.SetActive(false); // also sets wallTile (child game obj) to be inactive.
     }
 
     public void DropTile(List<int> indexes)
     {
-        for (var i = 0; i < indexes.Count; i++)
-            if (indexes[i] == index)
+        for (var i = 0; i < indexes.Count; i++){
+            if (indexes[i] == index){
                 _tileRigidbody.constraints &= ~RigidbodyConstraints.FreezePositionY;
+            }
+        }
     }
 }
