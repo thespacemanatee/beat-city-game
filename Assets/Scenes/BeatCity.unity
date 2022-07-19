@@ -2910,7 +2910,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9560586, y: 1}
+    m_SensorSize: {x: 1.777664, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3970,7 +3970,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300018, guid: 082c310ac59e31e4886d543523aa015e,
+      objectReference: {fileID: -1569498973, guid: 174a76a8109cc4d9f9773a3d135d4562,
         type: 3}
     - target: {fileID: 4845374895799185152, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
@@ -3991,17 +3991,17 @@ PrefabInstance:
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.25882354
+      value: 0.9607843
       objectReference: {fileID: 0}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.6627451
+      value: 0.5764706
       objectReference: {fileID: 0}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.35686275
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -9321,7 +9321,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9560586, y: 1}
+    m_SensorSize: {x: 1.777664, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -9878,7 +9878,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9560586, y: 1}
+    m_SensorSize: {x: 1.777664, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -11113,7 +11113,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300020, guid: 082c310ac59e31e4886d543523aa015e,
+      objectReference: {fileID: 560046498, guid: 174a76a8109cc4d9f9773a3d135d4562,
         type: 3}
     - target: {fileID: 4845374895799185152, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
@@ -11134,17 +11134,17 @@ PrefabInstance:
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 0.09803922
       objectReference: {fileID: 0}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.8745098
+      value: 0.7647059
       objectReference: {fileID: 0}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.r
-      value: 1
+      value: 0.69803923
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -13108,7 +13108,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300006, guid: 082c310ac59e31e4886d543523aa015e,
+      objectReference: {fileID: 1467492021, guid: 174a76a8109cc4d9f9773a3d135d4562,
         type: 3}
     - target: {fileID: 4845374895799185152, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
@@ -13129,17 +13129,17 @@ PrefabInstance:
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.b
-      value: 0.019607844
+      value: 0.043137256
       objectReference: {fileID: 0}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.g
-      value: 0.83137256
+      value: 0.76862746
       objectReference: {fileID: 0}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.r
-      value: 0.03137255
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -14358,7 +14358,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.9560586, y: 1}
+    m_SensorSize: {x: 1.777664, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -17179,6 +17179,42 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BeatCityGUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804275333709079506, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804398397266845592, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4804781135726658306, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4845295271726997630, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 500235270, guid: 174a76a8109cc4d9f9773a3d135d4562,
+        type: 3}
+    - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.03137255
+      objectReference: {fileID: 0}
+    - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.25490198
+      objectReference: {fileID: 0}
+    - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.83137256
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
