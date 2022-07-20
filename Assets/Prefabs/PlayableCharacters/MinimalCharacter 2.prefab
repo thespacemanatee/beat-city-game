@@ -213,7 +213,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterDimension: 0
   CharacterType: 0
-  PlayerID: Player1
+  PlayerID: Player3
   CharacterAnimator: {fileID: 0}
   UseDefaultMecanim: 1
   RunAnimatorSanityChecks: 0
@@ -543,14 +543,23 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
-  PlayerID: Player1
+  PlayerID: Player3
   MainInventoryName: SuitMainInventory
   WeaponInventoryName: SuitWeaponInventory
   HotbarInventoryName: 
   InventoryTransform: {fileID: 0}
   WeaponRotationMode: 0
-  AutoPickItems: []
-  AutoEquipWeaponOnStart: {fileID: 0}
+  AutoPickItems:
+  - Item: {fileID: 11400000, guid: 64391ef61e5e744f19008542a6ef0386, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: 7efc4e8c081d949b9863fc1c8f037b21, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: da71e776128cc4894acf30b450e62710, type: 2}
+    Quantity: 1
+  - Item: {fileID: 11400000, guid: dd50efd5589be4cbeb3b55b26a9e7b0c, type: 2}
+    Quantity: 10
+  AutoEquipWeaponOnStart: {fileID: 11400000, guid: 906c00e03372649e7a6e1a77de6fe1ab,
+    type: 2}
   CharacterHandleWeapon: {fileID: 0}
 --- !u!114 &3649422232105351005
 MonoBehaviour:
@@ -740,7 +749,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterDimension: 0
-  CharacterType: 1
+  CharacterType: 0
   PlayerID: Player3
   CharacterAnimator: {fileID: 0}
   UseDefaultMecanim: 1
@@ -825,7 +834,6 @@ MonoBehaviour:
   TargetDamageResistanceProcessor: {fileID: 0}
   TargetAnimator: {fileID: 0}
   DisableAnimatorLogs: 1
-  CharacterEnergy: {fileID: 6262953773355193352}
 --- !u!114 &6262953773355193352
 MonoBehaviour:
   m_ObjectHideFlags: 0

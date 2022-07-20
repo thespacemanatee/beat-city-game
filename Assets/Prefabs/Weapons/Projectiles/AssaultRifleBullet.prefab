@@ -4906,7 +4906,7 @@ GameObject:
   - component: {fileID: 114675558199215844}
   - component: {fileID: 114469000093533656}
   m_Layer: 18
-  m_Name: LoftAssaultRifleBullet
+  m_Name: AssaultRifleBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
