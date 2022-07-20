@@ -4,7 +4,6 @@ public class WinEventController : MonoBehaviour
 {
     public string playerId;
     public GameObject WinnerScreen;
-
     private bool activated;
 
     // Start is called before the first frame update
@@ -19,11 +18,8 @@ public class WinEventController : MonoBehaviour
 
     public void SetScreenActive(string PlayerName)
     {
-        Debug.Log("Winner active");
-        Debug.Log(PlayerName);
         if (PlayerName == playerId && !activated)
         {
-            WinnerScreen.SetActive(true);
             activated = true;
         }
     }

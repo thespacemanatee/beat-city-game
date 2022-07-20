@@ -10,6 +10,7 @@ public class CheckLastMan : MonoBehaviour
     
     public CustomEvent winEvent;
     private bool gameEnded;
+    private string playerId;
 
     // Start is called before the first frame update
     private void Start()
@@ -23,15 +24,15 @@ public class CheckLastMan : MonoBehaviour
         {
             gameEnded = true;
             var lastMan = GameObject.FindGameObjectsWithTag("Player")[0];
-            winEvent.Invoke(lastMan.name);
             updateWinner(lastMan.name);
+            winEvent.Invoke(playerId);
         }
 
+        // if ANY player presses jump then go to next scene
         if ((Input.GetButtonDown("Player1_Jump") || Input.GetButtonDown("Player2_Jump") ||
              Input.GetButtonDown("Player3_Jump") || Input.GetButtonDown("Player4_Jump")) && gameEnded)
         {
-            Debug.Log("restart pressed");
-            SceneManager.LoadScene("BeatCity");
+            SceneManager.LoadScene("BeatCity"); // change this to other scene for different levels
         }
     }
 
@@ -40,15 +41,19 @@ public class CheckLastMan : MonoBehaviour
         switch (winner)
         {
             case "MinimalCharacter":
+                playerId = "Player1";
                 Player1WinCount.ApplyChange(1);
                 break;
             case "MinimalCharacter 1":
+                playerId = "Player2";
                 Player2WinCount.ApplyChange(1);
                 break;
             case "MinimalCharacter 2":
+                playerId = "Player3";
                 Player3WinCount.ApplyChange(1);
                 break;
             case "MinimalCharacter 3":
+                playerId = "Player4";
                 Player4WinCount.ApplyChange(1);
                 break;
             default:

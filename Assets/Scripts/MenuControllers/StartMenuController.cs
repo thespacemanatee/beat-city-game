@@ -150,7 +150,7 @@ public class StartMenuController : MonoBehaviour
         }
         WaitText.GetComponent<Text>().text = $"Players ready, game starting in \n {counter}";
         yield return wait.NewTime(1);
-        Time.timeScale = 1.0f;
+        Time.timeScale = 1.0f; // start game after 
         this.gameObject.SetActive(false);
         isCoroutineReady = true;
     }

@@ -2,29 +2,151 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class SummaryMenuController : MonoBehaviour
 {
-    public IntVariable Player1Win;
-    public IntVariable Player2Win;
-    public IntVariable Player3Win;
-    public IntVariable Player4Win;
+    public int numPlayers = 4; 
+    
+    public IntVariable[] PlayerWins;
+    // public IntVariable Player2Win;
+    // public IntVariable Player3Win;
+    // public IntVariable Player4Win;
+
+    public IntVariable[] PlayerKills;
+    // public IntVariable Player2Kills;
+    // public IntVariable Player3Kills;
+    // public IntVariable Player4Kills;
+
+    GameObject[] PlayerWinIcons;
+    // GameObject Player2WinIcon;
+    // GameObject Player3WinIcon;
+    // GameObject Player4WinIcon;    
+
+    GameObject[] PlayerKillIcons;
+    // GameObject Player2KillIcon;
+    // GameObject Player3KillIcon;
+    // GameObject Player4KillIcon;    
+
+    GameObject[] PlayerEnergyIcons;
+    // GameObject Player2EnergyIcon;
+    // GameObject Player3EnergyIcon;
+    // GameObject Player4EnergyIcon;  
     
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerWinIcons = new GameObject[numPlayers];
+        PlayerKillIcons = new GameObject[numPlayers];
+        PlayerEnergyIcons = new GameObject[numPlayers];
     }
 
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Player 1 Win" + Player1Win.Value.ToString());
+
+    }
+
+    public void showWinMenu()
+    {
+        Time.timeScale = 0.0f;
+        foreach(Transform child in transform) 
+        {
+            child.gameObject.SetActive(true); // or false
+
+            // Setting win icons
+            if (child.name == "Winner1Icon")
+            {
+                PlayerWinIcons[0] = child.gameObject;
+            }
+            else if (child.name == "Winner2Icon")
+            {
+                PlayerWinIcons[1] = child.gameObject;
+            }
+            else if (child.name == "Winner3Icon")
+            {
+                PlayerWinIcons[2] = child.gameObject;
+            }
+            else if (child.name == "Winner4Icon")
+            {
+                PlayerWinIcons[3] = child.gameObject;
+            }
+
+            // setting kills icon
+            if (child.name == "MostKills1Icon")
+            {
+                PlayerKillIcons[0] = child.gameObject;
+            }
+            else if (child.name == "MostKills2Icon")
+            {
+                PlayerKillIcons[1] = child.gameObject;
+            }
+            else if (child.name == "MostKills3Icon")
+            {
+                PlayerKillIcons[2] = child.gameObject;
+            }
+            else if (child.name == "MostKills4Icon")
+            {
+                PlayerKillIcons[3] = child.gameObject;
+            }
+
+            // setting most energy icon
+            if (child.name == "MostEnergy1Icon")
+            {
+                PlayerEnergyIcons[0] = child.gameObject;
+            }
+            else if (child.name == "MostEnergy2Icon")
+            {
+                PlayerEnergyIcons[1] = child.gameObject;
+            }
+            else if (child.name == "MostEnergy3Icon")
+            {
+                PlayerEnergyIcons[2] = child.gameObject;
+            }
+            else if (child.name == "MostEnergy4Icon")
+            {
+                PlayerEnergyIcons[3] = child.gameObject;
+            }
+        }
+
+        updateIcons(PlayerWinIcons, PlayerWins);
+        updateIcons(PlayerKillIcons, PlayerKills);
+        // updateEnergyIcons(PlayerEnergyIcons);
+    }
+
+    // Update which icons 
+    void updateIcons(GameObject[] icons,IntVariable[] variables)
+    {
+        // First loop through and get the highest number 
+        int maxValues = 0;
+        for (int i = 0; i<numPlayers; i++)
+        {
+            if (variables[i].Value > maxValues)
+            {
+                maxValues = variables[i].Value;
+            }
+        }
         
-        Debug.Log("Player 2 Win" + Player2Win.Value.ToString());
-        
-        Debug.Log("Player 3 Win" + Player3Win.Value.ToString());
-        
-        Debug.Log("Player 4 Win" + Player4Win.Value.ToString());
+        // Second loop through and set the brightness of the highest 
+        for (int i = 0; i<numPlayers; i++)
+        {
+            if (variables[i].Value != maxValues)
+            {
+                setIconBrightness(icons[i]);
+            }
+        }
+    }
+
+    // 'darken' the noobs so we know who actually won
+    void setIconBrightness(GameObject icon)
+    {
+        float brightness = 0.25f;
+        icon.GetComponent<Image>().color = new Color(brightness,brightness,brightness);
+    }
+
+    public void restartGame()
+    {
+        // change this to other scene for different levels
+         SceneManager.LoadScene("BeatCity"); 
     }
 }
