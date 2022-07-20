@@ -7859,7 +7859,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127555697}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae12fda2e1e1c974790159e9720db70b, type: 3}
   m_Name: 
@@ -7988,12 +7988,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 127555697}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510b1220fcbfc4b0084f9add7d0e8156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowsAPlayer: 1
+  FollowsAPlayer: 0
   ConfineCameraToLevelBounds: 1
   ListenToSetConfinerEvents: 1
   TargetCharacter: {fileID: 0}
@@ -54499,12 +54499,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1117165352}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae12fda2e1e1c974790159e9720db70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowsAPlayer: 0
+  FollowsAPlayer: 1
   ConfineCameraToLevelBounds: 1
   ListenToSetConfinerEvents: 1
   TargetCharacter: {fileID: 0}
@@ -54628,12 +54628,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1117165352}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510b1220fcbfc4b0084f9add7d0e8156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowsAPlayer: 1
+  FollowsAPlayer: 0
   ConfineCameraToLevelBounds: 1
   ListenToSetConfinerEvents: 1
   TargetCharacter: {fileID: 0}
@@ -58531,12 +58531,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220499235}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae12fda2e1e1c974790159e9720db70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowsAPlayer: 0
+  FollowsAPlayer: 1
   ConfineCameraToLevelBounds: 1
   ListenToSetConfinerEvents: 1
   TargetCharacter: {fileID: 0}
@@ -58660,12 +58660,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1220499235}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510b1220fcbfc4b0084f9add7d0e8156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowsAPlayer: 1
+  FollowsAPlayer: 0
   ConfineCameraToLevelBounds: 1
   ListenToSetConfinerEvents: 1
   TargetCharacter: {fileID: 0}
@@ -83727,12 +83727,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1806662748}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ae12fda2e1e1c974790159e9720db70b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowsAPlayer: 0
+  FollowsAPlayer: 1
   ConfineCameraToLevelBounds: 1
   ListenToSetConfinerEvents: 1
   TargetCharacter: {fileID: 0}
@@ -83856,12 +83856,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1806662748}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 510b1220fcbfc4b0084f9add7d0e8156, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowsAPlayer: 1
+  FollowsAPlayer: 0
   ConfineCameraToLevelBounds: 1
   ListenToSetConfinerEvents: 1
   TargetCharacter: {fileID: 0}

@@ -128,11 +128,8 @@ namespace MoreMountains.TopDownEngine
         {
             if (!FollowsAPlayer) return;
             FollowsPlayer = true;
-            if (TargetCharacter.CameraTarget != null)
-            {
-                _virtualCamera.Follow = TargetCharacter.CameraTarget.transform;
-                _virtualCamera.enabled = true;
-            }
+            _virtualCamera.Follow = TargetCharacter.CameraTarget.transform;
+            _virtualCamera.enabled = true;
         }
 
         /// <summary>
