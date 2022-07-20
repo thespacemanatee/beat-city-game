@@ -20,6 +20,7 @@ public class WinEventController : MonoBehaviour
     {
         if (PlayerName == playerId && !activated)
         {
+            WinnerScreen.SetActive(true);
             activated = true;
         }
     }

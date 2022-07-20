@@ -2910,7 +2910,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6172998, y: 1}
+    m_SensorSize: {x: 1.9989988, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -3829,7 +3829,7 @@ PrefabInstance:
     - target: {fileID: 454182881611079219, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -88.7
+      value: -88.700005
       objectReference: {fileID: 0}
     - target: {fileID: 2992901452009314610, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
@@ -9377,7 +9377,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6172998, y: 1}
+    m_SensorSize: {x: 1.9989988, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -9934,7 +9934,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6172998, y: 1}
+    m_SensorSize: {x: 1.9989988, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -11022,7 +11022,7 @@ PrefabInstance:
     - target: {fileID: 454182881611079219, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -88.7
+      value: -88.700005
       objectReference: {fileID: 0}
     - target: {fileID: 2992901452009314610, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
@@ -13061,7 +13061,7 @@ PrefabInstance:
     - target: {fileID: 454182881611079219, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -88.7
+      value: -88.700005
       objectReference: {fileID: 0}
     - target: {fileID: 2992901452009314610, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
@@ -14528,7 +14528,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.6172998, y: 1}
+    m_SensorSize: {x: 1.9989988, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -17266,7 +17266,7 @@ PrefabInstance:
     - target: {fileID: 454182881611079219, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -88.7
+      value: -88.700005
       objectReference: {fileID: 0}
     - target: {fileID: 2992901452009314610, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
@@ -17633,6 +17633,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: StartUI
       objectReference: {fileID: 0}
+    - target: {fileID: 5454502841433795476, guid: 6ed7f5854dcf143478f92be5906e03f5,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ed7f5854dcf143478f92be5906e03f5, type: 3}
@@ -17834,6 +17839,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SummaryUI
+      objectReference: {fileID: 0}
+    - target: {fileID: 6339991866705385103, guid: cc29819b1aedefe4fa6187ab88d6883b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
