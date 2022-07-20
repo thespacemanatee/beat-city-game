@@ -1,17 +1,15 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "WinEvent", menuName = "ScriptableObjects/WinEvent", order = 3)]
 public class WinEvent : ScriptableObject
 {
-    private readonly List<WinEventListener> eventListeners = 
-        new List<WinEventListener>();
+    private readonly List<WinEventListener> eventListeners = new();
 
     public void Raise(string W)
     {
         Debug.Log(eventListeners.Count);
-        for(int i = eventListeners.Count -1; i >= 0; i--)
+        for (var i = eventListeners.Count - 1; i >= 0; i--)
             eventListeners[i].OnEventRaised(W);
     }
 

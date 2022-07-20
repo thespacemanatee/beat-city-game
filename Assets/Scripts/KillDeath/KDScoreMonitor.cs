@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,24 +19,26 @@ public class KDScoreMonitor : MonoBehaviour
         UpdateScore(null, null);
     }
 
-    public void UpdateScore(string killer, string victim){
-        if (killer != null && victim != null){
-            if (killer != victim){
-                UpdateKill(killer);
-            }
+    public void UpdateScore(string killer, string victim)
+    {
+        if (killer != null && victim != null)
+        {
+            if (killer != victim) UpdateKill(killer);
             UpdateDeath(victim);
         }
-        text.text = "Player 1 Kill: " + Player1KillCount.Value.ToString() +
-                    "Death: " + Player1DeathCount.Value.ToString() +
-                    "\nPlayer 2 Kill: " + Player2KillCount.Value.ToString() +
-                    "Death: " + Player2DeathCount.Value.ToString() +
-                    "\nPlayer 3 Kill: " + Player3KillCount.Value.ToString() +
-                    "Death: " + Player3DeathCount.Value.ToString() +
-                    "\nPlayer 4 Kill: " + Player4KillCount.Value.ToString() +
-                    "Death: " + Player4DeathCount.Value.ToString();
+
+        text.text = "Player 1 Kill: " + Player1KillCount.Value +
+                    "Death: " + Player1DeathCount.Value +
+                    "\nPlayer 2 Kill: " + Player2KillCount.Value +
+                    "Death: " + Player2DeathCount.Value +
+                    "\nPlayer 3 Kill: " + Player3KillCount.Value +
+                    "Death: " + Player3DeathCount.Value +
+                    "\nPlayer 4 Kill: " + Player4KillCount.Value +
+                    "Death: " + Player4DeathCount.Value;
     }
 
-    public void ResetScore(){
+    public void ResetScore()
+    {
         Player1KillCount.SetValue(0);
         Player2KillCount.SetValue(0);
         Player3KillCount.SetValue(0);
@@ -49,47 +49,47 @@ public class KDScoreMonitor : MonoBehaviour
         Player4DeathCount.SetValue(0);
     }
 
-    void UpdateKill(string killer)
+    private void UpdateKill(string killer)
     {
-      switch (killer)
-      {
-        case "Player1":
-            Player1KillCount.ApplyChange(1);
-            break;
-        case "Player2":
-            Player2KillCount.ApplyChange(1);
-            break;
-        case "Player3":
-            Player3KillCount.ApplyChange(1);
-            break;
-        case "Player4":
-            Player4KillCount.ApplyChange(1);
-            break; 
-        default:
-            Debug.Log("INCORRECT PLAYER ID");
-            break;
-      }
-         
+        switch (killer)
+        {
+            case "Player1":
+                Player1KillCount.ApplyChange(1);
+                break;
+            case "Player2":
+                Player2KillCount.ApplyChange(1);
+                break;
+            case "Player3":
+                Player3KillCount.ApplyChange(1);
+                break;
+            case "Player4":
+                Player4KillCount.ApplyChange(1);
+                break;
+            default:
+                Debug.Log("INCORRECT PLAYER ID");
+                break;
+        }
     }
-    void UpdateDeath(string victim)
+
+    private void UpdateDeath(string victim)
     {
         switch (victim)
-      {
-        case "Player1":
-            Player1DeathCount.ApplyChange(1);
-            break;
-        case "Player2":
-            Player2DeathCount.ApplyChange(1);
-            break;
-        case "Player3":
-            Player3DeathCount.ApplyChange(1);
-            break;
-        case "Player4":
-            Player4DeathCount.ApplyChange(1);
-            break; 
-        default:
-            Debug.Log("INCORRECT PLAYER ID");
-            break;
-      }
+        {
+            case "Player1":
+                Player1DeathCount.ApplyChange(1);
+                break;
+            case "Player2":
+                Player2DeathCount.ApplyChange(1);
+                break;
+            case "Player3":
+                Player3DeathCount.ApplyChange(1);
+                break;
+            case "Player4":
+                Player4DeathCount.ApplyChange(1);
+                break;
+            default:
+                Debug.Log("INCORRECT PLAYER ID");
+                break;
+        }
     }
 }

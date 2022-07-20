@@ -1,23 +1,11 @@
-using System;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
 
 public class NewCharacter : Character
 {
     public NewHealth NewCharacterHealth;
-    public CustomKDEvent onPlayerDeath;
-    //private bool dropped;
 
-    protected override void Update()
-    {
-        base.Update();
-        // if (GetComponent<Transform>().position.y < 0.0f && !dropped)
-        // {
-        //     var victim = GetComponent<Character>().PlayerID;
-        //     onPlayerDeath.Invoke(victim, victim);
-        //     dropped = true;
-        // }
-    }
+    public CustomKDEvent onPlayerDeath;
 
     /// <summary>
     ///     OnEnable, we register our OnRevive event
