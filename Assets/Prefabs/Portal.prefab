@@ -119,8 +119,8 @@ MonoBehaviour:
   AutoActivationDelay: 0
   AutoActivationDelayResetsOnExit: 1
   CanOnlyActivateIfGrounded: 0
-  ShouldUpdateState: 1
-  OnlyOneActivationAtOnce: 1
+  ShouldUpdateState: 0
+  OnlyOneActivationAtOnce: 0
   UnlimitedActivations: 1
   MaxNumberOfActivations: 0
   DelayBetweenUses: 0
@@ -152,12 +152,12 @@ MonoBehaviour:
   OnStay:
     m_PersistentCalls:
       m_Calls: []
-  OnlyAffectsPlayer: 1
-  ExitOffset: {x: 0, y: -2, z: 0}
+  OnlyAffectsPlayer: 0
+  ExitOffset: {x: 0, y: 0, z: 0}
   TeleportationMode: 0
   TweenCurve: 4
   MaintainXEntryPositionOnExit: 0
-  MaintainYEntryPositionOnExit: 0
+  MaintainYEntryPositionOnExit: 1
   MaintainZEntryPositionOnExit: 0
   Destination: {fileID: 0}
   AddToDestinationIgnoreList: 1
@@ -199,10 +199,10 @@ MonoBehaviour:
   MoveMaskMethod: 1
   MoveMaskDuration: 0.2
   FreezeTime: 0
-  FreezeCharacter: 1
+  FreezeCharacter: 0
   TimeMode: 0
-  InitialDelay: 0.1
-  FadeOutDuration: 0.2
-  DelayBetweenFades: 0.3
-  FadeInDuration: 0.2
-  FinalDelay: 0.1
+  InitialDelay: 0
+  FadeOutDuration: 0
+  DelayBetweenFades: 0
+  FadeInDuration: 0
+  FinalDelay: 0
