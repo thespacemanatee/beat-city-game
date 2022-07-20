@@ -20,8 +20,8 @@ public class MapLevel1Controller : MonoBehaviour
     // public GameObject tilePrefab;
     public CustomDropTileEvent dropTiles;
     private int _dropRound;
-    private int tileRows=31;
-    private int tileCols=31;
+    private int tileRows = 31;
+    private int tileCols = 31;
     private readonly List<TileObject> _tiles = new();
 
     private void Awake()
@@ -39,14 +39,14 @@ public class MapLevel1Controller : MonoBehaviour
         var index = 0;
         foreach (Transform col in transform)
         {
-            foreach (Transform tile in col){
-            tile.GetComponent<TileController>().index = index; // set index for tile
-            _tiles.Add(new TileObject(index, tile.gameObject)); // add it to list of tiles managed by map
-            index++;
+            foreach (Transform tile in col)
+            {
+                tile.GetComponent<TileController>().index = index; // set index for tile
+                _tiles.Add(new TileObject(index, tile.gameObject)); // add it to list of tiles managed by map
+                index++;
             }
             // assumes same number of tiles and rows
         }
-        
     }
 
     // Start is called before the first frame update
