@@ -71,13 +71,23 @@ public class NewCharacter : Character
         }
         catch(NullReferenceException)
         {
-            try{
-                killer = GetComponent<Character>().PlayerID;
+            try
+            {
+                killer = instigator.GetComponent<HitscanWeapon>().Owner.GetComponent<Character>().PlayerID;
             }
-            catch(NullReferenceException){
-                Debug.Log("WRONG INSTIGATOR RECEIVED");
+            catch
+            {
+                try
+                {
+                    killer = GetComponent<Character>().PlayerID;
+                }
+                catch(NullReferenceException)
+                {
+                    Debug.Log("WRONG INSTIGATOR RECEIVED");
+                }
             }
         }
+        Debug.Log(killer);
         var victim = GetComponent<Character>().PlayerID;
         if (killer != "null")
         {
