@@ -144,7 +144,7 @@ public class SummaryMenuController : MonoBehaviour
         {
             PlayerWins[i].SetValue(0);
             PlayerKills[i].SetValue(0);
-            PlayerEnergy[i].SetValue(0);
+            //PlayerEnergy[i].SetValue(0);
         }
     }
 }
