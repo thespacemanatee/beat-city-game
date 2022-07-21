@@ -9,29 +9,16 @@ public class SummaryMenuController : MonoBehaviour
     public int numPlayers = 4; 
     
     public IntVariable[] PlayerWins;
-    // public IntVariable Player2Win;
-    // public IntVariable Player3Win;
-    // public IntVariable Player4Win;
 
     public IntVariable[] PlayerKills;
-    // public IntVariable Player2Kills;
-    // public IntVariable Player3Kills;
-    // public IntVariable Player4Kills;
+
+    public IntVariable[] PlayerEnergy;
 
     GameObject[] PlayerWinIcons;
-    // GameObject Player2WinIcon;
-    // GameObject Player3WinIcon;
-    // GameObject Player4WinIcon;    
 
     GameObject[] PlayerKillIcons;
-    // GameObject Player2KillIcon;
-    // GameObject Player3KillIcon;
-    // GameObject Player4KillIcon;    
 
-    GameObject[] PlayerEnergyIcons;
-    // GameObject Player2EnergyIcon;
-    // GameObject Player3EnergyIcon;
-    // GameObject Player4EnergyIcon;  
+    GameObject[] PlayerEnergyIcons; 
     
     // Start is called before the first frame update
     void Start()
@@ -146,7 +133,18 @@ public class SummaryMenuController : MonoBehaviour
 
     public void restartGame()
     {
+        resetAllVariables();
         // change this to other scene for different levels
-         SceneManager.LoadScene("BeatCity"); 
+        SceneManager.LoadScene("BeatCity"); 
+    }
+
+    void resetAllVariables()
+    {
+        for (int i = 0; i < numPlayers; i++)
+        {
+            PlayerWins[i].SetValue(0);
+            PlayerKills[i].SetValue(0);
+            PlayerEnergy[i].SetValue(0);
+        }
     }
 }

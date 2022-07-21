@@ -57,7 +57,6 @@ public class CheckLastMan : MonoBehaviour
                 Player4WinCount.ApplyChange(1);
                 break;
             default:
-                Debug.Log("INCORRECT PLAYER ID");
                 break;
         }
     }
