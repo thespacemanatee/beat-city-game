@@ -41,21 +41,21 @@ public class MultiDirectionProjectileWeapon : ProjectileWeapon
         spawnedProjectile.gameObject.SetActive(true);
         if (projectile != null)
         {
-            float tiltAroundX = Input.GetAxis("Vertical") * i * 45;
-            Quaternion newDirectionAngle = Quaternion.Euler(tiltAroundX, 0, 0);
+            float tiltAroundY = i * 45;
+            Quaternion newRotationAngle = Quaternion.Euler(0, tiltAroundY, 0);
             if (Owner == null)
             {
-                projectile.SetDirection(newDirectionAngle * transform.rotation * DefaultProjectileDirection, transform.rotation, true);
+                projectile.SetDirection(newRotationAngle * transform.rotation * DefaultProjectileDirection, transform.rotation, true);
             }
             else
             {
                 if (Owner.CharacterDimension == Character.CharacterDimensions.Type3D)
                 {
-                    projectile.SetDirection(newDirectionAngle * transform.forward, transform.rotation, true);
+                    projectile.SetDirection(newRotationAngle * transform.forward, transform.rotation, true);
                 }
                 else
                 {
-                    Vector3 newDirection = (newDirectionAngle * transform.right) * (Flipped ? -1 : 1);
+                    Vector3 newDirection = (newRotationAngle * transform.right) * (Flipped ? -1 : 1);
                     if (Owner.Orientation2D != null)
                     {
                         projectile.SetDirection(newDirection, transform.rotation, Owner.Orientation2D.IsFacingRight);
@@ -68,7 +68,7 @@ public class MultiDirectionProjectileWeapon : ProjectileWeapon
             }
             if (RotateWeaponOnSpread)
             {
-                this.transform.rotation = this.transform.rotation * newDirectionAngle;
+                this.transform.rotation = this.transform.rotation * newRotationAngle;
             }
         }  
     }
