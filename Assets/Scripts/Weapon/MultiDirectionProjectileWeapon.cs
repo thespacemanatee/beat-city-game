@@ -20,11 +20,25 @@ public class MultiDirectionProjectileWeapon : ProjectileWeapon
     {
         throw new Exception(gameObject.name + " is trying to spawn objects that don't have a PoolableObject component.");
     }
-
-    for (int i = 0; i< 8; i++)
+    StartCoroutine(rotateProjectile(nextGameObject, spawnPosition));
+    if (triggerObjectActivation)
     {
+        if (nextGameObject.GetComponent<MMPoolableObject>() != null)
+        {
+            nextGameObject.GetComponent<MMPoolableObject>().TriggerOnSpawnComplete();
+        }
+    }
+    return (nextGameObject);
+ } 
+
+ IEnumerator rotateProjectile(GameObject nextGameObject, Vector3 spawnPosition) { 
+	for (int i = 0; i< 8; i++)
+    {
+        float tiltAroundY = i * 45;
         GameObject spawnedProjectile = Instantiate(nextGameObject);
+        //Position
         spawnedProjectile.transform.position = spawnPosition;
+        spawnedProjectile.transform.Rotate(0,tiltAroundY,0);
         if (_projectileSpawnTransform != null)
         {
             spawnedProjectile.transform.position = _projectileSpawnTransform.position;
@@ -38,10 +52,9 @@ public class MultiDirectionProjectileWeapon : ProjectileWeapon
                 projectile.SetOwner(Owner.gameObject);
             }
         }
-        spawnedProjectile.gameObject.SetActive(true);
+        spawnedProjectile.gameObject.SetActive(true); 
         if (projectile != null)
         {
-            float tiltAroundY = i * 45;
             Quaternion newRotationAngle = Quaternion.Euler(0, tiltAroundY, 0);
             if (Owner == null)
             {
@@ -70,15 +83,8 @@ public class MultiDirectionProjectileWeapon : ProjectileWeapon
             {
                 this.transform.rotation = this.transform.rotation * newRotationAngle;
             }
-        }  
-    }
-    if (triggerObjectActivation)
-    {
-        if (nextGameObject.GetComponent<MMPoolableObject>() != null)
-        {
-            nextGameObject.GetComponent<MMPoolableObject>().TriggerOnSpawnComplete();
         }
+        yield return null; 
     }
-    return (nextGameObject);
- }
+}
 }
