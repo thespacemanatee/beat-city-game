@@ -24,8 +24,6 @@ public class WinEventListener : MonoBehaviour
 
     public void OnEventRaised(string W)
     {
-        Debug.Log("Listen");
-        Debug.Log(W);
         Response.Invoke(W);
     }
 }
