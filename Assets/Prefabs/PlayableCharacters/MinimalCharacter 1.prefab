@@ -62,6 +62,7 @@ GameObject:
   - component: {fileID: 2931949030259794541}
   - component: {fileID: 7166277040645077222}
   - component: {fileID: 4006315026903273256}
+  - component: {fileID: -595303410897806206}
   m_Layer: 10
   m_Name: MinimalCharacter 1
   m_TagString: Player
@@ -506,8 +507,7 @@ MonoBehaviour:
   AbilityPermitted: 1
   BlockingMovementStates: 
   BlockingConditionStates: 
-  InitialWeapon: {fileID: 114922138254092764, guid: 37675d77e3fee4bbcbcde9f2be695bf6,
-    type: 3}
+  InitialWeapon: {fileID: 0}
   CanPickupWeapons: 1
   WeaponUseFeedback: {fileID: 0}
   WeaponAttachment: {fileID: 4564073364419608}
@@ -549,18 +549,9 @@ MonoBehaviour:
   HotbarInventoryName: 
   InventoryTransform: {fileID: 0}
   WeaponRotationMode: 0
-  AutoPickItems:
-  - Item: {fileID: 11400000, guid: 64391ef61e5e744f19008542a6ef0386, type: 2}
-    Quantity: 1
-  - Item: {fileID: 11400000, guid: 7efc4e8c081d949b9863fc1c8f037b21, type: 2}
-    Quantity: 1
-  - Item: {fileID: 11400000, guid: da71e776128cc4894acf30b450e62710, type: 2}
-    Quantity: 1
-  - Item: {fileID: 11400000, guid: dd50efd5589be4cbeb3b55b26a9e7b0c, type: 2}
-    Quantity: 10
-  AutoEquipWeaponOnStart: {fileID: 11400000, guid: 906c00e03372649e7a6e1a77de6fe1ab,
-    type: 2}
-  CharacterHandleWeapon: {fileID: 0}
+  AutoPickItems: []
+  AutoEquipWeaponOnStart: {fileID: 0}
+  CharacterHandleWeapon: {fileID: 114510539804127886}
 --- !u!114 &3649422232105351005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -875,6 +866,19 @@ MonoBehaviour:
   RespawnEffect: {fileID: 0}
   RespawnSfx: {fileID: 0}
   _newHealth: {fileID: 2931949030259794541}
+--- !u!114 &-595303410897806206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167761570092420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c01e7396a946fe429ef7fd91eb3dd22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PlayerID: Player2
 --- !u!1 &1749803945586204
 GameObject:
   m_ObjectHideFlags: 0

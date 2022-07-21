@@ -9,19 +9,22 @@ public struct EnergyChangeEvent
 {
     public Energy AffectedEnergy;
     public float NewEnergy;
+    public string PlayerId;
 
-    public EnergyChangeEvent(Energy affectedEnergy, float newEnergy)
+    public EnergyChangeEvent(Energy affectedEnergy, float newEnergy, string playerId)
     {
         AffectedEnergy = affectedEnergy;
         NewEnergy = newEnergy;
+        PlayerId = playerId;
     }
 
     static EnergyChangeEvent e;
 
-    public static void Trigger(Energy affectedEnergy, float newEnergy)
+    public static void Trigger(Energy affectedEnergy, float newEnergy, string playerId)
     {
         e.AffectedEnergy = affectedEnergy;
         e.NewEnergy = newEnergy;
+        e.PlayerId = playerId;
         MMEventManager.TriggerEvent(e);
     }
 }
@@ -143,7 +146,10 @@ public class Energy : MMMonoBehaviour
     {
         CurrentEnergy = newValue;
         UpdateEnergyBars();
-        EnergyChangeEvent.Trigger(this, newValue);
+        if (_character != null)
+        {
+            EnergyChangeEvent.Trigger(this, newValue, _character.PlayerID);
+        }
     }
 
     /// <summary>
