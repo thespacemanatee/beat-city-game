@@ -20311,13 +20311,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0514d297deadac74fb15a7b7326ff0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AimControl: 3
+  AimControl: 1
   RotationMode: 0
   WeaponRotationSpeed: 10
   MinimumAngle: -180
   MaximumAngle: 180
   MinimumMagnitude: 0.2
-  ReticleType: 2
+  ReticleType: 0
   Reticle: {fileID: 1373789777524232, guid: f8d2cd427805b416588f8a6a8bec2ef8, type: 3}
   ReticleDistance: 0
   ReticleHeight: 0
@@ -20337,15 +20337,6 @@ MonoBehaviour:
     m_Bits: 0
   MaximumSlopeElevation: 50
   AvoidNullAim: 1
-  MousePositionAction:
-    m_Name: 
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 20bfbe73-f59d-4608-a36e-5c926d3d721a
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!114 &114482990949044826
 MonoBehaviour:
   m_ObjectHideFlags: 0

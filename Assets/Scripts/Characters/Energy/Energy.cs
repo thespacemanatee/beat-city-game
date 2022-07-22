@@ -9,19 +9,22 @@ public struct EnergyChangeEvent
 {
     public Energy AffectedEnergy;
     public float NewEnergy;
+    public string PlayerId;
 
-    public EnergyChangeEvent(Energy affectedEnergy, float newEnergy)
+    public EnergyChangeEvent(Energy affectedEnergy, float newEnergy, string playerId)
     {
         AffectedEnergy = affectedEnergy;
         NewEnergy = newEnergy;
+        PlayerId = playerId;
     }
 
     static EnergyChangeEvent e;
 
-    public static void Trigger(Energy affectedEnergy, float newEnergy)
+    public static void Trigger(Energy affectedEnergy, float newEnergy, string playerId)
     {
         e.AffectedEnergy = affectedEnergy;
         e.NewEnergy = newEnergy;
+        e.PlayerId = playerId;
         MMEventManager.TriggerEvent(e);
     }
 }
@@ -143,7 +146,10 @@ public class Energy : MMMonoBehaviour
     {
         CurrentEnergy = newValue;
         UpdateEnergyBars();
-        EnergyChangeEvent.Trigger(this, newValue);
+        if (_character != null)
+        {
+            EnergyChangeEvent.Trigger(this, newValue, _character.PlayerID);
+        }
     }
 
     /// <summary>
@@ -159,10 +165,9 @@ public class Energy : MMMonoBehaviour
     /// <summary>
     /// Called when the character spends energy (from using abilities for example)
     /// </summary>
-    /// <param name="energy">The energy the character spends.</param>
-    public virtual void SpendEnergy(float energy)
+    public virtual void SpendEnergy()
     {
-        SetEnergy(Mathf.Max(0, CurrentEnergy - energy));
+        SetEnergy(0);
         UpdateEnergyBars();
     }
 

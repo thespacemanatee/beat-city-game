@@ -5,11 +5,12 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
 {
     public MMSimpleObjectPooler pooler;
+    public int initialCount = 10;
 
     private void Start()
     {
         // spawn two energy packs
-        for (var j = 0; j < 10; j++) SpawnFromPooler();
+        for (var j = 0; j < initialCount; j++) SpawnFromPooler();
         StartCoroutine(SpawnLooper());
     }
 
@@ -71,7 +72,7 @@ public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
         while (true)
         {
             SpawnFromPooler();
-            yield return new WaitForSeconds(5f);
+            yield return new WaitForSeconds(1f);
         }
     }
 }

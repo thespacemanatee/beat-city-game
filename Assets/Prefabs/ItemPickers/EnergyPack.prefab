@@ -5746,6 +5746,8 @@ GameObject:
   - component: {fileID: 7302219167820253230}
   - component: {fileID: 3940382301089915644}
   - component: {fileID: 4135046742940837405}
+  - component: {fileID: 6292592158761206876}
+  - component: {fileID: 7093117669218618584}
   m_Layer: 0
   m_Name: EnergyPack
   m_TagString: Energy
@@ -5793,7 +5795,7 @@ BoxCollider:
   m_GameObject: {fileID: 154168062650071481}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0.5, z: 0}
@@ -5856,6 +5858,35 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   LifeTime: 0
+--- !u!135 &6292592158761206876
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154168062650071481}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0.5, z: 0}
+--- !u!114 &7093117669218618584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 154168062650071481}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5a2085bd8d080a449b957af0284e1cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player1EnergyCount: {fileID: 11400000, guid: 090bd7d55d76e9f488f05f3b0a1bfba1, type: 2}
+  Player2EnergyCount: {fileID: 11400000, guid: 960fa08e1bb7ef1479a710f98181c6b1, type: 2}
+  Player3EnergyCount: {fileID: 11400000, guid: 6eff222f7521a0e48b57287c9607fae8, type: 2}
+  Player4EnergyCount: {fileID: 11400000, guid: f633859c8156dfe438bcdd1dbd1a8ddf, type: 2}
 --- !u!1 &154168062899919541
 GameObject:
   m_ObjectHideFlags: 0

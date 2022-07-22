@@ -118,10 +118,6 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   InventoryType: 0
   TargetTransform: {fileID: 0}
   Persistent: 0
@@ -158,5 +154,5 @@ Transform:
   - {fileID: 5894475947467954797}
   - {fileID: 5894475946444488452}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

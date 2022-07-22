@@ -802,7 +802,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 729b789a2422495418151a0b3fc07590, type: 2}
   - {fileID: 11400000, guid: 6f54656ab3530b84e86af5781897735a, type: 2}
   - {fileID: 11400000, guid: 605d5d662bf3aa5499de4943b194aebb, type: 2}
-  PlayerEnergy: []
+  PlayerEnergy:
+  - {fileID: 11400000, guid: 090bd7d55d76e9f488f05f3b0a1bfba1, type: 2}
+  - {fileID: 11400000, guid: 960fa08e1bb7ef1479a710f98181c6b1, type: 2}
+  - {fileID: 11400000, guid: 6eff222f7521a0e48b57287c9607fae8, type: 2}
+  - {fileID: 11400000, guid: f633859c8156dfe438bcdd1dbd1a8ddf, type: 2}
 --- !u!114 &1726122317295893892
 MonoBehaviour:
   m_ObjectHideFlags: 0
