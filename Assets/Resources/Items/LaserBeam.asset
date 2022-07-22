@@ -19,7 +19,7 @@ MonoBehaviour:
   Usable: 0
   Consumable: 1
   ConsumeQuantity: 1
-  Equippable: 0
+  Equippable: 1
   MoveWhenEquipped: 1
   Droppable: 1
   CanMoveObject: 1
@@ -35,7 +35,7 @@ MonoBehaviour:
   ItemName: 
   ShortDescription: 
   Description: 
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300010, guid: 08784f878b46d4920baa97d2f27b405a, type: 3}
   Prefab: {fileID: 1199924259801758518, guid: 3e4ceb77c070c454386ef06e151df72c, type: 3}
   DropProperties:
     Shape: 0
@@ -80,13 +80,13 @@ MonoBehaviour:
     MaximumScale: {x: 1, y: 1, z: 1}
   MaximumStack: 1
   ItemClass: 2
-  TargetEquipmentInventoryName: 
+  TargetEquipmentInventoryName: SuitWeaponInventory
   EquippedSound: {fileID: 0}
   UsedSound: {fileID: 0}
   MovedSound: {fileID: 0}
   DroppedSound: {fileID: 0}
   UseDefaultSoundsIfNull: 1
-  EquippableWeapon: {fileID: 8227614849266981797, guid: 3e4ceb77c070c454386ef06e151df72c,
+  EquippableWeapon: {fileID: -20687774445194988, guid: 3e4ceb77c070c454386ef06e151df72c,
     type: 3}
   AutoEquipMode: 0
   HandleWeaponID: 1
