@@ -14,7 +14,7 @@ public class NewProjectile : Projectile
             canFlip = false;
         }
         //TODO: CHANGE PLAYER INTO OBSTACLES FOR BOUNCING PROJECTILE
-        if (other.gameObject.CompareTag("Obstacles") && canFlip)
+        if (other.gameObject.CompareTag("Wall") && canFlip)
         {
             Flip();
             flipTime += 1;
