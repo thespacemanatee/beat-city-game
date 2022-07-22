@@ -134,7 +134,6 @@ public class SummaryMenuController : MonoBehaviour
 
     public void restartGame()
     {
-        Debug.Log("restart clicked");
         resetAllVariables();
         // change this to other scene for different levels
         SceneManager.LoadScene("BeatCity"); 
