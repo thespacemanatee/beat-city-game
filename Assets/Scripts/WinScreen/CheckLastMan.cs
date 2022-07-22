@@ -38,6 +38,7 @@ public class CheckLastMan : MonoBehaviour
 
     public void updateWinner(string winner)
     {
+        Debug.Log("Winner for this round is: " + winner);
         switch (winner)
         {
             case "MinimalCharacter":
