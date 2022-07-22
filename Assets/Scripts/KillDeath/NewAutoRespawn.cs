@@ -5,6 +5,7 @@ using UnityEngine;
 public class NewAutoRespawn : AutoRespawn
 {
     public NewHealth _newHealth;
+    public IntVector3DictVariable positionMap;
     protected bool _dropped;
 
     protected override void Update()
@@ -75,7 +76,9 @@ public class NewAutoRespawn : AutoRespawn
     protected virtual void ChangePosition()
     {
         Debug.Log("Change Position Called");
-        transform.position = _initialPosition;
+        Vector3 newPosition = positionMap.GetRandomItem();
+        newPosition.y += 2;
+        transform.position = newPosition;
         StartCoroutine(CheckPosition());
     }
 

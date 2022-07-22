@@ -864,6 +864,7 @@ MonoBehaviour:
   RespawnEffect: {fileID: 0}
   RespawnSfx: {fileID: 0}
   _newHealth: {fileID: 2931949030259794541}
+  positionMap: {fileID: 11400000, guid: 960724df5be734e65b6b43c149640a24, type: 2}
 --- !u!1 &1749803945586204
 GameObject:
   m_ObjectHideFlags: 0

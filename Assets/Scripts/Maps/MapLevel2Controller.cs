@@ -27,6 +27,7 @@ internal class PlatformObject
 public class MapLevel2Controller : MonoBehaviour
 {
     public CustomDropTileEvent dropTiles;
+    public IntVector3DictVariable positionMap;
     public Material teleporterActiveTileMaterial;
     public Material teleporterInactiveTileMaterial;
     private List<PlatformObject> _platforms = new List<PlatformObject>();
@@ -40,6 +41,8 @@ public class MapLevel2Controller : MonoBehaviour
 
     void Awake()
     {
+        positionMap.Reset();
+
         var tileIndex = 0;
         var platformIndex = 0;
         foreach (Transform platform in transform)
@@ -61,6 +64,7 @@ public class MapLevel2Controller : MonoBehaviour
                     }
                     tile.GetComponent<TileController>().index = tileIndex; // set index for tile
                     tiles.Add(tileObject); // add it to list of tiles managed by map
+                    positionMap.AddItem(tileIndex, tile.position);
                     tileIndex++;
                 }
             }
@@ -150,12 +154,14 @@ public class MapLevel2Controller : MonoBehaviour
                     if (shouldAdd)
                     {
                         dropIndex.Add(i + platform.smallestTileIndex);
+                        positionMap.RemoveItem(i + platform.smallestTileIndex);
                     }
                 }
                 int rowStartIndex = useFirstRow ? colStartIndex + _dropRound : colStartIndex + remainingSideLength - 1;
                 for (var i = useFirstCol ? rowStartIndex + rows : rowStartIndex - rows; i < rows * cols && i >= 0;)
                 {
                     dropIndex.Add(i + platform.smallestTileIndex);
+                    positionMap.RemoveItem(i + platform.smallestTileIndex);
                     i += useFirstCol ? rows : -rows;
                 }
             }
