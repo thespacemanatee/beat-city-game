@@ -31,11 +31,12 @@ public class MapLevel2Controller : MonoBehaviour
     public Material teleporterInactiveTileMaterial;
     private List<PlatformObject> _platforms = new List<PlatformObject>();
     private int _dropRound;
-    public int rows = 11;
-    public int cols = 11;
+    public int rows = 15;
+    public int cols = 15;
     private float teleporterAppearChance = 0.3f;
     private float teleporterAppearDuration = 5f;
     private float teleporterAppearInterval = 5.5f;
+    private int minRemainingSideLength = 6;
 
     void Awake()
     {
@@ -135,7 +136,7 @@ public class MapLevel2Controller : MonoBehaviour
         var remainingSideLength = rows - _dropRound;
         var dropIndex = new List<int>();
 
-        if (remainingSideLength > 4)
+        if (remainingSideLength > minRemainingSideLength)
         {
             foreach (PlatformObject platform in _platforms)
             {
