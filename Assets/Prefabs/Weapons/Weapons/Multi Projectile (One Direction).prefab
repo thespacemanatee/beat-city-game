@@ -151,8 +151,8 @@ MonoBehaviour:
   NestUnderThis: 0
   GameObjectToPool: {fileID: 1854097648223014, guid: 5ee140bba84933740bc9c0d6b28d2f6b,
     type: 3}
-  PoolSize: 1
-  PoolCanExpand: 0
+  PoolSize: 10
+  PoolCanExpand: 1
 --- !u!114 &4451807386433459578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -191,12 +191,3 @@ MonoBehaviour:
     m_Bits: 9
   MaximumSlopeElevation: 50
   AvoidNullAim: 1
-  MousePositionAction:
-    m_Name: Mouse Position
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: ef32bcf5-c33d-4ffd-afb0-11fa71d8164b
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0

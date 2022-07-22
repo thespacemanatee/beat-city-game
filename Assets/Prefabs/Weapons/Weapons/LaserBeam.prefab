@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 77424917314396801}
-  - component: {fileID: 8227614849266981797}
+  - component: {fileID: -20687774445194988}
   - component: {fileID: 1031183270425450778}
   m_Layer: 0
   m_Name: LaserBeam
@@ -35,7 +35,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8227614849266981797
+--- !u!114 &-20687774445194988
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -44,7 +44,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1199924259801758518}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdf6147897725a548ae8c694c8ecb82c, type: 3}
+  m_Script: {fileID: 11500000, guid: 9237e2e227377784d944e71d561e5bab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   WeaponName: 
@@ -103,14 +103,14 @@ MonoBehaviour:
   Interruptable: 0
   Flipped: 0
   ProjectileSpawnOffset: {x: 0, y: 0.1, z: 1}
-  Spread: {x: 1, y: 0.5, z: 0}
+  Spread: {x: 4, y: 1, z: 4}
   RotateWeaponOnSpread: 0
   RandomSpread: 0
   SpawnPosition: {x: -7.0293303, y: 2.3389997, z: 4.869373}
   Mode: 1
   HitscanTargetLayers:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 0
   HitscanMaxDistance: 100
   MinDamageCaused: 50
   MaxDamageCaused: 50
@@ -159,15 +159,6 @@ MonoBehaviour:
     m_Bits: 9
   MaximumSlopeElevation: 50
   AvoidNullAim: 1
-  MousePositionAction:
-    m_Name: Mouse Position
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: f928749e-cb76-4abb-95a0-9a29b3c9eb16
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!1 &5870319506565208409
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +199,7 @@ LineRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5870319506565208409}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -247,7 +238,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 100}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -260,15 +251,6 @@ LineRenderer:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 0.64779884
-        inSlope: -0.9884944
-        outSlope: -0.9884944
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.11452514
-        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
