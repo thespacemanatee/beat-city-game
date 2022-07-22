@@ -19,4 +19,6 @@ MonoBehaviour:
   startingColPos: -10
   groundLevel: 0
   tilePrefabScale: 1.5
-  gameDurationInSeconds: 60
+  gameDurationInSeconds: 180
+  minShrinkMapIntervalInSeconds: 5
+  shrinkMapIntervalMultiplier: 0.8

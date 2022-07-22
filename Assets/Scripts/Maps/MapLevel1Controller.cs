@@ -32,6 +32,7 @@ public class MapLevel1Controller : MonoBehaviour
     private int tileRows = 31;
     private int tileCols = 31;
     private readonly List<TileObject> _tiles = new();
+    private int minRemainingSideLength = 10;
 
     private void Awake()
     {
@@ -76,7 +77,7 @@ public class MapLevel1Controller : MonoBehaviour
     {
         // Drop 2 side columns
         var remainingSideLength = tileRows - 2 * _dropRound;
-        if (remainingSideLength > 3)
+        if (remainingSideLength > minRemainingSideLength)
         {
             var dropIndex = new List<int>();
             var startIndex = _dropRound * tileRows + _dropRound;
