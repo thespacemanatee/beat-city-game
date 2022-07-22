@@ -98,7 +98,7 @@ public class SummaryMenuController : MonoBehaviour
 
         updateIcons(PlayerWinIcons, PlayerWins);
         updateIcons(PlayerKillIcons, PlayerKills);
-        // updateEnergyIcons(PlayerEnergyIcons);
+        updateIcons(PlayerEnergyIcons, PlayerEnergy);
     }
 
     // Update which icons 
@@ -145,7 +145,7 @@ public class SummaryMenuController : MonoBehaviour
         {
             PlayerWins[i].SetValue(0);
             PlayerKills[i].SetValue(0);
-            //PlayerEnergy[i].SetValue(0);
+            PlayerEnergy[i].SetValue(0);
         }
     }
 }
