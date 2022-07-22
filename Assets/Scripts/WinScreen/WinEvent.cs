@@ -8,7 +8,6 @@ public class WinEvent : ScriptableObject
 
     public void Raise(string W)
     {
-        Debug.Log(eventListeners.Count);
         for (var i = eventListeners.Count - 1; i >= 0; i--)
             eventListeners[i].OnEventRaised(W);
     }

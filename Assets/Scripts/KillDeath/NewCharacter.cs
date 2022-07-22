@@ -1,4 +1,5 @@
 using MoreMountains.TopDownEngine;
+using System;
 using UnityEngine;
 
 public class NewCharacter : Character
@@ -10,9 +11,21 @@ public class NewCharacter : Character
     /// <summary>
     ///     OnEnable, we register our OnRevive event
     /// </summary>
+
+    protected void Start()
+    {
+        if (NewCharacterHealth != null)
+        {
+            NewCharacterHealth.NewOnDeath += NewOnDeath;
+        } else
+        {
+            Debug.Log("NEW CHARACTER HEALTH IS NOT ENABLED");
+        }
+    }
+    
     protected override void OnEnable()
     {
-        if (CharacterHealth != null)
+        if (NewCharacterHealth != null)
         {
             if (!_onReviveRegistered)
             {
@@ -20,7 +33,7 @@ public class NewCharacter : Character
                 _onReviveRegistered = true;
             }
 
-            CharacterHealth.OnDeath += OnDeath;
+            //CharacterHealth.OnDeath += OnDeath;
             NewCharacterHealth.NewOnDeath += NewOnDeath;
             CharacterHealth.OnHit += OnHit;
         }
@@ -31,9 +44,9 @@ public class NewCharacter : Character
     /// </summary>
     protected override void OnDisable()
     {
-        if (CharacterHealth != null)
+        if (NewCharacterHealth != null)
         {
-            CharacterHealth.OnDeath -= OnDeath;
+            //CharacterHealth.OnDeath -= OnDeath;
             NewCharacterHealth.NewOnDeath -= NewOnDeath;
             CharacterHealth.OnHit -= OnHit;
         }
@@ -41,6 +54,7 @@ public class NewCharacter : Character
 
     protected virtual void NewOnDeath(GameObject instigator)
     {
+        Debug.Log("New On Death Triggered");
         if (CharacterBrain != null)
         {
             CharacterBrain.TransitionToState("");
@@ -49,13 +63,35 @@ public class NewCharacter : Character
 
         if (MovementState.CurrentState != CharacterStates.MovementStates.FallingDownHole)
             MovementState.ChangeState(CharacterStates.MovementStates.Idle);
-        Debug.Log("New On Death Triggered");
+        
         Debug.Log("Killer:");
-        Debug.Log(instigator.GetComponent<Projectile>().Owner.GetComponent<Character>().PlayerID);
-        var killer = instigator.GetComponent<Projectile>().Owner.GetComponent<Character>().PlayerID;
-        Debug.Log("Death:");
-        Debug.Log(GetComponent<Character>().PlayerID);
+        var killer = "null";
+        try{
+            killer = instigator.GetComponent<Projectile>().Owner.GetComponent<Character>().PlayerID;
+        }
+        catch(NullReferenceException)
+        {
+            try
+            {
+                killer = instigator.GetComponent<HitscanWeapon>().Owner.GetComponent<Character>().PlayerID;
+            }
+            catch
+            {
+                try
+                {
+                    killer = GetComponent<Character>().PlayerID;
+                }
+                catch(NullReferenceException)
+                {
+                    Debug.Log("WRONG INSTIGATOR RECEIVED");
+                }
+            }
+        }
+        Debug.Log(killer);
         var victim = GetComponent<Character>().PlayerID;
-        onPlayerDeath.Invoke(killer, victim);
+        if (killer != "null")
+        {
+            onPlayerDeath.Invoke(killer, victim);
+        }
     }
 }
