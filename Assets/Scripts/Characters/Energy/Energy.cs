@@ -165,10 +165,9 @@ public class Energy : MMMonoBehaviour
     /// <summary>
     /// Called when the character spends energy (from using abilities for example)
     /// </summary>
-    /// <param name="energy">The energy the character spends.</param>
-    public virtual void SpendEnergy(float energy)
+    public virtual void SpendEnergy()
     {
-        SetEnergy(Mathf.Max(0, CurrentEnergy - energy));
+        SetEnergy(0);
         UpdateEnergyBars();
     }
 
