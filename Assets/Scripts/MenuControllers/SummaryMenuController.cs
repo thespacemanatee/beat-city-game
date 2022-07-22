@@ -117,6 +117,7 @@ public class SummaryMenuController : MonoBehaviour
         // Second loop through and set the brightness of the highest 
         for (int i = 0; i<numPlayers; i++)
         {
+            Debug.Log(i + "\t search" + variables[i].Value);
             if (variables[i].Value != maxValues)
             {
                 setIconBrightness(icons[i]);
