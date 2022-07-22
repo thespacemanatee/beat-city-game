@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114225316701939062}
   - component: {fileID: 114602549670299862}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: FlipProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
