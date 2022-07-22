@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class MapLevel3Controller : MonoBehaviour
 {
-    public IntVector3DictVariable positionMap;
+    // public IntVector3DictVariable positionMap;
     private List<TileObject> _tiles = new List<TileObject>();
 
     void Awake()
     {
-        positionMap.Reset();
+        // positionMap.Reset();
 
         var index = 0;
         foreach (Transform col in transform)
@@ -18,7 +18,7 @@ public class MapLevel3Controller : MonoBehaviour
             {
                 tile.GetComponent<TileController>().index = index; // set index for tile
                 _tiles.Add(new TileObject(index, tile.gameObject)); // add it to list of tiles managed by map
-                positionMap.AddItem(index, tile.position);
+                // positionMap.AddItem(index, tile.position);
                 index++;
             }
             // assumes same number of tiles and rows
