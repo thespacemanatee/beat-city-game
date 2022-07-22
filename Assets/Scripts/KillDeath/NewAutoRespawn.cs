@@ -6,6 +6,7 @@ public class NewAutoRespawn : AutoRespawn
 {
     public NewHealth _newHealth;
     protected bool _dropped;
+    protected int droppedCount = 0;
 
     protected override void Update()
     {
@@ -74,6 +75,7 @@ public class NewAutoRespawn : AutoRespawn
 
     protected virtual void ChangePosition()
     {
+        droppedCount += 1;
         Debug.Log("Change Position Called");
         transform.position = _initialPosition;
         StartCoroutine(CheckPosition());
@@ -82,13 +84,19 @@ public class NewAutoRespawn : AutoRespawn
     private IEnumerator CheckPosition()
     {
         yield return new WaitForSeconds(0.5f);
-        if (GetComponent<Transform>().position.y <= 0.0f)
+        if (droppedCount > 10)
+        {
+         if (_newHealth != null) _newHealth.Damage(200, gameObject, 1.0f, 3.0f, GetComponent<Transform>().position); 
+         yield return null; 
+        }
+        else if (GetComponent<Transform>().position.y <= 0.0f)
         {
             ChangePosition();
         }
         else
         {
             _dropped = false;
+            droppedCount = 0;
             yield return null;
         }
     }
