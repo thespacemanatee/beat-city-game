@@ -15,17 +15,60 @@ public class NewHitscanWeapon : HitscanWeapon
     GameObject[] hitObjects;
     Vector3[]  hitPoints;
     LineRenderer line;
+    private bool shooting;
     private float thickness = 3f; //<-- Desired thickness here.
 
-    public override void SpawnProjectile(Vector3 spawnPosition, bool triggerObjectActivation = true)
+    protected override void Update()
     {
+        if (shooting)
+        {
+            DetermineSpawnPosition();
+            DetermineDirection();
+            SpawnProjectile(SpawnPosition, true);
+            HandleDamage();
+        }
+    }
+
+    public override void WeaponUse()
+    {
+        if ((RecoilForce > 0f) && (_controller != null))
+        {
+            if (Owner != null)
+            {
+                if (!_controllerIs3D)
+                {
+                    if (Flipped)
+                    {
+                        _controller.Impact(this.transform.right, RecoilForce);
+                    }
+                    else
+                    {
+                        _controller.Impact(-this.transform.right, RecoilForce);
+                    }
+                }
+                else
+                {
+                    _controller.Impact(-this.transform.forward, RecoilForce);
+                }
+            }
+        }
+
+        TriggerWeaponUsedFeedback();
+        shooting = true;
+        DetermineSpawnPosition();
+        DetermineDirection();
         line = gameObject.GetComponentInChildren(typeof(LineRenderer)) as LineRenderer;
         if (line != null)
         {
             line.enabled = true;
-            StartCoroutine(dsiableLineRendered(line));
-            //TODO: Add coroutine to set it off.
         }
+        SpawnProjectile(SpawnPosition, true);
+        HandleDamage();
+        StartCoroutine(startShootingDuration());
+    }
+
+    public override void SpawnProjectile(Vector3 spawnPosition, bool triggerObjectActivation = true)
+    {
         _hitObject = null;
         // we cast a ray in the direction
         if (Mode == Modes.ThreeD)
@@ -86,13 +129,16 @@ public class NewHitscanWeapon : HitscanWeapon
         }      
     }
 
-    IEnumerator dsiableLineRendered(LineRenderer line)
+    IEnumerator startShootingDuration()
     {
-        //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(0.7f);
+        //yield on a new YieldInstruction that waits for 3 seconds.
+        yield return new WaitForSeconds(0.5f);
+        Debug.Log("Destroying laser");
+        shooting = false;
         line.enabled = false;
-        yield return null;
+        Destroy(this.gameObject);
     }
+
 
     protected override void HandleDamage()
     {
