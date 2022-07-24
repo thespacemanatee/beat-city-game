@@ -27,18 +27,22 @@ internal class PlatformObject
 public class MapLevel2Controller : MonoBehaviour
 {
     public CustomDropTileEvent dropTiles;
+    public IntVector3DictVariable positionMap;
     public Material teleporterActiveTileMaterial;
     public Material teleporterInactiveTileMaterial;
     private List<PlatformObject> _platforms = new List<PlatformObject>();
     private int _dropRound;
-    public int rows = 11;
-    public int cols = 11;
+    public int rows = 15;
+    public int cols = 15;
     private float teleporterAppearChance = 0.3f;
     private float teleporterAppearDuration = 5f;
     private float teleporterAppearInterval = 5.5f;
+    private int minRemainingSideLength = 6;
 
     void Awake()
     {
+        positionMap.Reset();
+
         var tileIndex = 0;
         var platformIndex = 0;
         foreach (Transform platform in transform)
@@ -60,6 +64,7 @@ public class MapLevel2Controller : MonoBehaviour
                     }
                     tile.GetComponent<TileController>().index = tileIndex; // set index for tile
                     tiles.Add(tileObject); // add it to list of tiles managed by map
+                    positionMap.AddItem(tileIndex, tile.position);
                     tileIndex++;
                 }
             }
@@ -135,7 +140,7 @@ public class MapLevel2Controller : MonoBehaviour
         var remainingSideLength = rows - _dropRound;
         var dropIndex = new List<int>();
 
-        if (remainingSideLength > 4)
+        if (remainingSideLength > minRemainingSideLength)
         {
             foreach (PlatformObject platform in _platforms)
             {
@@ -149,12 +154,14 @@ public class MapLevel2Controller : MonoBehaviour
                     if (shouldAdd)
                     {
                         dropIndex.Add(i + platform.smallestTileIndex);
+                        positionMap.RemoveItem(i + platform.smallestTileIndex);
                     }
                 }
                 int rowStartIndex = useFirstRow ? colStartIndex + _dropRound : colStartIndex + remainingSideLength - 1;
                 for (var i = useFirstCol ? rowStartIndex + rows : rowStartIndex - rows; i < rows * cols && i >= 0;)
                 {
                     dropIndex.Add(i + platform.smallestTileIndex);
+                    positionMap.RemoveItem(i + platform.smallestTileIndex);
                     i += useFirstCol ? rows : -rows;
                 }
             }

@@ -16,7 +16,7 @@ public class Timer : MonoBehaviour
         // Starts the timer automatically
         _timeRemaining = gameConstants.gameDurationInSeconds;
         timerIsRunning = true;
-        _dropCutoffTime = _timeRemaining * 0.75f;
+        _dropCutoffTime = _timeRemaining * gameConstants.shrinkMapIntervalMultiplier;
     }
 
     private void Update()
@@ -30,7 +30,14 @@ public class Timer : MonoBehaviour
                 if (_timeRemaining < _dropCutoffTime)
                 {
                     onTimerFired.Invoke();
-                    _dropCutoffTime *= 0.75f;
+                    if (_dropCutoffTime * (1 - gameConstants.shrinkMapIntervalMultiplier) >= gameConstants.minShrinkMapIntervalInSeconds)
+                    {
+                        _dropCutoffTime *= gameConstants.shrinkMapIntervalMultiplier;
+                    }
+                    else
+                    {
+                        _dropCutoffTime -= gameConstants.minShrinkMapIntervalInSeconds;
+                    }
                 }
             }
             else
