@@ -15,6 +15,8 @@ public class NewHitscanWeapon : HitscanWeapon
     GameObject[] hitObjects;
     Vector3[]  hitPoints;
     LineRenderer line;
+    private float thickness = 3f; //<-- Desired thickness here.
+
     public override void SpawnProjectile(Vector3 spawnPosition, bool triggerObjectActivation = true)
     {
         line = gameObject.GetComponentInChildren(typeof(LineRenderer)) as LineRenderer;
@@ -30,8 +32,8 @@ public class NewHitscanWeapon : HitscanWeapon
         {
             // if 3D
             _origin = SpawnPosition;
-             
-            hits = Physics.RaycastAll(_origin, _randomSpreadDirection, HitscanMaxDistance);
+            
+            hits = Physics.SphereCastAll(_origin, thickness, _randomSpreadDirection, HitscanMaxDistance);
             // if we've hit something, our destination is the raycast hit
             if (hits != null)
             {   
@@ -42,7 +44,7 @@ public class NewHitscanWeapon : HitscanWeapon
                     try
                     {
                         RaycastHit hit = hits[i];
-                        if (hit.collider.gameObject.name.Contains("MinimalCharacter"))
+                        if (hit.collider.gameObject.name.Contains("MinimalCharacter") && hit.collider.gameObject.name != this.Owner.name)
                         {
                             _hitObject = hit.collider.gameObject;
                             hitObjects[i] = _hitObject;
@@ -51,11 +53,10 @@ public class NewHitscanWeapon : HitscanWeapon
                         }
                     } catch
                     {
-                        Debug.Log("Invalid Object");
+                        //Collision with wrong object.
                     }
                     
                 }
-
             }
             // otherwise we just draw our laser in front of our weapon 
             else
@@ -88,7 +89,7 @@ public class NewHitscanWeapon : HitscanWeapon
     IEnumerator dsiableLineRendered(LineRenderer line)
     {
         //yield on a new YieldInstruction that waits for 5 seconds.
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.7f);
         line.enabled = false;
         yield return null;
     }

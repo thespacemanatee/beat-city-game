@@ -27,10 +27,12 @@ public class MapLevel1Controller : MonoBehaviour
     // public GameConstants gameConstants;
     // public GameObject tilePrefab;
     public CustomDropTileEvent dropTiles;
+    public IntVector3DictVariable positionMap;
     private int _dropRound;
     private int tileRows = 31;
     private int tileCols = 31;
     private readonly List<TileObject> _tiles = new();
+    private int minRemainingSideLength = 10;
 
     private void Awake()
     {
@@ -44,6 +46,9 @@ public class MapLevel1Controller : MonoBehaviour
         //     _tiles.Add(new TileObject(index, gameObject));
         //     index++;
         // }
+
+        positionMap.Reset();
+
         var index = 0;
         foreach (Transform col in transform)
         {
@@ -51,6 +56,7 @@ public class MapLevel1Controller : MonoBehaviour
             {
                 tile.GetComponent<TileController>().index = index; // set index for tile
                 _tiles.Add(new TileObject(index, tile.gameObject)); // add it to list of tiles managed by map
+                positionMap.AddItem(index, tile.position);
                 index++;
             }
             // assumes same number of tiles and rows
@@ -71,7 +77,7 @@ public class MapLevel1Controller : MonoBehaviour
     {
         // Drop 2 side columns
         var remainingSideLength = tileRows - 2 * _dropRound;
-        if (remainingSideLength > 3)
+        if (remainingSideLength > minRemainingSideLength)
         {
             var dropIndex = new List<int>();
             var startIndex = _dropRound * tileRows + _dropRound;
@@ -80,6 +86,8 @@ public class MapLevel1Controller : MonoBehaviour
                 dropIndex.Add(i);
                 // Drops opposite column -- only works assuming our map is a square, otherwise calculate the other column separately
                 dropIndex.Add(i + (remainingSideLength - 1) * tileCols);
+                positionMap.RemoveItem(i);
+                positionMap.RemoveItem(i + (remainingSideLength - 1) * tileCols);
             }
 
             // Drop 2 side rows
@@ -89,6 +97,8 @@ public class MapLevel1Controller : MonoBehaviour
             {
                 dropIndex.Add(i);
                 dropIndex.Add(i + (remainingSideLength - 1));
+                positionMap.RemoveItem(i);
+                positionMap.RemoveItem(i + (remainingSideLength - 1));
             }
 
             _dropRound++;
