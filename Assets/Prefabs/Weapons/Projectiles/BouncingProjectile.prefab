@@ -654,7 +654,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 0
-    maxNumParticles: 1000
+    maxNumParticles: 100
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -713,7 +713,7 @@ ParticleSystem:
         m_RotationOrder: 4
   ShapeModule:
     serializedVersion: 6
-    enabled: 1
+    enabled: 0
     type: 4
     angle: 0
     length: 5
@@ -5011,11 +5011,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TargetLayerMask:
     serializedVersion: 2
-    m_Bits: 12032
+    m_Bits: 1536
   Owner: {fileID: 0}
   TriggerFilter: 195
-  MinDamageCaused: 30
-  MaxDamageCaused: 10
+  MinDamageCaused: 50
+  MaxDamageCaused: 50
   TypedDamages: []
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
@@ -5026,8 +5026,8 @@ MonoBehaviour:
   DurationBetweenRepeats: 1
   DamageOverTimeInterruptible: 1
   RepeatedDamageType: {fileID: 0}
-  DamageTakenEveryTime: 1
-  DamageTakenDamageable: 0
+  DamageTakenEveryTime: 0
+  DamageTakenDamageable: 1
   DamageTakenNonDamageable: 0
   DamageTakenKnockbackType: 0
   DamageTakenKnockbackForce: {x: 0, y: 0, z: 0}
@@ -5087,7 +5087,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ObstaclesLayerMask:
     serializedVersion: 2
-    m_Bits: 12032
+    m_Bits: 1536
   SkinWidth: 0.1
   RepositionRigidbody: 1
   RepositionRigidbodyLayerMask:
