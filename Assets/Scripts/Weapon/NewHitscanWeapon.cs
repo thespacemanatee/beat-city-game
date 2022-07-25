@@ -16,6 +16,7 @@ public class NewHitscanWeapon : HitscanWeapon
     Vector3[]  hitPoints;
     LineRenderer line;
     private bool shooting;
+    private bool released = false;
     private float thickness = 3f; //<-- Desired thickness here.
 
     protected override void Update()
@@ -54,17 +55,20 @@ public class NewHitscanWeapon : HitscanWeapon
         }
 
         TriggerWeaponUsedFeedback();
-        shooting = true;
-        DetermineSpawnPosition();
-        DetermineDirection();
-        line = gameObject.GetComponentInChildren(typeof(LineRenderer)) as LineRenderer;
-        if (line != null)
+        if (!shooting && !released)
         {
-            line.enabled = true;
+            shooting = true;
+            DetermineSpawnPosition();
+            DetermineDirection();
+            line = gameObject.GetComponentInChildren(typeof(LineRenderer)) as LineRenderer;
+            if (line != null)
+            {
+                line.enabled = true;
+            }
+            SpawnProjectile(SpawnPosition, true);
+            HandleDamage();
+            StartCoroutine(startShootingDuration());
         }
-        SpawnProjectile(SpawnPosition, true);
-        HandleDamage();
-        StartCoroutine(startShootingDuration());
     }
 
     public override void SpawnProjectile(Vector3 spawnPosition, bool triggerObjectActivation = true)
@@ -134,9 +138,12 @@ public class NewHitscanWeapon : HitscanWeapon
         //yield on a new YieldInstruction that waits for 3 seconds.
         yield return new WaitForSeconds(0.5f);
         Debug.Log("Destroying laser");
-        shooting = false;
-        line.enabled = false;
-        Destroy(this.gameObject);
+        this.shooting = false;
+        this.released = true;   
+        this.line.enabled = false;
+        //Destroy(this.gameObject); 
+        WeaponState.ChangeState(WeaponStates.WeaponIdle);
+        Debug.Log("Changed to idle state");
     }
 
 
