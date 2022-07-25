@@ -114,8 +114,23 @@ EditorBuildSettings:
     path: Assets/ThirdParty/TopDownEngine/ThirdParty/MoreMountains/MMTools/Demos/MMSceneLoading/MMSceneLoadingDemoSceneB.unity
     guid: 352d34cac2435634fb99618d19a3929c
   - enabled: 1
+    path: Assets/Scenes/StartMenu.unity
+    guid: 62deaf426fad94d479eb4ef8eb2e8006
+  - enabled: 1
+    path: Assets/Scenes/Level 1.unity
+    guid: 5b1e2638597314ae2adbeb7fbdb97e73
+  - enabled: 1
+    path: Assets/Scenes/Level 2.unity
+    guid: 715ba6d76201d427492f8e7da2d99ae2
+  - enabled: 1
+    path: Assets/Scenes/Level 3.unity
+    guid: f69e923688e474be78a63d47697e95d1
+  - enabled: 1
     path: Assets/Scenes/BeatCity.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
+    guid: 3360b516dfd7a124db35ee44cf61474a
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 385984eaf45854b5abe8242b84a87e90,
       type: 2}
