@@ -4424,7 +4424,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7782805, y: 1}
+    m_SensorSize: {x: 1.7798165, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -10383,32 +10383,32 @@ PrefabInstance:
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737288421688, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
@@ -15971,32 +15971,32 @@ PrefabInstance:
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737273801316, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
@@ -20232,6 +20232,11 @@ PrefabInstance:
       propertyPath: m_UiScaleMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1011900589190959498, guid: 6ed7f5854dcf143478f92be5906e03f5,
+        type: 3}
+      propertyPath: inventoryUI
+      value: 
+      objectReference: {fileID: 1724341490}
     - target: {fileID: 1011900589190959501, guid: 6ed7f5854dcf143478f92be5906e03f5,
         type: 3}
       propertyPath: m_Name
@@ -22841,7 +22846,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7782805, y: 1}
+    m_SensorSize: {x: 1.7798165, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -24295,7 +24300,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7782805, y: 1}
+    m_SensorSize: {x: 1.7798165, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -30724,32 +30729,32 @@ PrefabInstance:
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737273801316, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
@@ -32331,32 +32336,32 @@ PrefabInstance:
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737260111199, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -64
       objectReference: {fileID: 0}
     - target: {fileID: 5438195737273801316, guid: f6ae866e28ca54eb296172a563dc0744,
         type: 3}
@@ -36488,13 +36493,14 @@ GameObject:
   - component: {fileID: 1724341494}
   - component: {fileID: 1724341493}
   - component: {fileID: 1724341492}
+  - component: {fileID: 1724341496}
   m_Layer: 5
   m_Name: InventoryCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1724341491
 RectTransform:
   m_ObjectHideFlags: 0
@@ -36590,6 +36596,34 @@ Canvas:
   m_SortingLayerID: -1053558941
   m_SortingOrder: 1
   m_TargetDisplay: 0
+--- !u!114 &1724341496
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1724341490}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c0a2bad4ac44f744af0cda3145212cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: f9818ecd4347f5445bcd2a9da3a9de91, type: 2}
+  Response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1724341490}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!4 &1726637107 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4860560893307180173, guid: c14a831c1b2274ec083c0ad0f16c1d06,
@@ -38328,7 +38362,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7782805, y: 1}
+    m_SensorSize: {x: 1.7798165, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
