@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 114945670543429980}
   - component: {fileID: 114065509660881824}
   - component: {fileID: 114510539804127886}
+  - component: {fileID: 3892230880511729566}
   - component: {fileID: 114710286730267884}
   - component: {fileID: 3649422232105351005}
   - component: {fileID: 2712783647569780224}
@@ -524,7 +525,7 @@ MonoBehaviour:
   MaximumBufferDuration: 0.25
   RequiresPerfectTile: 0
   CurrentWeapon: {fileID: 0}
---- !u!114 &114710286730267884
+--- !u!114 &3892230880511729566
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -532,6 +533,35 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1167761570092420}
   m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9023b485da074cf3850a2a14c1d9707e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AbilityStartSfx: {fileID: 0}
+  AbilityInProgressSfx: {fileID: 0}
+  AbilityStopSfx: {fileID: 0}
+  AbilityStartFeedbacks: {fileID: 0}
+  AbilityStopFeedbacks: {fileID: 0}
+  AbilityPermitted: 1
+  BlockingMovementStates: 
+  BlockingConditionStates: 
+  PlayerID: Player2
+  MainInventoryName: SuitMainInventory
+  WeaponInventoryName: SuitWeaponInventory
+  HotbarInventoryName: 
+  InventoryTransform: {fileID: 0}
+  WeaponRotationMode: 0
+  AutoPickItems: []
+  AutoEquipWeaponOnStart: {fileID: 0}
+  CharacterHandleWeapon: {fileID: 0}
+--- !u!114 &114710286730267884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167761570092420}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05b56d00552d6cd44b46000232e9d83a, type: 3}
   m_Name: 

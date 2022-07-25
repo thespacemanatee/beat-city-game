@@ -100,17 +100,17 @@ MonoBehaviour:
   WeaponStopMMFeedback: {fileID: 0}
   WeaponReloadMMFeedback: {fileID: 0}
   WeaponReloadNeededMMFeedback: {fileID: 0}
-  InitializeOnStart: 1
+  InitializeOnStart: 0
   Interruptable: 0
   Flipped: 0
   ProjectileSpawnOffset: {x: 0, y: 0.16, z: 0.57}
   DefaultProjectileDirection: {x: 0, y: 0, z: 1}
-  ProjectilesPerShot: 5
+  ProjectilesPerShot: 100
   SpawnTransforms: []
   SpawnTransformsMode: 1
-  Spread: {x: 5, y: 5, z: 5}
+  Spread: {x: 200, y: 200, z: 200}
   RotateWeaponOnSpread: 0
-  RandomSpread: 1
+  RandomSpread: 0
   SpawnPosition: {x: 0, y: 0.16, z: 0.57}
   SpawnFeedbacks: []
   TestShootButton: 0
@@ -172,15 +172,6 @@ MonoBehaviour:
     m_Bits: 0
   MaximumSlopeElevation: 50
   AvoidNullAim: 1
-  MousePositionAction:
-    m_Name: Mouse Position
-    m_Type: 0
-    m_ExpectedControlType: 
-    m_Id: 4e639118-b0a2-4e5b-a2fa-47cec9f4e858
-    m_Processors: 
-    m_Interactions: 
-    m_SingletonActionBindings: []
-    m_Flags: 0
 --- !u!114 &114602549670299862
 MonoBehaviour:
   m_ObjectHideFlags: 0
