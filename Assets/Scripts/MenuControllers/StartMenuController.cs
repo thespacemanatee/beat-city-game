@@ -30,6 +30,8 @@ public class StartMenuController : MonoBehaviour
     public Sprite Player3Ready;
     public Sprite Player4Ready;
 
+    public GameObject inventoryUI;
+
     void Awake()
     {
         Time.timeScale = 0.0f; // pause game initially
@@ -152,6 +154,7 @@ public class StartMenuController : MonoBehaviour
         yield return wait.NewTime(1);
         Time.timeScale = 1.0f; // start game after 
         this.gameObject.SetActive(false);
+        inventoryUI.SetActive(true);
         isCoroutineReady = true;
     }
 }

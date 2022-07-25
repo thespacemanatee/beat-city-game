@@ -324,6 +324,7 @@ namespace MoreMountains.TopDownEngine
 		/// <param name="levelName">Level name.</param>
 		protected virtual IEnumerator GotoLevelCo(string levelName)
 		{
+			Debug.Log(Players);
 			if (Players != null && Players.Count > 0)
 			{ 
 				foreach (Character player in Players)

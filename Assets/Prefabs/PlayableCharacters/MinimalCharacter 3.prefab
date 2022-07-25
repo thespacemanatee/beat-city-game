@@ -64,6 +64,7 @@ GameObject:
   - component: {fileID: 5029227804454485112}
   - component: {fileID: 3333534341021411896}
   - component: {fileID: -5242183176269233480}
+  - component: {fileID: 7119525593691818865}
   m_Layer: 10
   m_Name: MinimalCharacter 3
   m_TagString: Player
@@ -910,6 +911,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerID: Player4
+--- !u!65 &7119525593691818865
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1167761570092420}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 2, z: 1}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &1749803945586204
 GameObject:
   m_ObjectHideFlags: 0
