@@ -154,6 +154,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MenuUI
       objectReference: {fileID: 0}
+    - target: {fileID: 1126012798137961639, guid: 8879ffad20d124efb8ea070d7df4ccc1,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1126012798137961641, guid: 8879ffad20d124efb8ea070d7df4ccc1,
         type: 3}
       propertyPath: m_Pivot.x
@@ -273,6 +278,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1126012798179855726, guid: 8879ffad20d124efb8ea070d7df4ccc1,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.43450928
       objectReference: {fileID: 0}
     - target: {fileID: 1591554380113480839, guid: 8879ffad20d124efb8ea070d7df4ccc1,
         type: 3}
@@ -453,6 +463,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5819591090421121813, guid: 8879ffad20d124efb8ea070d7df4ccc1,
+        type: 3}
+      propertyPath: LevelName
+      value: Level 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -999,7 +1014,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1153508262244021
 GameObject:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1078,7 +1093,7 @@ GameObject:
   m_IsActive: 0
 --- !u!4 &4146474211329903
 Transform:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1272,7 +1287,7 @@ MonoBehaviour:
   m_Damping: 0
 --- !u!114 &114449969078096857
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1305,7 +1320,7 @@ MonoBehaviour:
   TargetCharacter: {fileID: 0}
 --- !u!114 &114607369110315103
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1411,7 +1426,7 @@ MonoBehaviour:
   m_ComponentOwner: {fileID: 4146474211329903}
 --- !u!114 &114947792202843783
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -1701,6 +1716,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ButtonUI Back
+      objectReference: {fileID: 0}
+    - target: {fileID: 6309907041673457121, guid: 80d41edecb80f4942a67d5b961238df3,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6309907041673457124, guid: 80d41edecb80f4942a67d5b961238df3,
         type: 3}
@@ -2643,6 +2663,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7394726502989013156, guid: 7797d003aff224fe7a9ad306e37b6e9d,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7394726502989013162, guid: 7797d003aff224fe7a9ad306e37b6e9d,
         type: 3}
