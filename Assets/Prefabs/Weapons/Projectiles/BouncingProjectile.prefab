@@ -5020,7 +5020,7 @@ MonoBehaviour:
   DamageCausedKnockbackType: 1
   DamageCausedKnockbackDirection: 0
   DamageCausedKnockbackForce: {x: 10, y: 2, z: 0}
-  InvincibilityDuration: 0.1
+  InvincibilityDuration: 1
   RepeatDamageOverTime: 0
   AmountOfRepeats: 3
   DurationBetweenRepeats: 1
