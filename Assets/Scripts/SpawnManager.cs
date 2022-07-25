@@ -5,6 +5,7 @@ using UnityEngine;
 public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
 {
     public MMSimpleObjectPooler pooler;
+    public IntVector3DictVariable positionMap;
     public int initialCount = 10;
 
     private void Start()
@@ -43,7 +44,10 @@ public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
 
     private void SpawnFromPooler()
     {
-        SpawnFromPooler(new Vector3(Random.Range(-10f, 10f), 10f, Random.Range(-10f, 10f)));
+        // SpawnFromPooler(new Vector3(Random.Range(-10f, 10f), 10f, Random.Range(-10f, 10f)));
+        Vector3 newPosition = positionMap.GetRandomItem();
+        newPosition.y += 5;
+        SpawnFromPooler(newPosition);
     }
 
     private GameObject SpawnFromPooler(Vector3 position)

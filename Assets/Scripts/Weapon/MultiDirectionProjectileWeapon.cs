@@ -1,90 +1,83 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.TopDownEngine;
-using MoreMountains.Feedbacks;
 using MoreMountains.Tools;
 using System;
 
 public class MultiDirectionProjectileWeapon : ProjectileWeapon
 {
-
- public override GameObject SpawnProjectile(Vector3 spawnPosition, int projectileIndex, int totalProjectiles, bool triggerObjectActivation = true)
- {
-    /// we get the next object in the pool and make sure it's not null
-    GameObject nextGameObject = ObjectPooler.GetPooledGameObject();
-
-    // mandatory checks
-    if (nextGameObject == null) { return null; }
-    if (nextGameObject.GetComponent<MMPoolableObject>() == null)
+    public override GameObject SpawnProjectile(Vector3 spawnPosition, int projectileIndex, int totalProjectiles,
+        bool triggerObjectActivation = true)
     {
-        throw new Exception(gameObject.name + " is trying to spawn objects that don't have a PoolableObject component.");
-    }
-    StartCoroutine(rotateProjectile(nextGameObject, spawnPosition));
-    if (triggerObjectActivation)
-    {
-        if (nextGameObject.GetComponent<MMPoolableObject>() != null)
+        /// we get the next object in the pool and make sure it's not null
+        var nextGameObject = ObjectPooler.GetPooledGameObject();
+
+        // mandatory checks
+        if (nextGameObject == null)
+        {
+            return null;
+        }
+
+        if (nextGameObject.GetComponent<MMPoolableObject>() == null)
+        {
+            throw new Exception(gameObject.name +
+                                " is trying to spawn objects that don't have a PoolableObject component.");
+        }
+
+        StartCoroutine(RotateProjectile(nextGameObject, spawnPosition));
+        if (triggerObjectActivation && nextGameObject.GetComponent<MMPoolableObject>() != null)
         {
             nextGameObject.GetComponent<MMPoolableObject>().TriggerOnSpawnComplete();
         }
-    }
-    return (nextGameObject);
- } 
 
- IEnumerator rotateProjectile(GameObject nextGameObject, Vector3 spawnPosition) { 
-	for (int i = 0; i< 8; i++)
+        return nextGameObject;
+    }
+
+    private IEnumerator RotateProjectile(GameObject nextGameObject, Vector3 spawnPosition)
     {
-        float tiltAroundY = i * 45;
-        GameObject spawnedProjectile = Instantiate(nextGameObject);
-        //Position
-        spawnedProjectile.transform.position = spawnPosition;
-        spawnedProjectile.transform.Rotate(0,tiltAroundY,0);
-        if (_projectileSpawnTransform != null)
+        for (var i = 0; i < 8; i++)
         {
-            spawnedProjectile.transform.position = _projectileSpawnTransform.position;
-        }
-        Projectile projectile = spawnedProjectile.GetComponent<Projectile>();
-        if (projectile != null)
-        {
-            projectile.SetWeapon(this);
-            if (Owner != null)
+            float tiltAroundY = i * 45;
+            var spawnedProjectile = Instantiate(nextGameObject);
+            //Position
+            spawnedProjectile.transform.position = spawnPosition;
+            spawnedProjectile.transform.Rotate(0, tiltAroundY, 0);
+            if (_projectileSpawnTransform != null)
             {
-                projectile.SetOwner(Owner.gameObject);
+                spawnedProjectile.transform.position = _projectileSpawnTransform.position;
             }
-        }
-        spawnedProjectile.gameObject.SetActive(true); 
-        if (projectile != null)
-        {
-            Quaternion newRotationAngle = Quaternion.Euler(0, tiltAroundY, 0);
+
+            var projectile = spawnedProjectile.GetComponent<Projectile>();
+            if (projectile == null) continue;
+            projectile.SetWeapon(this);
+            spawnedProjectile.gameObject.SetActive(true);
+            var newRotationAngle = Quaternion.Euler(0, tiltAroundY, 0);
             if (Owner == null)
             {
-                projectile.SetDirection(newRotationAngle * transform.rotation * DefaultProjectileDirection, transform.rotation, true);
+                projectile.SetDirection(newRotationAngle * transform.rotation * DefaultProjectileDirection,
+                    transform.rotation, true);
             }
             else
             {
+                projectile.SetOwner(Owner.gameObject);
                 if (Owner.CharacterDimension == Character.CharacterDimensions.Type3D)
                 {
                     projectile.SetDirection(newRotationAngle * transform.forward, transform.rotation, true);
                 }
                 else
                 {
-                    Vector3 newDirection = (newRotationAngle * transform.right) * (Flipped ? -1 : 1);
-                    if (Owner.Orientation2D != null)
-                    {
-                        projectile.SetDirection(newDirection, transform.rotation, Owner.Orientation2D.IsFacingRight);
-                    }
-                    else
-                    {
-                        projectile.SetDirection(newDirection, transform.rotation, true);
-                    }
+                    var newDirection = (newRotationAngle * transform.right) * (Flipped ? -1 : 1);
+                    projectile.SetDirection(newDirection, transform.rotation,
+                        Owner.Orientation2D == null || Owner.Orientation2D.IsFacingRight);
                 }
             }
+
             if (RotateWeaponOnSpread)
             {
-                this.transform.rotation = this.transform.rotation * newRotationAngle;
+                transform.rotation *= newRotationAngle;
             }
         }
-        yield return null; 
+
+        yield return null;
     }
-}
 }

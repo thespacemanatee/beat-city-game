@@ -5,7 +5,9 @@ using UnityEngine;
 public class NewAutoRespawn : AutoRespawn
 {
     public NewHealth _newHealth;
+    public IntVector3DictVariable positionMap;
     protected bool _dropped;
+    protected int respawnCount = 0;
 
     protected override void Update()
     {
@@ -74,14 +76,22 @@ public class NewAutoRespawn : AutoRespawn
 
     protected virtual void ChangePosition()
     {
+        respawnCount += 1;
         Debug.Log("Change Position Called");
-        transform.position = _initialPosition;
+        Vector3 newPosition = positionMap.GetRandomItem();
+        newPosition.y += 2; 
+        transform.position = newPosition;
+        // transform.position = _initialPosition;
         StartCoroutine(CheckPosition());
     }
 
     private IEnumerator CheckPosition()
     {
         yield return new WaitForSeconds(0.5f);
+        if (respawnCount > 10)
+        {
+            if (_newHealth != null) _newHealth.Damage(200, gameObject, 1.0f, 3.0f, GetComponent<Transform>().position);
+        }
         if (GetComponent<Transform>().position.y <= 0.0f)
         {
             ChangePosition();
@@ -89,6 +99,7 @@ public class NewAutoRespawn : AutoRespawn
         else
         {
             _dropped = false;
+            respawnCount = 0;
             yield return null;
         }
     }
