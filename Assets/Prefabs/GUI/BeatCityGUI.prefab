@@ -1964,7 +1964,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: PRESS JUMP TO RESTART
+  m_Text: PRESS JUMP TO CONTINUE
 --- !u!1 &8973364349726416928
 GameObject:
   m_ObjectHideFlags: 0
