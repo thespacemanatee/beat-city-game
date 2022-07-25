@@ -1,12 +1,16 @@
 using System.Collections;
+using System.Numerics;
 using MoreMountains.Tools;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
 {
     public MMSimpleObjectPooler pooler;
     public IntVector3DictVariable positionMap;
     public int initialCount = 10;
+    public float spawnInterval = 1f;
 
     private void Start()
     {
@@ -31,21 +35,20 @@ public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
         var position = eventType.Position;
         for (var i = 0; i < count; i++)
         {
-            var item = SpawnFromPooler(position + Vector3.up * 5f);
-            if (item == null) continue;
+            var spawnPosition = position + new Vector3(0, 5, 0);
+            var item = SpawnFromPooler(spawnPosition);
+            if (item == null) item = Instantiate(pooler.GameObjectToPool, spawnPosition, Quaternion.identity);
             var rigidBody = item.GetComponent<Rigidbody>();
-            if (rigidBody)
-            {
-                // fling in random direction
-                rigidBody.AddForce(Random.insideUnitSphere * 10f + Vector3.up * 5f, ForceMode.Impulse);
-            }
+            if (!rigidBody) continue;
+            // fling in random direction
+            var direction = Random.insideUnitSphere;
+            rigidBody.AddForce(direction * 10 + Vector3.up * 15f, ForceMode.Impulse);
         }
     }
 
     private void SpawnFromPooler()
     {
-        // SpawnFromPooler(new Vector3(Random.Range(-10f, 10f), 10f, Random.Range(-10f, 10f)));
-        Vector3 newPosition = positionMap.GetRandomItem();
+        var newPosition = positionMap.GetRandomItem();
         newPosition.y += 10;
         SpawnFromPooler(newPosition);
     }
@@ -76,7 +79,7 @@ public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
         while (true)
         {
             SpawnFromPooler();
-            yield return new WaitForSeconds(1f);
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 }
