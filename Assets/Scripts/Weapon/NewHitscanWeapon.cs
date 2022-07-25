@@ -1,27 +1,22 @@
 using MoreMountains.TopDownEngine;
 using MoreMountains.Tools;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using MoreMountains.Feedbacks;
-using System;
-using UnityEngine.Events;
-using UnityEngine.Serialization;
-using Random = System.Random;
 
 public class NewHitscanWeapon : HitscanWeapon
 {
-    RaycastHit[] hits;
-    GameObject[] hitObjects;
-    Vector3[]  hitPoints;
-    LineRenderer line;
-    private bool shooting;
-    private bool released = false;
-    private float thickness = 3f; //<-- Desired thickness here.
+    public float thickness = 3f; //<-- Desired thickness here.
+
+    private RaycastHit[] _hits;
+    private GameObject[] _hitObjects;
+    private Vector3[] _hitPoints;
+    private LineRenderer _line;
+    private bool _isShooting;
+    private bool _isReleased;
 
     protected override void Update()
     {
-        if (shooting)
+        if (_isShooting)
         {
             DetermineSpawnPosition();
             DetermineDirection();
@@ -32,7 +27,7 @@ public class NewHitscanWeapon : HitscanWeapon
 
     public override void WeaponUse()
     {
-        if ((RecoilForce > 0f) && (_controller != null))
+        if (RecoilForce > 0f && _controller != null)
         {
             if (Owner != null)
             {
@@ -40,35 +35,34 @@ public class NewHitscanWeapon : HitscanWeapon
                 {
                     if (Flipped)
                     {
-                        _controller.Impact(this.transform.right, RecoilForce);
+                        _controller.Impact(transform.right, RecoilForce);
                     }
                     else
                     {
-                        _controller.Impact(-this.transform.right, RecoilForce);
+                        _controller.Impact(-transform.right, RecoilForce);
                     }
                 }
                 else
                 {
-                    _controller.Impact(-this.transform.forward, RecoilForce);
+                    _controller.Impact(-transform.forward, RecoilForce);
                 }
             }
         }
 
         TriggerWeaponUsedFeedback();
-        if (!shooting && !released)
+        if (_isShooting || _isReleased) return;
+        _isShooting = true;
+        DetermineSpawnPosition();
+        DetermineDirection();
+        _line = gameObject.GetComponentInChildren(typeof(LineRenderer)) as LineRenderer;
+        if (_line != null)
         {
-            shooting = true;
-            DetermineSpawnPosition();
-            DetermineDirection();
-            line = gameObject.GetComponentInChildren(typeof(LineRenderer)) as LineRenderer;
-            if (line != null)
-            {
-                line.enabled = true;
-            }
-            SpawnProjectile(SpawnPosition, true);
-            HandleDamage();
-            StartCoroutine(startShootingDuration());
+            _line.enabled = true;
         }
+
+        SpawnProjectile(SpawnPosition, true);
+        HandleDamage();
+        StartCoroutine(StartShootingDuration());
     }
 
     public override void SpawnProjectile(Vector3 spawnPosition, bool triggerObjectActivation = true)
@@ -79,30 +73,31 @@ public class NewHitscanWeapon : HitscanWeapon
         {
             // if 3D
             _origin = SpawnPosition;
-            
-            hits = Physics.SphereCastAll(_origin, thickness, _randomSpreadDirection, HitscanMaxDistance);
+
+            _hits = Physics.SphereCastAll(_origin, thickness, _randomSpreadDirection, HitscanMaxDistance);
             // if we've hit something, our destination is the raycast hit
-            if (hits != null)
-            {   
-                hitObjects = new GameObject[hits.Length];
-                hitPoints = new Vector3[hits.Length];
-                for (int i = 0; i < hits.Length; i++)
+            if (_hits != null)
+            {
+                _hitObjects = new GameObject[_hits.Length];
+                _hitPoints = new Vector3[_hits.Length];
+                for (var i = 0; i < _hits.Length; i++)
                 {
                     try
                     {
-                        RaycastHit hit = hits[i];
-                        if (hit.collider.gameObject.name.Contains("MinimalCharacter") && hit.collider.gameObject.name != this.Owner.name)
+                        var hit = _hits[i];
+                        if (hit.collider.gameObject.name.Contains("MinimalCharacter") &&
+                            hit.collider.gameObject.name != this.Owner.name)
                         {
                             _hitObject = hit.collider.gameObject;
-                            hitObjects[i] = _hitObject;
+                            _hitObjects[i] = _hitObject;
                             _hitPoint = _hit.point;
-                            hitPoints[i] = _hitPoint;
+                            _hitPoints[i] = _hitPoint;
                         }
-                    } catch
+                    }
+                    catch
                     {
                         //Collision with wrong object.
                     }
-                    
                 }
             }
             // otherwise we just draw our laser in front of our weapon 
@@ -119,7 +114,8 @@ public class NewHitscanWeapon : HitscanWeapon
 
             // we cast a ray in front of the weapon to detect an obstacle
             _origin = SpawnPosition;
-            _hit2D = MMDebug.RayCast(_origin, _randomSpreadDirection, HitscanMaxDistance, HitscanTargetLayers, Color.red, true);
+            _hit2D = MMDebug.RayCast(_origin, _randomSpreadDirection, HitscanMaxDistance, HitscanTargetLayers,
+                Color.red, true);
             if (_hit2D)
             {
                 _hitObject = _hit2D.collider.gameObject;
@@ -130,76 +126,77 @@ public class NewHitscanWeapon : HitscanWeapon
             {
                 _hitObject = null;
             }
-        }      
+        }
     }
 
-    IEnumerator startShootingDuration()
+    private IEnumerator StartShootingDuration()
     {
         //yield on a new YieldInstruction that waits for 3 seconds.
         yield return new WaitForSeconds(0.5f);
         Debug.Log("Destroying laser");
-        this.shooting = false;
-        this.released = true;   
-        this.line.enabled = false;
-        //Destroy(this.gameObject); 
-        WeaponState.ChangeState(WeaponStates.WeaponIdle);
-        Debug.Log("Changed to idle state");
+        _isShooting = false;
+        _isReleased = true;
+        _line.enabled = false;
+        WeaponState.ChangeState(WeaponStates.WeaponStop);
+        Debug.Log("Changed to weapon stop state");
     }
 
 
     protected override void HandleDamage()
     {
-        if (hitObjects.Length == 0)
+        if (_hitObjects.Length == 0)
         {
             return;
         }
-        for (int i = 0; i < hitObjects.Length; i++)
+
+        foreach (var hit in _hitObjects)
         {
-            if (hitObjects[i] == null)
+            if (hit == null)
             {
                 continue;
             }
-            _health = hitObjects[i].MMGetComponentNoAlloc<Health>();
+
+            _health = hit.MMGetComponentNoAlloc<Health>();
             if (_health == null)
-			{
-				// hit non damageable
-				if (HitNonDamageable != null)
-				{
-					HitNonDamageable.transform.position = _hitPoint;
-					HitNonDamageable.transform.LookAt(this.transform);
-					HitNonDamageable.PlayFeedbacks();
-				}
+            {
+                // hit non damageable
+                if (HitNonDamageable != null)
+                {
+                    HitNonDamageable.transform.position = _hitPoint;
+                    HitNonDamageable.transform.LookAt(transform);
+                    HitNonDamageable.PlayFeedbacks();
+                }
 
-				if (NonDamageableImpactParticles != null)
-				{
-					NonDamageableImpactParticles.transform.position = _hitPoint;
-					NonDamageableImpactParticles.transform.LookAt(this.transform);
-					NonDamageableImpactParticles.Play();
-				}
-			}
-			else
-			{
-				// hit damageable
-				_damageDirection = (hitObjects[i].transform.position - this.transform.position).normalized;
-                
-				float randomDamage = UnityEngine.Random.Range(MinDamageCaused, Mathf.Max(MaxDamageCaused, MinDamageCaused));
-				_health.Damage(randomDamage, this.gameObject, DamageCausedInvincibilityDuration, DamageCausedInvincibilityDuration, _damageDirection, TypedDamages);
+                if (NonDamageableImpactParticles != null)
+                {
+                    NonDamageableImpactParticles.transform.position = _hitPoint;
+                    NonDamageableImpactParticles.transform.LookAt(transform);
+                    NonDamageableImpactParticles.Play();
+                }
+            }
+            else
+            {
+                // hit damageable
+                _damageDirection = (hit.transform.position - transform.position).normalized;
 
-				if (HitDamageable != null)
-				{
-					HitDamageable.transform.position = _hitPoint;
-					HitDamageable.transform.LookAt(this.transform);
-					HitDamageable.PlayFeedbacks();
-				}
-                
-				if (DamageableImpactParticles != null)
-				{
-					DamageableImpactParticles.transform.position = _hitPoint;
-					DamageableImpactParticles.transform.LookAt(this.transform);
-					DamageableImpactParticles.Play();
-				}
-			}
+                var randomDamage = Random.Range(MinDamageCaused, Mathf.Max(MaxDamageCaused, MinDamageCaused));
+                _health.Damage(randomDamage, gameObject, DamageCausedInvincibilityDuration,
+                    DamageCausedInvincibilityDuration, _damageDirection, TypedDamages);
+
+                if (HitDamageable != null)
+                {
+                    HitDamageable.transform.position = _hitPoint;
+                    HitDamageable.transform.LookAt(this.transform);
+                    HitDamageable.PlayFeedbacks();
+                }
+
+                if (DamageableImpactParticles != null)
+                {
+                    DamageableImpactParticles.transform.position = _hitPoint;
+                    DamageableImpactParticles.transform.LookAt(transform);
+                    DamageableImpactParticles.Play();
+                }
+            }
         }
-
     }
 }
