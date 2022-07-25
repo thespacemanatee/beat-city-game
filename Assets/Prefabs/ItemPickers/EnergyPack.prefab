@@ -5742,11 +5742,11 @@ GameObject:
   m_Component:
   - component: {fileID: 154168062650071478}
   - component: {fileID: 154168062650071476}
+  - component: {fileID: 6292592158761206876}
   - component: {fileID: 4396653550606162235}
   - component: {fileID: 7302219167820253230}
   - component: {fileID: 3940382301089915644}
   - component: {fileID: 4135046742940837405}
-  - component: {fileID: 6292592158761206876}
   - component: {fileID: 7093117669218618584}
   m_Layer: 0
   m_Name: EnergyPack

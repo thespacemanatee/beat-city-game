@@ -46,7 +46,7 @@ public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
     {
         // SpawnFromPooler(new Vector3(Random.Range(-10f, 10f), 10f, Random.Range(-10f, 10f)));
         Vector3 newPosition = positionMap.GetRandomItem();
-        newPosition.y += 5;
+        newPosition.y += 10;
         SpawnFromPooler(newPosition);
     }
 

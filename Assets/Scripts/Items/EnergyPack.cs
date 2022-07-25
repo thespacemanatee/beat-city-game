@@ -36,4 +36,13 @@ public class EnergyPack : PickableItem
             characterEnergy.ReceiveEnergy(EnergyToGive);
         }
     }
+
+    void Update()
+    {
+        // Return energy pack to pooler when it falls
+        if (gameObject.activeSelf && gameObject.transform.position.y < -10)
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }
