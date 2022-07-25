@@ -551,7 +551,7 @@ InputManager:
     joyNum: 1
   - serializedVersion: 3
     m_Name: Player1_Horizontal
-    descriptiveName: 
+    descriptiveName: Ex-6th axis
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
@@ -563,7 +563,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 1
   - serializedVersion: 3
     m_Name: Player2_Horizontal
@@ -583,7 +583,7 @@ InputManager:
     joyNum: 2
   - serializedVersion: 3
     m_Name: Player2_Horizontal
-    descriptiveName: 
+    descriptiveName: Ex-6th axis
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
@@ -595,7 +595,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 2
   - serializedVersion: 3
     m_Name: Player3_Horizontal
@@ -615,7 +615,7 @@ InputManager:
     joyNum: 3
   - serializedVersion: 3
     m_Name: Player3_Horizontal
-    descriptiveName: 
+    descriptiveName: Ex-6th axis
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
@@ -627,7 +627,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 3
   - serializedVersion: 3
     m_Name: Player4_Horizontal
@@ -647,7 +647,7 @@ InputManager:
     joyNum: 4
   - serializedVersion: 3
     m_Name: Player4_Horizontal
-    descriptiveName: 
+    descriptiveName: Ex-6th axis
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: 
@@ -659,7 +659,7 @@ InputManager:
     snap: 0
     invert: 0
     type: 2
-    axis: 5
+    axis: 0
     joyNum: 4
   - serializedVersion: 3
     m_Name: Player1_Vertical
