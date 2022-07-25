@@ -262,7 +262,7 @@ MonoBehaviour:
     m_Bits: 0
   TargetTriggerTag: 
   DelayMode: 0
-  TimeBeforeStateChange: 2
+  TimeBeforeStateChange: 0.75
   FrameCount: 1
   TargetGameObjects: []
   TargetBehaviours: []
@@ -337,7 +337,7 @@ MonoBehaviour:
   ProjectileIsFacingRight: 1
   InitialInvulnerabilityDuration: 0
   DamageOwner: 0
-  InitialForce: 20
+  InitialForce: 15
   InitialRotation: {x: 0, y: 0, z: 0}
   InitialForceMode: 1
   InitialForceMode2D: 1

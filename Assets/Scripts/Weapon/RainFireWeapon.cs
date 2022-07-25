@@ -40,7 +40,7 @@ public class RainFireWeapon : ProjectileWeapon
             float tiltAroundY = i * 45;
             var spawnedProjectile = Instantiate(nextGameObject);
             //Position
-            spawnedProjectile.transform.position = spawnPosition;
+            spawnedProjectile.transform.position = spawnPosition + new Vector3(0, 5, 0);
             spawnedProjectile.transform.Rotate(0, tiltAroundY, 0);
             if (_projectileSpawnTransform != null)
             {
