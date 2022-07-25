@@ -115,7 +115,7 @@ MonoBehaviour:
   HitscanMaxDistance: 100
   MinDamageCaused: 50
   MaxDamageCaused: 50
-  DamageCausedInvincibilityDuration: 0.5
+  DamageCausedInvincibilityDuration: 3
   TypedDamages: []
   HitDamageable: {fileID: 0}
   DamageableImpactParticles: {fileID: 0}
