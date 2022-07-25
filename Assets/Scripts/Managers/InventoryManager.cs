@@ -18,10 +18,6 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
     private CharacterInventory _player2Inventory;
     private CharacterInventory _player3Inventory;
     private CharacterInventory _player4Inventory;
-    private CharacterHandleWeapon _player1WeaponHandler;
-    private CharacterHandleWeapon _player2WeaponHandler;
-    private CharacterHandleWeapon _player3WeaponHandler;
-    private CharacterHandleWeapon _player4WeaponHandler;
     private Energy _player1Energy;
     private Energy _player2Energy;
     private Energy _player3Energy;
@@ -35,28 +31,24 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
             if (character.PlayerID == "Player1")
             {
                 _player1Inventory = character.GetComponent<CharacterInventory>();
-                _player1WeaponHandler = character.GetComponent<CharacterHandleWeapon>();
                 _player1Energy = character.GetComponent<Energy>();
             }
 
             if (character.PlayerID == "Player2")
             {
                 _player2Inventory = character.GetComponent<CharacterInventory>();
-                _player2WeaponHandler = character.GetComponent<CharacterHandleWeapon>();
                 _player2Energy = character.GetComponent<Energy>();
             }
 
             if (character.PlayerID == "Player3")
             {
                 _player3Inventory = character.GetComponent<CharacterInventory>();
-                _player3WeaponHandler = character.GetComponent<CharacterHandleWeapon>();
                 _player3Energy = character.GetComponent<Energy>();
             }
 
             if (character.PlayerID == "Player4")
             {
                 _player4Inventory = character.GetComponent<CharacterInventory>();
-                _player4WeaponHandler = character.GetComponent<CharacterHandleWeapon>();
                 _player4Energy = character.GetComponent<Energy>();
             }
 
@@ -89,39 +81,21 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
         this.MMEventStopListening<WeaponFireEvent>();
     }
 
-    private InventoryWeapon GetWeapon(int index)
-    {
-        return index switch
-        {
-            0 => Weapon1,
-            1 => Weapon2,
-            2 => Weapon3,
-            3 => Weapon4,
-            4 => Weapon5,
-            5 => Weapon6,
-            6 => Weapon7,
-            _ => null
-        };
-    }
-
     public void OnMMEvent(EnergyChangeEvent eventType)
     {
         var index = (int)eventType.NewEnergy - 1;
-        var weapon = GetWeapon(index);
         switch (eventType.PlayerId)
         {
             case "Player1":
             {
                 if (index < 0)
                 {
-                    _player1WeaponHandler.ChangeWeapon(null, "");
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
                         _player1Inventory.WeaponInventory.name,
                         _player1Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
                     break;
                 }
 
-                _player1WeaponHandler.ChangeWeapon(weapon.EquippableWeapon, weapon.EquippableWeapon.WeaponName);
                 MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
                     _player1Inventory.MainInventory.name, _player1Inventory.MainInventory.Content[index], 0, index,
                     eventType.PlayerId);
@@ -131,14 +105,12 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
             {
                 if (index < 0)
                 {
-                    _player2WeaponHandler.ChangeWeapon(null, "");
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
                         _player2Inventory.WeaponInventory.name,
                         _player2Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
                     break;
                 }
 
-                _player2WeaponHandler.ChangeWeapon(weapon.EquippableWeapon, weapon.EquippableWeapon.WeaponName);
                 MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
                     _player2Inventory.MainInventory.name, _player2Inventory.MainInventory.Content[index], 0, index,
                     eventType.PlayerId);
@@ -148,14 +120,12 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
             {
                 if (index < 0)
                 {
-                    _player3WeaponHandler.ChangeWeapon(null, "");
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
                         _player3Inventory.WeaponInventory.name,
                         _player3Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
                     break;
                 }
 
-                _player3WeaponHandler.ChangeWeapon(weapon.EquippableWeapon, weapon.EquippableWeapon.WeaponName);
                 MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
                     _player3Inventory.MainInventory.name, _player3Inventory.MainInventory.Content[index], 0,
                     (int)eventType.NewEnergy - 1,
@@ -166,14 +136,12 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
             {
                 if (index < 0)
                 {
-                    _player4WeaponHandler.ChangeWeapon(null, "");
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
                         _player4Inventory.WeaponInventory.name,
                         _player4Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
                     break;
                 }
 
-                _player4WeaponHandler.ChangeWeapon(weapon.EquippableWeapon, weapon.EquippableWeapon.WeaponName);
                 MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
                     _player4Inventory.MainInventory.name, _player4Inventory.MainInventory.Content[index], 0, index,
                     eventType.PlayerId);
