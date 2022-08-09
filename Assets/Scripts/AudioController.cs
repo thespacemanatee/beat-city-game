@@ -21,9 +21,18 @@ public class AudioController : MonoBehaviour
         if (!GameObject.Find("StartUI")) {
             audioData.UnPause();
         }
+
         if (pause) {
             audioData.Pause();
         }
+        
+        //While the pitch is less than 2, increase it as time passes.
+        if (audioData.pitch < 2) {
+            audioData.pitch += Time.deltaTime * 1 / 250;
+        }
+
+        Debug.Log("audio pitch " + audioData.pitch);
+
     }
 
     public void stopMusic()
