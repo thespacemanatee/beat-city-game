@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class ForceField : MonoBehaviour
 {
+    public GameObject forcefield;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+        Debug.Log("Forcefield is " + forcefield);
+        StartCoroutine(SelfDestruct());
     }
 
     // Update is called once per frame
@@ -16,11 +19,18 @@ public class ForceField : MonoBehaviour
         
     }
 
+    IEnumerator SelfDestruct()
+    {
+        yield return new WaitForSeconds(5f);
+        forcefield.SetActive(false);
+    }
+
     void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "Attack")
         {
-            this.gameObject.SetActive(false);
+            forcefield.SetActive(false);
         }
     }
+    
 }
