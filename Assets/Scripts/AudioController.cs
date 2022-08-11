@@ -30,7 +30,6 @@ public class AudioController : MonoBehaviour
         if (audioData.pitch < 2) {
             audioData.pitch += Time.deltaTime * 1 / 250;
         }
-
     }
 
     public void stopMusic()

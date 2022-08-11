@@ -19,6 +19,8 @@ public class SummaryMenuController : MonoBehaviour
     GameObject[] PlayerKillIcons;
 
     GameObject[] PlayerEnergyIcons; 
+
+    private bool showCheck = false;
     
     // Start is called before the first frame update
     void Start()
@@ -36,6 +38,60 @@ public class SummaryMenuController : MonoBehaviour
 
     public void showWinMenu()
     {
+        StartCoroutine(DelayBeforeShow());
+    }
+
+    // Update which icons 
+    void updateIcons(GameObject[] icons,IntVariable[] variables)
+    {
+        // First loop through and get the highest number 
+        int maxValues = 0;
+        for (int i = 0; i<numPlayers; i++)
+        {
+            if (variables[i].Value > maxValues)
+            {
+                maxValues = variables[i].Value;
+            }
+        }
+        
+        // Second loop through and set the brightness of the highest 
+        for (int i = 0; i<numPlayers; i++)
+        {
+            Debug.Log(i + "\t search" + variables[i].Value);
+            if (variables[i].Value != maxValues)
+            {
+                setIconBrightness(icons[i]);
+            }
+        }
+    }
+
+    // 'darken' the noobs so we know who actually won
+    void setIconBrightness(GameObject icon)
+    {
+        float brightness = 0.25f;
+        icon.GetComponent<Image>().color = new Color(brightness,brightness,brightness);
+    }
+
+    public void restartGame()
+    {
+        resetAllVariables();
+        // change this to other scene for different levels
+        SceneManager.LoadScene("BeatCity"); 
+    }
+
+    void resetAllVariables()
+    {
+        for (int i = 0; i < numPlayers; i++)
+        {
+            PlayerWins[i].SetValue(0);
+            PlayerKills[i].SetValue(0);
+            PlayerEnergy[i].SetValue(0);
+        }
+    }
+
+    IEnumerator DelayBeforeShow()
+    {
+        yield return new WaitForSeconds(1.5f * 2);
         Time.timeScale = 0.0f;
         foreach(Transform child in transform) 
         {
@@ -99,53 +155,5 @@ public class SummaryMenuController : MonoBehaviour
         updateIcons(PlayerWinIcons, PlayerWins);
         updateIcons(PlayerKillIcons, PlayerKills);
         updateIcons(PlayerEnergyIcons, PlayerEnergy);
-    }
-
-    // Update which icons 
-    void updateIcons(GameObject[] icons,IntVariable[] variables)
-    {
-        // First loop through and get the highest number 
-        int maxValues = 0;
-        for (int i = 0; i<numPlayers; i++)
-        {
-            if (variables[i].Value > maxValues)
-            {
-                maxValues = variables[i].Value;
-            }
-        }
-        
-        // Second loop through and set the brightness of the highest 
-        for (int i = 0; i<numPlayers; i++)
-        {
-            Debug.Log(i + "\t search" + variables[i].Value);
-            if (variables[i].Value != maxValues)
-            {
-                setIconBrightness(icons[i]);
-            }
-        }
-    }
-
-    // 'darken' the noobs so we know who actually won
-    void setIconBrightness(GameObject icon)
-    {
-        float brightness = 0.25f;
-        icon.GetComponent<Image>().color = new Color(brightness,brightness,brightness);
-    }
-
-    public void restartGame()
-    {
-        resetAllVariables();
-        // change this to other scene for different levels
-        SceneManager.LoadScene("BeatCity"); 
-    }
-
-    void resetAllVariables()
-    {
-        for (int i = 0; i < numPlayers; i++)
-        {
-            PlayerWins[i].SetValue(0);
-            PlayerKills[i].SetValue(0);
-            PlayerEnergy[i].SetValue(0);
-        }
     }
 }
