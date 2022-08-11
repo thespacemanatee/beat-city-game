@@ -1,10 +1,13 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class WinEventController : MonoBehaviour
 {
     public string playerId;
     public GameObject WinnerScreen;
     private bool activated;
+    public GameConstants gameConstants;
 
     // Start is called before the first frame update
     private void Start()
@@ -18,10 +21,17 @@ public class WinEventController : MonoBehaviour
 
     public void SetScreenActive(string PlayerName)
     {
+        // Add delay time here 
         if (PlayerName == playerId && !activated)
         {
-            WinnerScreen.SetActive(true);
             activated = true;
+            StartCoroutine(DelayBeforeShow());
         }
+    }
+
+    IEnumerator DelayBeforeShow()
+    {
+        yield return new WaitForSeconds(1.5f);
+        WinnerScreen.SetActive(true);
     }
 }

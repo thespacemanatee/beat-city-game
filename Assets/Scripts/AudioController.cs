@@ -31,7 +31,6 @@ public class AudioController : MonoBehaviour
             audioData.pitch += Time.deltaTime * 1 / 250;
         }
 
-        Debug.Log("audio pitch " + audioData.pitch);
 
     }
 
