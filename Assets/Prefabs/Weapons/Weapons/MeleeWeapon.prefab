@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 827614882301090828}
   - component: {fileID: 1719213415832332209}
+  - component: {fileID: 718993516150043353}
   m_Layer: 0
   m_Name: MeleeWeapon
   m_TagString: Untagged
@@ -108,11 +109,12 @@ MonoBehaviour:
   PreventAllMovementWhileInUse: 0
   PreventAllAimWhileInUse: 0
   RecoilForce: 0
-  Animators: []
+  Animators:
+  - {fileID: 718993516150043353}
   PerformAnimatorSanityChecks: 0
   WeaponAnimationID: 0
   IdleAnimationParameter: 
-  StartAnimationParameter: 
+  StartAnimationParameter: Attack
   DelayBeforeUseAnimationParameter: 
   SingleUseAnimationParameter: 
   UseAnimationParameter: 
@@ -134,8 +136,8 @@ MonoBehaviour:
   Flipped: 0
   MeleeDamageAreaMode: 0
   DamageAreaShape: 2
-  AreaSize: {x: 1.5, y: 1, z: 1.9}
-  AreaOffset: {x: -0.6, y: 0, z: -0.3}
+  AreaSize: {x: 3, y: 3, z: 3}
+  AreaOffset: {x: 0, y: 0, z: 2}
   HitDamageableFeedback: {fileID: 0}
   HitNonDamageableFeedback: {fileID: 0}
   ExistingDamageArea: {fileID: 0}
@@ -150,6 +152,26 @@ MonoBehaviour:
   KnockbackForce: {x: 10, y: 2, z: 0}
   InvincibilityDuration: 0.5
   CanDamageOwner: 0
+--- !u!95 &718993516150043353
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3581228643189595240}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: dcbeef937122cde45813d5ca6bc035ea, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &572750616729210761
 PrefabInstance:
   m_ObjectHideFlags: 0
