@@ -7,51 +7,70 @@ public class RotatingObstacle : MonoBehaviour
     float forceAmount = 5f;
     float impactDuration = 0.2f;
     bool isHit = false;
+    bool updateRotationSpeed = false;
+    float rotationSpeed = 90f;
+    float rotationSpeedLowerBound = 45f;
+    float rotationSpeedUpperBound = 90f;
+    float speedChangePercentage = 0.5f;
+    float directionChangePercentage = 0.25f;
+    float speedChangeLowerBound = 5f;
+    float speedChangeUpperBound = 20f;
+    float updateRotationSpeedInterval = 5f;
 
-    // Start is called before the first frame update
     void Start()
     {
-
+        StartCoroutine(ToggleUpdateRotationSpeed());
     }
 
     void Update()
     {
-        // Spin the object around the target at 20 degrees/second.
-        transform.RotateAround(this.transform.position, Vector3.up, 180 * Time.deltaTime);
+        // Spin the object around the target at rotationSpeed degrees/second.
+        transform.RotateAround(this.transform.position, Vector3.up, rotationSpeed * Time.deltaTime);
     }
 
+    IEnumerator ToggleUpdateRotationSpeed()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(updateRotationSpeedInterval);
+            if (Random.value < speedChangePercentage)
+            {
+                float changeValue = Random.Range(speedChangeLowerBound, speedChangeUpperBound);
+                bool clockwise = rotationSpeed < 0;
+                bool changeDirection = Random.value < directionChangePercentage;
+                bool newClockwise = (clockwise && !changeDirection) || (!clockwise && changeDirection);
+                if (Mathf.Abs(rotationSpeed) >= rotationSpeedUpperBound)
+                {
+
+                    rotationSpeed = Mathf.Max(Mathf.Abs(rotationSpeed) - changeValue, rotationSpeedLowerBound) * (newClockwise ? 1 : -1);
+                }
+                else
+                {
+                    rotationSpeed = Mathf.Min(Mathf.Abs(rotationSpeed) + changeValue, rotationSpeedUpperBound) * (newClockwise ? 1 : -1);
+                }
+            }
+        }
+    }
 
     void OnCollisionEnter(Collision c)
     {
         if (c.gameObject.CompareTag("Player") && !isHit)
         {
             Rigidbody rigidbody = c.gameObject.GetComponent<Rigidbody>();
-            // rigidbody.velocity = new Vector3(50f, 50f, 50f);
-            // Debug.Log("Collided " + c.gameObject + ", Direction: " + c.GetContact(0).normal.normalized);
             isHit = true;
             StartCoroutine(FakeAddForceMotion(rigidbody, c.GetContact(0).normal.normalized));
-            // Debug.Log(c.gameObject.transform.forward);
         }
     }
 
     IEnumerator FakeAddForceMotion(Rigidbody rigidbody, Vector3 contact)
     {
         Transform transform = rigidbody.GetComponent<Transform>();
-        // float i = 0.01f;
         for (float i = 0; i < impactDuration; i += Time.deltaTime)
         {
             transform.Translate(new Vector3(-contact.x * forceAmount / impactDuration, 0, -contact.z * forceAmount / impactDuration) * Time.deltaTime);
             yield return null;
         }
 
-        // while (forceAmount > i)
-        // {
-
-        //     // rigidbody.velocity = new Vector3(contact.x * forceAmount / i, contact.y * forceAmount / i, contact.z * forceAmount / i);
-        //     i = i + Time.deltaTime;
-        //     yield return new WaitForEndOfFrame();
-        // }
-        // rigidbody.velocity = Vector2.zero;
         isHit = false;
         yield return null;
     }
