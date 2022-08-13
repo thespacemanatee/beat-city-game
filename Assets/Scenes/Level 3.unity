@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: db20bd95f765a4bf0bbfcd9e39b30119, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.0386551, g: 0.0022095966, b: 0.0016785352, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -27155,6 +27155,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1405258957}
   - component: {fileID: 1405258958}
+  - component: {fileID: 1405258959}
   m_Layer: 0
   m_Name: MapLevel3
   m_TagString: Untagged
@@ -27209,6 +27210,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionMap: {fileID: 11400000, guid: 960724df5be734e65b6b43c149640a24, type: 2}
+--- !u!114 &1405258959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1405258956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b19767ece5b4506b582195a90089a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMaterial: {fileID: 2100004, guid: 675fea9647b63514ebeec7e6189b36f5, type: 3}
 --- !u!4 &1409077998 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7616102885898879815, guid: a1ade369920684804949ffd27cbae6d8,
