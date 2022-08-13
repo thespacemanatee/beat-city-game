@@ -53,7 +53,7 @@ MonoBehaviour:
   Weapon2: {fileID: 11400000, guid: eb9bfb86d4c857843b25439de90bfb47, type: 2}
   Weapon3: {fileID: 11400000, guid: 3670c47854547d648b1fb59a2b5430c3, type: 2}
   Weapon4: {fileID: 11400000, guid: bf0a054de27608641b000f03bb07d340, type: 2}
-  Weapon5: {fileID: 11400000, guid: bf0a054de27608641b000f03bb07d340, type: 2}
+  Weapon5: {fileID: 11400000, guid: 4b4444e947fe849e186d7e377a6996c6, type: 2}
   Weapon6: {fileID: 11400000, guid: 8ae4217c6ae3b1f4f90a1c3c1f312889, type: 2}
   Weapon7: {fileID: 11400000, guid: b67dfa6fcc1604e1fa158e8ace44a5a0, type: 2}
 --- !u!1001 &7616102886417123488
