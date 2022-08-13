@@ -1,0 +1,140 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5280687061479146829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5280687061479146830}
+  - component: {fileID: 5280687061479146831}
+  m_Layer: 0
+  m_Name: EnergySpawnManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5280687061479146830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5280687061479146829}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5280687059999724973}
+  m_Father: {fileID: 0}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5280687061479146831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5280687061479146829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c468dae8146944b69cbf883ff934235, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pooler: {fileID: 5280687059999724974}
+  positionMap: {fileID: 11400000, guid: 960724df5be734e65b6b43c149640a24, type: 2}
+  initialCount: 10
+  spawnInterval: 1
+--- !u!1001 &8536423588620565973
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 2
+    m_TransformParent: {fileID: 5280687061479146830}
+    m_Modifications:
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.364379
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.5976934
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4.971786
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4557569025675585657, guid: b0afe2980021547c79ee16577699c630,
+        type: 3}
+      propertyPath: m_Name
+      value: EnergyPooler
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_AddedGameObjects: []
+  m_SourcePrefab: {fileID: 100100000, guid: b0afe2980021547c79ee16577699c630, type: 3}
+--- !u!4 &5280687059999724973 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4557569025675585656, guid: b0afe2980021547c79ee16577699c630,
+    type: 3}
+  m_PrefabInstance: {fileID: 8536423588620565973}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5280687059999724974 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4557569025675585659, guid: b0afe2980021547c79ee16577699c630,
+    type: 3}
+  m_PrefabInstance: {fileID: 8536423588620565973}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b7277539b95c0d45895792ecc99ce66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

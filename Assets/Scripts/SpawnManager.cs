@@ -61,6 +61,7 @@ public class SpawnManager : MonoBehaviour, MMEventListener<EnergyDropEvent>
         {
             item.transform.position = position;
             item.SetActive(true);
+            item.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX;
 
             // TODO: Clean this up
             item.GetComponent<BoxCollider>().enabled = true;
