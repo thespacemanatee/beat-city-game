@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using MoreMountains.TopDownEngine;
 
 public class SummaryMenuController : MonoBehaviour
 {
@@ -20,7 +21,11 @@ public class SummaryMenuController : MonoBehaviour
 
     GameObject[] PlayerEnergyIcons; 
 
-    private bool showCheck = false;
+    private bool allowInput = false;
+    private LevelSelector levelSelector;
+    private bool changingScene=false;
+
+
     
     // Start is called before the first frame update
     void Start()
@@ -28,12 +33,24 @@ public class SummaryMenuController : MonoBehaviour
         PlayerWinIcons = new GameObject[numPlayers];
         PlayerKillIcons = new GameObject[numPlayers];
         PlayerEnergyIcons = new GameObject[numPlayers];
+        levelSelector = gameObject.GetComponent<LevelSelector>();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+            if (allowInput && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Joystick2Button0) ||
+             Input.GetKeyDown(KeyCode.Joystick3Button0) || Input.GetKeyDown(KeyCode.Joystick4Button0) || Input.GetKeyDown(KeyCode.Space)))
+        {
+            // SceneManager.LoadScene("BeatCity"); // change this to other scene for different levels
+            if(levelSelector && !changingScene){
+                changingScene=true;
+                levelSelector.GoToLevel();
+            }
+            else{
+                Debug.Log("Attach Level Selector onto LevelManager");
+            }
+        }
     }
 
     public void showWinMenu()
@@ -155,5 +172,6 @@ public class SummaryMenuController : MonoBehaviour
         updateIcons(PlayerWinIcons, PlayerWins);
         updateIcons(PlayerKillIcons, PlayerKills);
         updateIcons(PlayerEnergyIcons, PlayerEnergy);
+        allowInput = true;
     }
 }

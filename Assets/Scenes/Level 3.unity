@@ -191,6 +191,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5012026177327799169, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679307386997691877, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679307387471258968, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679307388177534473, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 60c6d37ced9ad471ca60dccdcc64b430, type: 3}
@@ -21495,7 +21515,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2013657466791506146, guid: 3f8f0e80704b54b70a558616a043c39d, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f8f0e80704b54b70a558616a043c39d, type: 3}
 --- !u!1 &1074249736
@@ -32449,6 +32470,26 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1703717992}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1733453034 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1726122317295893891, guid: cc29819b1aedefe4fa6187ab88d6883b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1872339340}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1733453035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1733453034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 316ab92be1a09414daadf97f5d5d2a77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LevelName: StartMenu
+  DoNotUseLevelManager: 1
 --- !u!1 &1734542445
 GameObject:
   m_ObjectHideFlags: 0
