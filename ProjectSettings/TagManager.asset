@@ -10,6 +10,10 @@ TagManager:
   - World
   - NoMask
   - Energy
+  - Attack
+  - Wall
+  - Teleporter
+  - RotatingObstacle
   layers:
   - Default
   - TransparentFX
@@ -34,7 +38,7 @@ TagManager:
   - Camera2
   - Camera3
   - Camera4
-  - 
+  - RotatingObstacle
   - 
   - 
   - 

@@ -17,12 +17,13 @@ public class NewCharacter : Character
         if (NewCharacterHealth != null)
         {
             NewCharacterHealth.NewOnDeath += NewOnDeath;
-        } else
+        }
+        else
         {
             Debug.Log("NEW CHARACTER HEALTH IS NOT ENABLED");
         }
     }
-    
+
     protected override void OnEnable()
     {
         if (NewCharacterHealth != null)
@@ -63,13 +64,14 @@ public class NewCharacter : Character
 
         if (MovementState.CurrentState != CharacterStates.MovementStates.FallingDownHole)
             MovementState.ChangeState(CharacterStates.MovementStates.Idle);
-        
+
         Debug.Log("Killer:");
         var killer = "null";
-        try{
+        try
+        {
             killer = instigator.GetComponent<Projectile>().Owner.GetComponent<Character>().PlayerID;
         }
-        catch(NullReferenceException)
+        catch (NullReferenceException)
         {
             try
             {
@@ -81,7 +83,7 @@ public class NewCharacter : Character
                 {
                     killer = GetComponent<Character>().PlayerID;
                 }
-                catch(NullReferenceException)
+                catch (NullReferenceException)
                 {
                     Debug.Log("WRONG INSTIGATOR RECEIVED");
                 }
