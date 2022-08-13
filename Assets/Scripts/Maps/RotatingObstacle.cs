@@ -64,10 +64,14 @@ public class RotatingObstacle : MonoBehaviour
 
     IEnumerator FakeAddForceMotion(Rigidbody rigidbody, Vector3 contact)
     {
+        GameObject gameObject = rigidbody.gameObject;
         Transform transform = rigidbody.GetComponent<Transform>();
         for (float i = 0; i < impactDuration; i += Time.deltaTime)
         {
-            transform.Translate(new Vector3(-contact.x * forceAmount / impactDuration, 0, -contact.z * forceAmount / impactDuration) * Time.deltaTime);
+            if (gameObject != null)
+            {
+                transform.Translate(new Vector3(-contact.x * forceAmount / impactDuration, 0, -contact.z * forceAmount / impactDuration) * Time.deltaTime);
+            }
             yield return null;
         }
 
