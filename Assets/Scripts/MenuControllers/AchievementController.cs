@@ -18,7 +18,7 @@ public class AchievementController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        testSetStats();
+        // testSetStats();
         getMaxMin();
         updateIcons();
         // make sure all UI is updated first

@@ -20,7 +20,7 @@ public class WinnerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        testSetStats();
+        // testSetStats();
         getMax();
         updateIcons();
         // make sure all UI is updated first
