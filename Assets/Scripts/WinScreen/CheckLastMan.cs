@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using MoreMountains.TopDownEngine;
 
 public class CheckLastMan : MonoBehaviour
@@ -15,6 +16,7 @@ public class CheckLastMan : MonoBehaviour
     private LevelSelector levelSelector;
     private bool changingScene=false;
     public CustomEvent winEvent;
+    public UnityEvent drawEvent;
     private bool gameEnded;
     private bool stopCheck = false;
     private string playerId;
@@ -32,11 +34,16 @@ public class CheckLastMan : MonoBehaviour
         {
             stopCheck=true;
             StartCoroutine(DelayBeforeShow());
-            var lastMan = GameObject.FindGameObjectsWithTag("Player")[0];
-            Debug.Log(lastMan.name);
-            updateWinner(lastMan.name);
-            winEvent.Invoke(playerId);
-            Destroy(lastMan);
+            var players = GameObject.FindGameObjectsWithTag("Player");
+            if (players.Length > 0) {
+                var lastMan = players[0];
+                Debug.Log(lastMan.name);
+                updateWinner(lastMan.name);
+                winEvent.Invoke(playerId);
+                Destroy(lastMan);
+            } else {
+                drawEvent.Invoke();
+            }
         }
 
         // TODO: Add short delay here before checking
