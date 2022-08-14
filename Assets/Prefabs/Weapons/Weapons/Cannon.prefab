@@ -126,7 +126,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0514d297deadac74fb15a7b7326ff0d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AimControl: 5
+  AimControl: 1
   RotationMode: 0
   WeaponRotationSpeed: 5
   MinimumAngle: -180
