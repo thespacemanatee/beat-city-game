@@ -57899,6 +57899,11 @@ PrefabInstance:
       propertyPath: LevelName
       value: StartMenu
       objectReference: {fileID: 0}
+    - target: {fileID: 4096743548631815759, guid: cc29819b1aedefe4fa6187ab88d6883b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5166819356836720882, guid: cc29819b1aedefe4fa6187ab88d6883b,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -57964,7 +57969,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4096743548631815759, guid: cc29819b1aedefe4fa6187ab88d6883b, type: 3}
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: cc29819b1aedefe4fa6187ab88d6883b, type: 3}
 --- !u!1 &1453452047 stripped
@@ -61301,10 +61307,35 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 9436983
       objectReference: {fileID: 0}
+    - target: {fileID: 3384429179894566062, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3384429180241225925, guid: 60c6d37ced9ad471ca60dccdcc64b430,
         type: 3}
       propertyPath: m_Lens.m_SensorSize.x
       value: 1.7784616
+      objectReference: {fileID: 0}
+    - target: {fileID: 5012026177327799169, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679307386997691877, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679307387471258968, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6679307388177534473, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
