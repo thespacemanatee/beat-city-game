@@ -35726,6 +35726,11 @@ PrefabInstance:
       propertyPath: m_Text
       value: Training Wheels
       objectReference: {fileID: 0}
+    - target: {fileID: 8636301945547870332, guid: 6ed7f5854dcf143478f92be5906e03f5,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -41.15227
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 6ed7f5854dcf143478f92be5906e03f5, type: 3}

@@ -148,14 +148,14 @@ public class StartMenuController : MonoBehaviour
         WaitForSecondsRT wait = new WaitForSecondsRT(1);
         int counter = 3;
         CircleButton.SetActive(false);
-        WaitText.GetComponent<Text>().text = $"Players ready, game starting in \n{counter}";
+        WaitText.GetComponent<Text>().text = $"Players ready, game starting in {counter}";
         while (counter > 0){
             // if not then wait for the remaining number of seconds while updating the message
             yield return wait.NewTime(1);
             counter --;
-            WaitText.GetComponent<Text>().text = $"Players ready, game starting in \n{counter}";
+            WaitText.GetComponent<Text>().text = $"Players ready, game starting in {counter}";
         }
-        WaitText.GetComponent<Text>().text = $"Players ready, game starting in \n{counter}";
+        WaitText.GetComponent<Text>().text = $"Players ready, game starting in {counter}";
         yield return wait.NewTime(1);
         Time.timeScale = 1.0f; // start game after 
         this.gameObject.SetActive(false);

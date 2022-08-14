@@ -3384,9 +3384,9 @@ PrefabInstance:
     - target: {fileID: 7250119419621966504, guid: 1b0ed8bc0e74044d4a25c9cb40fdcc6b,
         type: 3}
       propertyPath: m_Text
-      value: "There are 7 different types of attack in this game.  Each attack is
-        mapped to a \ndifferent energy level.\n\nThe next 7 slides will explain each
-        of the 7 attacks."
+      value: "There are 7 different types of attacks in this game.  Each attack is
+        mapped to a \ndifferent energy level.\n\nThe next few slides will explain
+        each of the attacks."
       objectReference: {fileID: 0}
     - target: {fileID: 8144950075090503707, guid: 1b0ed8bc0e74044d4a25c9cb40fdcc6b,
         type: 3}
