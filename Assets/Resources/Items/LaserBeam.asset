@@ -35,7 +35,7 @@ MonoBehaviour:
   ItemName: 
   ShortDescription: 
   Description: 
-  Icon: {fileID: 21300010, guid: 08784f878b46d4920baa97d2f27b405a, type: 3}
+  Icon: {fileID: 21300000, guid: 6a3fb9963fb36ac49ac25095ee92a4fe, type: 3}
   Prefab: {fileID: 1199924259801758518, guid: 3e4ceb77c070c454386ef06e151df72c, type: 3}
   DropProperties:
     Shape: 0
