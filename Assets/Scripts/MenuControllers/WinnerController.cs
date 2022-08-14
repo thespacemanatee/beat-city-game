@@ -69,9 +69,9 @@ public class WinnerController : MonoBehaviour
     void updateIcons()
     {   
         updateIcon(player1WinStats, PlayerIcons[0], CrownIcons[0]);
-        updateIcon(player1WinStats, PlayerIcons[1], CrownIcons[1]);
-        updateIcon(player1WinStats, PlayerIcons[2], CrownIcons[2]);
-        updateIcon(player1WinStats, PlayerIcons[3], CrownIcons[3]);
+        updateIcon(player2WinStats, PlayerIcons[1], CrownIcons[1]);
+        updateIcon(player3WinStats, PlayerIcons[2], CrownIcons[2]);
+        updateIcon(player4WinStats, PlayerIcons[3], CrownIcons[3]);
         // // Loop through and set the brightness of the highest 
         // for (int i = 0; i<numPlayers; i++)
         // {
