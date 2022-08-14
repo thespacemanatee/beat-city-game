@@ -54,15 +54,19 @@ public class KDScoreMonitor : MonoBehaviour
         switch (killer)
         {
             case "Player1":
+                Debug.Log("Player 1 Kill Count +1, current value is " + Player1KillCount.Value);
                 Player1KillCount.ApplyChange(1);
                 break;
             case "Player2":
+                Debug.Log("Player 2 Kill Count +1, current value is " + Player2KillCount.Value);
                 Player2KillCount.ApplyChange(1);
                 break;
             case "Player3":
+                Debug.Log("Player 3 Kill Count +1, current value is " + Player3KillCount.Value);
                 Player3KillCount.ApplyChange(1);
                 break;
             case "Player4":
+                Debug.Log("Player 4 Kill Count +1, current value is " + Player4KillCount.Value);
                 Player4KillCount.ApplyChange(1);
                 break;
             default:
