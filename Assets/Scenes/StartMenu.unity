@@ -8759,6 +8759,23 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 1534177357}
     m_Modifications:
+    - target: {fileID: 171124914596313487, guid: 7797d003aff224fe7a9ad306e37b6e9d,
+        type: 3}
+      propertyPath: m_Text
+      value: Cast Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 220901494782732088, guid: 7797d003aff224fe7a9ad306e37b6e9d,
+        type: 3}
+      propertyPath: m_Text
+      value: 'Move & Select
+
+        Buttons'
+      objectReference: {fileID: 0}
+    - target: {fileID: 289413273247126899, guid: 7797d003aff224fe7a9ad306e37b6e9d,
+        type: 3}
+      propertyPath: m_Text
+      value: Jump
+      objectReference: {fileID: 0}
     - target: {fileID: 1251791466870022743, guid: 7797d003aff224fe7a9ad306e37b6e9d,
         type: 3}
       propertyPath: m_TargetGraphic
@@ -8873,6 +8890,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ButtonUI Back
+      objectReference: {fileID: 0}
+    - target: {fileID: 5855635675659131496, guid: 7797d003aff224fe7a9ad306e37b6e9d,
+        type: 3}
+      propertyPath: m_Texture
+      value: 
+      objectReference: {fileID: 2800000, guid: b8322ca42fbcf4f869d9019d0414cbf9, type: 3}
+    - target: {fileID: 7358035088299156685, guid: 7797d003aff224fe7a9ad306e37b6e9d,
+        type: 3}
+      propertyPath: m_Text
+      value: Run & Select
       objectReference: {fileID: 0}
     - target: {fileID: 7394726502762340717, guid: 7797d003aff224fe7a9ad306e37b6e9d,
         type: 3}
