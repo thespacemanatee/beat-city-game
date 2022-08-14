@@ -1,3 +1,4 @@
+using System;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
@@ -174,7 +175,7 @@ public class Energy : MMMonoBehaviour
     /// </summary>
     public virtual void EnergyPenaltyFromDamage()
     {
-        var energyPenalty = (int)CurrentEnergy / 2;
+        var energyPenalty = (int)Math.Ceiling(CurrentEnergy / 2);
         EnergyDropEvent.Trigger(_character.transform.position, energyPenalty);
         SetEnergy(CurrentEnergy - energyPenalty);
     }

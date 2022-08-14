@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9529ae2b2ee0d1e4d802b51d271424c3, type: 3}
-  m_Name: SphereAttacj
+  m_Name: SphereAttack
   m_EditorClassIdentifier: 
   ItemID: ConeProjectile
   TargetInventoryName: SuitMainInventory
@@ -32,8 +32,8 @@ MonoBehaviour:
     DisplayUseButton: 1
     DisplayUnequipButton: 1
   Quantity: 1
-  ItemName: 
-  ShortDescription: 
+  ItemName: Sphere Burst
+  ShortDescription: Bursty.
   Description: 
   Icon: {fileID: 21300000, guid: e32aad571b880e549a22b1cc2f2f84a2, type: 3}
   Prefab: {fileID: 1801408263114154, guid: 97f9328d130b17945bbbd03369f9e290, type: 3}
