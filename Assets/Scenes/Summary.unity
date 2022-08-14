@@ -1514,6 +1514,30 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
         type: 3}
+      propertyPath: player1Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 090bd7d55d76e9f488f05f3b0a1bfba1,
+        type: 2}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
+      propertyPath: player2Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 960fa08e1bb7ef1479a710f98181c6b1,
+        type: 2}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
+      propertyPath: player3Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 6eff222f7521a0e48b57287c9607fae8,
+        type: 2}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
+      propertyPath: player4Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: f633859c8156dfe438bcdd1dbd1a8ddf,
+        type: 2}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
       propertyPath: PlayerStats.Array.size
       value: 4
       objectReference: {fileID: 0}
@@ -4187,21 +4211,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   numPlayers: 4
-  PlayerWinStats:
-  - {fileID: 11400000, guid: f80f9a5e01782d94999c742f02e5761f, type: 2}
-  - {fileID: 11400000, guid: 44f3abdb478def14e8d120355040b404, type: 2}
-  - {fileID: 11400000, guid: d95c60b72e3456445896550e972a7069, type: 2}
-  - {fileID: 11400000, guid: d561f8a4ecabcbb408cf9873a8655034, type: 2}
-  PlayerEnergyStats:
-  - {fileID: 11400000, guid: 090bd7d55d76e9f488f05f3b0a1bfba1, type: 2}
-  - {fileID: 11400000, guid: 960fa08e1bb7ef1479a710f98181c6b1, type: 2}
-  - {fileID: 11400000, guid: 6eff222f7521a0e48b57287c9607fae8, type: 2}
-  - {fileID: 11400000, guid: f633859c8156dfe438bcdd1dbd1a8ddf, type: 2}
-  PlayerKillStats:
-  - {fileID: 11400000, guid: 48107e3afd4fddd4cbf8451ad112698c, type: 2}
-  - {fileID: 11400000, guid: 729b789a2422495418151a0b3fc07590, type: 2}
-  - {fileID: 11400000, guid: 6f54656ab3530b84e86af5781897735a, type: 2}
-  - {fileID: 11400000, guid: 605d5d662bf3aa5499de4943b194aebb, type: 2}
+  player1WinStats: {fileID: 11400000, guid: f80f9a5e01782d94999c742f02e5761f, type: 2}
+  player2WinStats: {fileID: 11400000, guid: 44f3abdb478def14e8d120355040b404, type: 2}
+  player3WinStats: {fileID: 11400000, guid: d95c60b72e3456445896550e972a7069, type: 2}
+  player4WinStats: {fileID: 11400000, guid: d561f8a4ecabcbb408cf9873a8655034, type: 2}
+  player1EnergyStats: {fileID: 11400000, guid: 090bd7d55d76e9f488f05f3b0a1bfba1, type: 2}
+  player2EnergyStats: {fileID: 11400000, guid: 960fa08e1bb7ef1479a710f98181c6b1, type: 2}
+  player3EnergyStats: {fileID: 11400000, guid: 6eff222f7521a0e48b57287c9607fae8, type: 2}
+  player4EnergyStats: {fileID: 11400000, guid: f633859c8156dfe438bcdd1dbd1a8ddf, type: 2}
+  player1KillStats: {fileID: 11400000, guid: 48107e3afd4fddd4cbf8451ad112698c, type: 2}
+  player2KillStats: {fileID: 11400000, guid: 729b789a2422495418151a0b3fc07590, type: 2}
+  player3KillStats: {fileID: 11400000, guid: 6f54656ab3530b84e86af5781897735a, type: 2}
+  player4KillStats: {fileID: 11400000, guid: 605d5d662bf3aa5499de4943b194aebb, type: 2}
   PlayerIcons:
   - {fileID: 7956700988165870239}
   - {fileID: 9121313188611125460}
@@ -4628,6 +4649,30 @@ PrefabInstance:
       propertyPath: m_Color.r
       value: 0.8226095
       objectReference: {fileID: 0}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
+      propertyPath: player1Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 48107e3afd4fddd4cbf8451ad112698c,
+        type: 2}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
+      propertyPath: player2Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 729b789a2422495418151a0b3fc07590,
+        type: 2}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
+      propertyPath: player3Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 6f54656ab3530b84e86af5781897735a,
+        type: 2}
+    - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
+        type: 3}
+      propertyPath: player4Stats
+      value: 
+      objectReference: {fileID: 11400000, guid: 605d5d662bf3aa5499de4943b194aebb,
+        type: 2}
     - target: {fileID: 4876272008982316575, guid: 967d33adb9f3d4ff7909bbc1ac3108b9,
         type: 3}
       propertyPath: PlayerStats.Array.size
