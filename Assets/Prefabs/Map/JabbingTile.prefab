@@ -172,4 +172,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   activeMaterial: {fileID: -6860537945389345203, guid: 98ad67e4ae4dbb54eb05b761fb2a2c02,
     type: 3}
-  inactiveMaterial: {fileID: 2100000, guid: 124cbb75476b4da45a8a02c0429ba638, type: 2}
+  inactiveMaterial: {fileID: 2100000, guid: ebe4702b48c51ce4cbacb1d3968f9259, type: 2}

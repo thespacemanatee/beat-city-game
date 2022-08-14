@@ -16398,6 +16398,7 @@ GameObject:
   m_Component:
   - component: {fileID: 780113679}
   - component: {fileID: 780113680}
+  - component: {fileID: 780113681}
   m_Layer: 0
   m_Name: MapLevel3
   m_TagString: Untagged
@@ -16454,6 +16455,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionMap: {fileID: 11400000, guid: 960724df5be734e65b6b43c149640a24, type: 2}
+--- !u!114 &780113681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780113678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b19767ece5b4506b582195a90089a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMaterial: {fileID: 2100000, guid: f2dd8474c6d2c794bb34bbb7d45ed0d2, type: 2}
 --- !u!1 &791888179
 GameObject:
   m_ObjectHideFlags: 0

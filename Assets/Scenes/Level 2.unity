@@ -4101,7 +4101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2b19767ece5b4506b582195a90089a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMaterial: {fileID: 2100000, guid: 8110e38d86dbc6e4bbb27a5319a8c4cd, type: 2}
+  newMaterial: {fileID: 2100000, guid: 5f224db6c71e6dd4cab33e493be89679, type: 2}
 --- !u!4 &389540519 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6769304173935018344, guid: c14a831c1b2274ec083c0ad0f16c1d06,
@@ -11372,9 +11372,9 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   positionMap: {fileID: 11400000, guid: 960724df5be734e65b6b43c149640a24, type: 2}
-  teleporterActiveTileMaterial: {fileID: 2100000, guid: 124cbb75476b4da45a8a02c0429ba638,
+  teleporterActiveTileMaterial: {fileID: 2100000, guid: 5f224db6c71e6dd4cab33e493be89679,
     type: 2}
-  teleporterInactiveTileMaterial: {fileID: 2100000, guid: 124cbb75476b4da45a8a02c0429ba638,
+  teleporterInactiveTileMaterial: {fileID: 2100000, guid: 5f224db6c71e6dd4cab33e493be89679,
     type: 2}
   rows: 15
   cols: 15
@@ -15183,7 +15183,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2b19767ece5b4506b582195a90089a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMaterial: {fileID: 2100000, guid: 8110e38d86dbc6e4bbb27a5319a8c4cd, type: 2}
+  newMaterial: {fileID: 2100000, guid: 5f224db6c71e6dd4cab33e493be89679, type: 2}
 --- !u!4 &1442677355 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 753695050388000308, guid: c14a831c1b2274ec083c0ad0f16c1d06,
@@ -23096,7 +23096,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2b19767ece5b4506b582195a90089a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMaterial: {fileID: 2100000, guid: 8110e38d86dbc6e4bbb27a5319a8c4cd, type: 2}
+  newMaterial: {fileID: 2100000, guid: 5f224db6c71e6dd4cab33e493be89679, type: 2}
 --- !u!114 &2040731079 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7075974262983648547, guid: cecdcb50d91104f89926ce60d208ca68,
@@ -24377,7 +24377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2b19767ece5b4506b582195a90089a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  newMaterial: {fileID: 2100000, guid: 8110e38d86dbc6e4bbb27a5319a8c4cd, type: 2}
+  newMaterial: {fileID: 2100000, guid: 5f224db6c71e6dd4cab33e493be89679, type: 2}
 --- !u!1001 &2118920158
 PrefabInstance:
   m_ObjectHideFlags: 0

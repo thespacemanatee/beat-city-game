@@ -26,8 +26,8 @@ public class AudioController : MonoBehaviour
             audioData.Pause();
         }
         
-        //While the pitch is less than 2, increase it as time passes.
-        if (audioData.pitch < 2) {
+        // While the pitch is less than 1.5, increase it as time passes.
+        if (audioData.pitch < 1.5) {
             audioData.pitch += Time.deltaTime * 1 / 250;
         }
     }

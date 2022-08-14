@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 7a1377293fca64347af5a20b7aa41cd4, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028305, g: 0.22571313, b: 0.3069213, a: 1}
+  m_IndirectSpecularColor: {r: 0.2903354, g: 0.07303986, b: 0.0066759335, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -4101,6 +4101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 106193829}
   - component: {fileID: 106193830}
+  - component: {fileID: 106193831}
   m_Layer: 0
   m_Name: MapLevel4
   m_TagString: Untagged
@@ -4167,6 +4168,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   positionMap: {fileID: 11400000, guid: 960724df5be734e65b6b43c149640a24, type: 2}
+--- !u!114 &106193831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 106193828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2b19767ece5b4506b582195a90089a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  newMaterial: {fileID: 2100000, guid: ebe4702b48c51ce4cbacb1d3968f9259, type: 2}
 --- !u!1001 &106466202
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51774,7 +51788,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: -2273146209696275378, guid: 7e984f512e89b60468e829489e8883e3,
     type: 2}
-  m_audioClip: {fileID: 8300000, guid: d65b3176b880e4842b9758687d0093f5, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 7c297a98dba174e7ab4b77f962f7660e, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
