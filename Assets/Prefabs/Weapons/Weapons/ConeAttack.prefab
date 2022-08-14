@@ -67,7 +67,7 @@ MonoBehaviour:
   AutoDestroyWhenEmpty: 0
   AutoDestroyWhenEmptyDelay: 1
   CurrentAmmoLoaded: 0
-  WeaponAttachmentOffset: {x: 0, y: 0, z: 0}
+  WeaponAttachmentOffset: {x: -0.6, y: 0, z: -0.8}
   FlipWeaponOnCharacterFlip: 1
   RightFacingFlipValue: {x: 1, y: 1, z: 1}
   LeftFacingFlipValue: {x: -1, y: 1, z: 1}
@@ -104,13 +104,13 @@ MonoBehaviour:
   InitializeOnStart: 0
   Interruptable: 0
   Flipped: 0
-  ProjectileSpawnOffset: {x: 0, y: 0.16, z: 0.57}
+  ProjectileSpawnOffset: {x: 0, y: 0, z: 0}
   DefaultProjectileDirection: {x: 0, y: 0, z: 1}
-  ProjectilesPerShot: 100
+  ProjectilesPerShot: 120
   SpawnTransforms: []
-  SpawnTransformsMode: 1
-  Spread: {x: 200, y: 200, z: 200}
-  RotateWeaponOnSpread: 0
+  SpawnTransformsMode: 0
+  Spread: {x: 360, y: 0, z: 360}
+  RotateWeaponOnSpread: 1
   RandomSpread: 0
   SpawnPosition: {x: 0, y: 0.16, z: 0.57}
   SpawnFeedbacks: []
@@ -219,7 +219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8063710924008579844}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: -0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 4}
   m_ConstrainProportionsScale: 1
   m_Children:

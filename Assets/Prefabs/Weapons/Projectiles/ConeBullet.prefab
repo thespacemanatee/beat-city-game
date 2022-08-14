@@ -4971,11 +4971,11 @@ MonoBehaviour:
   ExecuteOnDisable:
     m_PersistentCalls:
       m_Calls: []
-  LifeTime: 0.25
+  LifeTime: 0.35
   FaceDirection: 1
   FaceMovement: 0
   MovementVector: 0
-  Speed: 100
+  Speed: 150
   Acceleration: 0
   Direction: {x: -1, y: 0, z: 0}
   DirectionCanBeChangedBySpawner: 1
