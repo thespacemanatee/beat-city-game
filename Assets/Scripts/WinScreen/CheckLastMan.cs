@@ -48,8 +48,8 @@ public class CheckLastMan : MonoBehaviour
 
         // TODO: Add short delay here before checking
         // if ANY player presses jump then go to next scene
-        if ((Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Joystick2Button0) ||
-             Input.GetKeyDown(KeyCode.Joystick3Button0) || Input.GetKeyDown(KeyCode.Joystick4Button0) || Input.GetKeyDown(KeyCode.Space)) && gameEnded)
+        if (gameEnded && (Input.GetButtonDown("Player1_Run") || Input.GetButtonDown("Player2_Run") ||
+            Input.GetButtonDown("Player3_Run") || Input.GetButtonDown("Player4_Run")))
         {
             // SceneManager.LoadScene("BeatCity"); // change this to other scene for different levels
             if(levelSelector && !changingScene){
