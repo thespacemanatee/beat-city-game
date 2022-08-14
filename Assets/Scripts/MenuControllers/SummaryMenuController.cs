@@ -42,9 +42,9 @@ public class SummaryMenuController : MonoBehaviour
             if (allowInput && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Joystick2Button0) ||
              Input.GetKeyDown(KeyCode.Joystick3Button0) || Input.GetKeyDown(KeyCode.Joystick4Button0) || Input.GetKeyDown(KeyCode.Space)))
         {
-            // SceneManager.LoadScene("BeatCity"); // change this to other scene for different levels
             if(levelSelector && !changingScene){
                 changingScene=true;
+                resetAllVariables();
                 levelSelector.GoToLevel();
             }
             else{
@@ -58,6 +58,9 @@ public class SummaryMenuController : MonoBehaviour
         StartCoroutine(DelayBeforeShow());
     }
 
+void getMaxLeast() {
+    
+}
     // Update which icons 
     void updateIcons(GameObject[] icons,IntVariable[] variables)
     {
@@ -89,12 +92,6 @@ public class SummaryMenuController : MonoBehaviour
         icon.GetComponent<Image>().color = new Color(brightness,brightness,brightness);
     }
 
-    public void restartGame()
-    {
-        resetAllVariables();
-        // change this to other scene for different levels
-        SceneManager.LoadScene("BeatCity"); 
-    }
 
     void resetAllVariables()
     {
