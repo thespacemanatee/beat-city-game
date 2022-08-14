@@ -13,11 +13,10 @@ public class NewAutoRespawn : AutoRespawn
     {
         if (GetComponent<Transform>().position.y < 0.0f && !_dropped)
         {
-            Debug.Log("DROPPED detected by auto respawn");
             if (AutoRespawnDuration <= 0f)
             {
                 // object is turned inactive to be able to reinstate it at respawn
-                if (DisableGameObjectOnKill) gameObject.SetActive(false);
+                //if (DisableGameObjectOnKill) gameObject.SetActive(false);
             }
             else
             {
@@ -77,7 +76,6 @@ public class NewAutoRespawn : AutoRespawn
     protected virtual void ChangePosition()
     {
         respawnCount += 1;
-        Debug.Log("Change Position Called");
         Vector3 newPosition = positionMap.GetRandomItem();
         newPosition.y += 2; 
         transform.position = newPosition;
@@ -106,7 +104,6 @@ public class NewAutoRespawn : AutoRespawn
 
     protected override void InstantiateRespawnEffect()
     {
-        Debug.Log("New Auto Respawn effect");
         // instantiates the destroy effect
         if (RespawnEffect != null)
         {

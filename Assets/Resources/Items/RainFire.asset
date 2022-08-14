@@ -37,7 +37,7 @@ MonoBehaviour:
   Description: A shotgun is a firearm that is usually designed to be fired from the
     shoulder, which uses the energy of a fixed shell to fire a number of small spherical
     pellets called shot.
-  Icon: {fileID: 21300000, guid: 08784f878b46d4920baa97d2f27b405a, type: 3}
+  Icon: {fileID: 21300000, guid: 0d852f5493cecf94a90183f3f83ce947, type: 3}
   Prefab: {fileID: 1631669111904308, guid: ea53df9b9a756400c9a9cb9d2513d8a4, type: 3}
   DropProperties:
     Shape: 0
