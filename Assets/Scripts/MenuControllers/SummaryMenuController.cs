@@ -39,8 +39,8 @@ public class SummaryMenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-            if (allowInput && (Input.GetKeyDown(KeyCode.Joystick1Button0) || Input.GetKeyDown(KeyCode.Joystick2Button0) ||
-             Input.GetKeyDown(KeyCode.Joystick3Button0) || Input.GetKeyDown(KeyCode.Joystick4Button0) || Input.GetKeyDown(KeyCode.Space)))
+            if (allowInput && (Input.GetButtonDown("Player1_Run") || Input.GetButtonDown("Player2_Run") ||
+             Input.GetButtonDown("Player3_Run") || Input.GetButtonDown("Player4_Run")))
         {
             if(levelSelector && !changingScene){
                 changingScene=true;
