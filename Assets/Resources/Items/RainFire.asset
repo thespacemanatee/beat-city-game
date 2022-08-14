@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9529ae2b2ee0d1e4d802b51d271424c3, type: 3}
   m_Name: RainFire
   m_EditorClassIdentifier: 
-  ItemID: Shotgun
+  ItemID: RainFire
   TargetInventoryName: SuitMainInventory
   ForceSlotIndex: 0
   TargetIndex: 0
@@ -32,8 +32,8 @@ MonoBehaviour:
     DisplayUseButton: 1
     DisplayUnequipButton: 1
   Quantity: 1
-  ItemName: Shotgun
-  ShortDescription: Shotgun!
+  ItemName: Rain Fire
+  ShortDescription: Rain fire on thy enemies.
   Description: A shotgun is a firearm that is usually designed to be fired from the
     shoulder, which uses the energy of a fixed shell to fire a number of small spherical
     pellets called shot.

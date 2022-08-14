@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 114602549670299862}
   - component: {fileID: 4451807386433459578}
   m_Layer: 0
-  m_Name: MultiProjectile (One Direction)
+  m_Name: MultiProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

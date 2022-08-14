@@ -32,8 +32,8 @@ MonoBehaviour:
     DisplayUseButton: 1
     DisplayUnequipButton: 1
   Quantity: 1
-  ItemName: 
-  ShortDescription: 
+  ItemName: Multi Direction Projectile
+  ShortDescription: Multiple!
   Description: 
   Icon: {fileID: 21300000, guid: 406984ac0d0fc2c4bbaf906048f7c43e, type: 3}
   Prefab: {fileID: 1801408263114154, guid: b29e8c4d0fec146499af0c1ac7301e1b, type: 3}
