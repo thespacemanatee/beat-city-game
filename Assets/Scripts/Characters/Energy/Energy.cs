@@ -1,3 +1,4 @@
+using System;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
@@ -159,7 +160,6 @@ public class Energy : MMMonoBehaviour
     public virtual void ReceiveEnergy(float energy)
     {
         SetEnergy(Mathf.Min(CurrentEnergy + energy, MaximumEnergy));
-        UpdateEnergyBars();
     }
 
     /// <summary>
@@ -168,7 +168,6 @@ public class Energy : MMMonoBehaviour
     public virtual void SpendEnergy()
     {
         SetEnergy(0);
-        UpdateEnergyBars();
     }
 
     /// <summary>
@@ -176,18 +175,9 @@ public class Energy : MMMonoBehaviour
     /// </summary>
     public virtual void EnergyPenaltyFromDamage()
     {
-        var energyPenalty = (int)Mathf.Max(0, CurrentEnergy / 2);
+        var energyPenalty = (int)Math.Ceiling(CurrentEnergy / 2);
         EnergyDropEvent.Trigger(_character.transform.position, energyPenalty);
         SetEnergy(CurrentEnergy - energyPenalty);
-        UpdateEnergyBars();
-    }
-
-    /// <summary>
-    /// Resets the character's energy to its max value
-    /// </summary>
-    public virtual void ResetEnergyToMaxEnergy()
-    {
-        SetEnergy(MaximumEnergy);
     }
 
     /// <summary>

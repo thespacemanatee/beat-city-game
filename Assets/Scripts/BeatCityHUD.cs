@@ -33,10 +33,15 @@ public class BeatCityHUD : MonoBehaviour, MMEventListener<TopDownEngineEvent>
     [Tooltip("the screen to display if the target player wins")]
     public CanvasGroup WinnerScreen;
 
+    /// the screen to display if draw occurs
+    [Tooltip("the screen to display if draw occurs")]
+    public CanvasGroup DrawScreen;
+
     protected virtual void Start()
     {
         DeadMask.gameObject.SetActive(false);
         WinnerScreen.gameObject.SetActive(false);
+        DrawScreen.gameObject.SetActive(false);
     }
 
     /// <summary>

@@ -4686,7 +4686,7 @@ PrefabInstance:
     - target: {fileID: 2020107893081557370, guid: f5c8223f353074c08bf6474c45275062,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 6.5
       objectReference: {fileID: 0}
     - target: {fileID: 2020107893081557370, guid: f5c8223f353074c08bf6474c45275062,
         type: 3}
@@ -9784,6 +9784,66 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021889899562367729, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.03137255
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021889899562367729, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.25490198
+      objectReference: {fileID: 0}
+    - target: {fileID: 7021889899562367729, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.83137256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622541942142101, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.09803922
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622541942142101, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.7647059
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622541942142101, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.69803923
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622542675215400, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.043137256
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622542675215400, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.76862746
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622542675215400, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622542911745913, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.9607843
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622542911745913, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.5764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 8668622542911745913, guid: 60c6d37ced9ad471ca60dccdcc64b430,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.35686275
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_AddedGameObjects: []
@@ -15067,6 +15127,42 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 563469022}
     m_Modifications:
+    - target: {fileID: 2013657466791506144, guid: 3f8f0e80704b54b70a558616a043c39d,
+        type: 3}
+      propertyPath: drawEvent.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013657466791506144, guid: 3f8f0e80704b54b70a558616a043c39d,
+        type: 3}
+      propertyPath: drawEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013657466791506144, guid: 3f8f0e80704b54b70a558616a043c39d,
+        type: 3}
+      propertyPath: drawEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 11400000, guid: 0944c6f2253424565a003433d477d848,
+        type: 2}
+    - target: {fileID: 2013657466791506144, guid: 3f8f0e80704b54b70a558616a043c39d,
+        type: 3}
+      propertyPath: drawEvent.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013657466791506144, guid: 3f8f0e80704b54b70a558616a043c39d,
+        type: 3}
+      propertyPath: drawEvent.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Raise
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013657466791506144, guid: 3f8f0e80704b54b70a558616a043c39d,
+        type: 3}
+      propertyPath: drawEvent.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameEvent, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2013657466791506144, guid: 3f8f0e80704b54b70a558616a043c39d,
+        type: 3}
+      propertyPath: drawEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 2013657466791506146, guid: 3f8f0e80704b54b70a558616a043c39d,
         type: 3}
       propertyPath: LevelName
@@ -15883,7 +15979,7 @@ PrefabInstance:
     - target: {fileID: 1299923800699822865, guid: c14a831c1b2274ec083c0ad0f16c1d06,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1299923800699822865, guid: c14a831c1b2274ec083c0ad0f16c1d06,
         type: 3}
@@ -16587,7 +16683,7 @@ PrefabInstance:
     - target: {fileID: 2020107893081557370, guid: f5c8223f353074c08bf6474c45275062,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 6.5
       objectReference: {fileID: 0}
     - target: {fileID: 2020107893081557370, guid: f5c8223f353074c08bf6474c45275062,
         type: 3}
@@ -17320,7 +17416,7 @@ PrefabInstance:
     - target: {fileID: 1299923800699822865, guid: c14a831c1b2274ec083c0ad0f16c1d06,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 13.5
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 1299923800699822865, guid: c14a831c1b2274ec083c0ad0f16c1d06,
         type: 3}
@@ -19564,6 +19660,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  drawEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &1802479446
 MonoBehaviour:
   m_ObjectHideFlags: 0

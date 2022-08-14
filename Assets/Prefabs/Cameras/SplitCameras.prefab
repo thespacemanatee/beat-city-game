@@ -304,7 +304,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.9241517, y: 1}
+    m_SensorSize: {x: 1.7770035, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4210,7 +4210,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.9241517, y: 1}
+    m_SensorSize: {x: 1.7770035, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -4678,7 +4678,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.9241517, y: 1}
+    m_SensorSize: {x: 1.7770035, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -10889,7 +10889,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 2.9241517, y: 1}
+    m_SensorSize: {x: 1.7770035, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -12057,6 +12057,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Name
+      value: DrawScreen4
+      objectReference: {fileID: 0}
     - target: {fileID: 2935146960780127278, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -12308,6 +12313,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 213.90778
       objectReference: {fileID: 0}
+    - target: {fileID: 4788857319469314012, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -88.69998
+      objectReference: {fileID: 0}
     - target: {fileID: 4803188867100092300, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Text
@@ -12511,6 +12521,11 @@ PrefabInstance:
       propertyPath: playerId
       value: Player4
       objectReference: {fileID: 0}
+    - target: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: DrawScreen
+      value: 
+      objectReference: {fileID: 4011569004218702623}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.b
@@ -12761,6 +12776,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a42a23ce4f9ed24abde69beacbef2f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4011569004218702623 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3384429178570712859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5381944001505408463 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3384429178570712859}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808225292299766393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9c24f9758800b46a40695be0b4c7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6827953416445477125 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8085697583571887646, guid: e6b559aeefb1a46288eb01e783649ad9,
@@ -12829,6 +12862,34 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: IntVariable, Assembly-CSharp
         m_MethodName: SetValue
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5109335821431601914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808225292299766393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e686ff333030a434483e7436c3272e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  event: {fileID: 11400000, guid: 0944c6f2253424565a003433d477d848, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5381944001505408463}
+        m_TargetAssemblyTypeName: WinEventController, Assembly-CSharp
+        m_MethodName: SetDrawScreenActive
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -13584,6 +13645,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Name
+      value: DrawScreen3
+      objectReference: {fileID: 0}
     - target: {fileID: 2935146960780127278, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -13835,6 +13901,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 213.90778
       objectReference: {fileID: 0}
+    - target: {fileID: 4788857319469314012, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -88.69998
+      objectReference: {fileID: 0}
     - target: {fileID: 4803188867100092300, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Text
@@ -14038,6 +14109,11 @@ PrefabInstance:
       propertyPath: playerId
       value: Player3
       objectReference: {fileID: 0}
+    - target: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: DrawScreen
+      value: 
+      objectReference: {fileID: 4011569004682570658}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.b
@@ -14288,6 +14364,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a42a23ce4f9ed24abde69beacbef2f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4011569004682570658 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3384429179177179046}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5381944000632063346 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3384429179177179046}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808225292501236420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9c24f9758800b46a40695be0b4c7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6827953417187226040 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8085697583571887646, guid: e6b559aeefb1a46288eb01e783649ad9,
@@ -14356,6 +14450,34 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: IntVariable, Assembly-CSharp
         m_MethodName: SetValue
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6904352750800808581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808225292501236420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e686ff333030a434483e7436c3272e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  event: {fileID: 11400000, guid: 0944c6f2253424565a003433d477d848, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5381944000632063346}
+        m_TargetAssemblyTypeName: WinEventController, Assembly-CSharp
+        m_MethodName: SetDrawScreenActive
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -18782,6 +18904,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Name
+      value: DrawScreen2
+      objectReference: {fileID: 0}
     - target: {fileID: 2935146960780127278, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -19038,6 +19165,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 213.90778
       objectReference: {fileID: 0}
+    - target: {fileID: 4788857319469314012, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -88.69998
+      objectReference: {fileID: 0}
     - target: {fileID: 4803188867100092300, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Text
@@ -19241,6 +19373,11 @@ PrefabInstance:
       propertyPath: playerId
       value: Player2
       objectReference: {fileID: 0}
+    - target: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: DrawScreen
+      value: 
+      objectReference: {fileID: 4011569003511640142}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.b
@@ -19491,6 +19628,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a42a23ce4f9ed24abde69beacbef2f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4011569003511640142 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3384429180413774922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5381943999662464670 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 3384429180413774922}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808225293739794728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9c24f9758800b46a40695be0b4c7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6827953416209099348 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8085697583571887646, guid: e6b559aeefb1a46288eb01e783649ad9,
@@ -19559,6 +19714,34 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: IntVariable, Assembly-CSharp
         m_MethodName: SetValue
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &8691485240507996144
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7808225293739794728}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e686ff333030a434483e7436c3272e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  event: {fileID: 11400000, guid: 0944c6f2253424565a003433d477d848, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5381943999662464670}
+        m_TargetAssemblyTypeName: WinEventController, Assembly-CSharp
+        m_MethodName: SetDrawScreenActive
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -19886,6 +20069,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_Name
+      value: DrawScreen1
+      objectReference: {fileID: 0}
     - target: {fileID: 2935146960780127278, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -20121,6 +20309,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: 213.90778
       objectReference: {fileID: 0}
+    - target: {fileID: 4788857319469314012, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -88.69998
+      objectReference: {fileID: 0}
     - target: {fileID: 4803188867100092301, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -20313,6 +20506,11 @@ PrefabInstance:
       propertyPath: playerId
       value: Player1
       objectReference: {fileID: 0}
+    - target: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+        type: 3}
+      propertyPath: DrawScreen
+      value: 
+      objectReference: {fileID: 3356330916575487430}
     - target: {fileID: 7414148891910197110, guid: e6b559aeefb1a46288eb01e783649ad9,
         type: 3}
       propertyPath: m_Color.b
@@ -20563,12 +20761,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a42a23ce4f9ed24abde69beacbef2f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &3356330916575487430 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1827367062528392196, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 4019473141836569026}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5187621865688743900 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8085697583571887646, guid: e6b559aeefb1a46288eb01e783649ad9,
     type: 3}
   m_PrefabInstance: {fileID: 4019473141836569026}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6021137206034221846 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7225860563550245588, guid: e6b559aeefb1a46288eb01e783649ad9,
+    type: 3}
+  m_PrefabInstance: {fileID: 4019473141836569026}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8458747901189256352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9c24f9758800b46a40695be0b4c7b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &8427891791371826832 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4845287608936410962, guid: e6b559aeefb1a46288eb01e783649ad9,
@@ -20655,6 +20871,34 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: IntVariable, Assembly-CSharp
         m_MethodName: SetValue
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6381933883343168837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8458747901189256352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e686ff333030a434483e7436c3272e56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  event: {fileID: 11400000, guid: 0944c6f2253424565a003433d477d848, type: 2}
+  response:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6021137206034221846}
+        m_TargetAssemblyTypeName: WinEventController, Assembly-CSharp
+        m_MethodName: SetDrawScreenActive
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
