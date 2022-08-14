@@ -91,14 +91,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player1Inventory.WeaponInventory.name,
-                        _player1Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player1Inventory.WeaponInventory.name, _player1Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player1Inventory.MainInventory.name, _player1Inventory.MainInventory.Content[index], 0, index,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player1Inventory.MainInventory.name,
+                    _player1Inventory.MainInventory.Content[index], 0, 0, eventType.PlayerId);
                 break;
             }
             case "Player2":
@@ -106,14 +105,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player2Inventory.WeaponInventory.name,
-                        _player2Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player2Inventory.WeaponInventory.name, _player2Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player2Inventory.MainInventory.name, _player2Inventory.MainInventory.Content[index], 0, index,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player2Inventory.MainInventory.name,
+                    _player2Inventory.MainInventory.Content[index], 0, 0, eventType.PlayerId);
                 break;
             }
             case "Player3":
@@ -121,15 +119,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player3Inventory.WeaponInventory.name,
-                        _player3Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player3Inventory.WeaponInventory.name, _player3Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player3Inventory.MainInventory.name, _player3Inventory.MainInventory.Content[index], 0,
-                    (int)eventType.NewEnergy - 1,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player3Inventory.MainInventory.name,
+                    _player3Inventory.MainInventory.Content[index], 0, 0, eventType.PlayerId);
                 break;
             }
             case "Player4":
@@ -137,14 +133,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player4Inventory.WeaponInventory.name,
-                        _player4Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player4Inventory.WeaponInventory.name, _player4Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player4Inventory.MainInventory.name, _player4Inventory.MainInventory.Content[index], 0, index,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player4Inventory.MainInventory.name,
+                    _player4Inventory.MainInventory.Content[index], 0, 0, eventType.PlayerId);
                 break;
             }
         }
