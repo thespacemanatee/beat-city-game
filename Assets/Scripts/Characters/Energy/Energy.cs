@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
@@ -88,6 +90,8 @@ public class Energy : MMMonoBehaviour
     public bool ResetEnergyOnEnable = true;
 
     protected Character _character;
+    
+    private bool _isInvincible;
 
     #region Initialization
 
@@ -175,9 +179,21 @@ public class Energy : MMMonoBehaviour
     /// </summary>
     public virtual void EnergyPenaltyFromDamage()
     {
+        if (_isInvincible) return;
         var energyPenalty = (int)Math.Ceiling(CurrentEnergy / 2);
         EnergyDropEvent.Trigger(_character.transform.position, energyPenalty);
         SetEnergy(CurrentEnergy - energyPenalty);
+        _isInvincible = true;
+        StartCoroutine(ResetInvincibility());
+    }
+    
+    private IEnumerator ResetInvincibility()
+    {
+        yield return new WaitForSeconds(1f);
+        if (_isInvincible)
+        {
+            _isInvincible = false;
+        }
     }
 
     /// <summary>
