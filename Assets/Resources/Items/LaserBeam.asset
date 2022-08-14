@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9529ae2b2ee0d1e4d802b51d271424c3, type: 3}
   m_Name: LaserBeam
   m_EditorClassIdentifier: 
-  ItemID: Laserbeam
+  ItemID: LaserBeam
   TargetInventoryName: SuitMainInventory
   ForceSlotIndex: 0
   TargetIndex: 0
@@ -32,8 +32,8 @@ MonoBehaviour:
     DisplayUseButton: 1
     DisplayUnequipButton: 1
   Quantity: 1
-  ItemName: 
-  ShortDescription: 
+  ItemName: Laser Beam
+  ShortDescription: Lase a beam.
   Description: 
   Icon: {fileID: 21300000, guid: 6a3fb9963fb36ac49ac25095ee92a4fe, type: 3}
   Prefab: {fileID: 1199924259801758518, guid: 3e4ceb77c070c454386ef06e151df72c, type: 3}

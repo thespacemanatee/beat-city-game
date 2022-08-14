@@ -11,7 +11,7 @@ public class NewAutoRespawn : AutoRespawn
 
     protected override void Update()
     {
-        if (GetComponent<Transform>().position.y < 0.0f && !_dropped)
+        if (GetComponent<Transform>().position.y < -5.0f && !_dropped)
         {
             if (AutoRespawnDuration <= 0f)
             {
@@ -90,7 +90,7 @@ public class NewAutoRespawn : AutoRespawn
         {
             if (_newHealth != null) _newHealth.Damage(200, gameObject, 1.0f, 3.0f, GetComponent<Transform>().position);
         }
-        if (GetComponent<Transform>().position.y <= 0.0f)
+        if (GetComponent<Transform>().position.y <= -5.0f)
         {
             ChangePosition();
         }
