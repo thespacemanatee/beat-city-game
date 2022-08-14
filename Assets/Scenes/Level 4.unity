@@ -44064,7 +44064,7 @@ PrefabInstance:
     - target: {fileID: 3384429179438974025, guid: 60c6d37ced9ad471ca60dccdcc64b430,
         type: 3}
       propertyPath: m_Name
-      value: SplitCameras (1)
+      value: SplitCameras
       objectReference: {fileID: 0}
     - target: {fileID: 3384429179438974027, guid: 60c6d37ced9ad471ca60dccdcc64b430,
         type: 3}
@@ -50437,7 +50437,7 @@ PrefabInstance:
     - target: {fileID: 2013657466791506146, guid: 3f8f0e80704b54b70a558616a043c39d,
         type: 3}
       propertyPath: LevelName
-      value: Level 4
+      value: Summary
       objectReference: {fileID: 0}
     - target: {fileID: 2013657466791506148, guid: 3f8f0e80704b54b70a558616a043c39d,
         type: 3}
@@ -50529,8 +50529,7 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelManager
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2013657466791506146, guid: 3f8f0e80704b54b70a558616a043c39d, type: 3}
+    m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 3f8f0e80704b54b70a558616a043c39d, type: 3}
 --- !u!114 &1262153202 stripped
@@ -57558,7 +57557,7 @@ PrefabInstance:
     - target: {fileID: 1726122317295893891, guid: cc29819b1aedefe4fa6187ab88d6883b,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1726122317295893895, guid: cc29819b1aedefe4fa6187ab88d6883b,
         type: 3}

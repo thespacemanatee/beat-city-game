@@ -1,3 +1,6 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
 using UnityEngine;
@@ -87,6 +90,8 @@ public class Energy : MMMonoBehaviour
     public bool ResetEnergyOnEnable = true;
 
     protected Character _character;
+    
+    private bool _isInvincible;
 
     #region Initialization
 
@@ -159,7 +164,6 @@ public class Energy : MMMonoBehaviour
     public virtual void ReceiveEnergy(float energy)
     {
         SetEnergy(Mathf.Min(CurrentEnergy + energy, MaximumEnergy));
-        UpdateEnergyBars();
     }
 
     /// <summary>
@@ -168,7 +172,6 @@ public class Energy : MMMonoBehaviour
     public virtual void SpendEnergy()
     {
         SetEnergy(0);
-        UpdateEnergyBars();
     }
 
     /// <summary>
@@ -176,18 +179,21 @@ public class Energy : MMMonoBehaviour
     /// </summary>
     public virtual void EnergyPenaltyFromDamage()
     {
-        var energyPenalty = (int)Mathf.Max(0, CurrentEnergy / 2);
+        if (_isInvincible) return;
+        var energyPenalty = (int)Math.Ceiling(CurrentEnergy / 2);
         EnergyDropEvent.Trigger(_character.transform.position, energyPenalty);
         SetEnergy(CurrentEnergy - energyPenalty);
-        UpdateEnergyBars();
+        _isInvincible = true;
+        StartCoroutine(ResetInvincibility());
     }
-
-    /// <summary>
-    /// Resets the character's energy to its max value
-    /// </summary>
-    public virtual void ResetEnergyToMaxEnergy()
+    
+    private IEnumerator ResetInvincibility()
     {
-        SetEnergy(MaximumEnergy);
+        yield return new WaitForSeconds(1f);
+        if (_isInvincible)
+        {
+            _isInvincible = false;
+        }
     }
 
     /// <summary>

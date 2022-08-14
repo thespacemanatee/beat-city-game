@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MoreMountains.InventoryEngine;
 using MoreMountains.Tools;
 using MoreMountains.TopDownEngine;
@@ -6,13 +7,7 @@ using UnityEngine;
 public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent>, MMEventListener<WeaponFireEvent>
 {
     public MultiplayerLevelManager LevelManager;
-    public InventoryWeapon Weapon1;
-    public InventoryWeapon Weapon2;
-    public InventoryWeapon Weapon3;
-    public InventoryWeapon Weapon4;
-    public InventoryWeapon Weapon5;
-    public InventoryWeapon Weapon6;
-    public InventoryWeapon Weapon7;
+    public List<InventoryWeapon> Weapons;
 
     private CharacterInventory _player1Inventory;
     private CharacterInventory _player2Inventory;
@@ -28,44 +23,39 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
     {
         foreach (var character in LevelManager.Players)
         {
-            if (character.PlayerID == "Player1")
+            switch (character.PlayerID)
             {
-                _player1Inventory = character.GetComponent<CharacterInventory>();
-                _player1Energy = character.GetComponent<Energy>();
+                case "Player1":
+                {
+                    _player1Inventory = character.GetComponent<CharacterInventory>();
+                    _player1Energy = character.GetComponent<Energy>();
+                    break;
+                }
+                case "Player2":
+                {
+                    _player2Inventory = character.GetComponent<CharacterInventory>();
+                    _player2Energy = character.GetComponent<Energy>();
+                    break;
+                }
+                case "Player3":
+                {
+                    _player3Inventory = character.GetComponent<CharacterInventory>();
+                    _player3Energy = character.GetComponent<Energy>();
+                    break;
+                }
+                case "Player4":
+                {
+                    _player4Inventory = character.GetComponent<CharacterInventory>();
+                    _player4Energy = character.GetComponent<Energy>();
+                    break;
+                }
             }
 
-            if (character.PlayerID == "Player2")
+            foreach (var weapon in Weapons)
             {
-                _player2Inventory = character.GetComponent<CharacterInventory>();
-                _player2Energy = character.GetComponent<Energy>();
+                MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, weapon.TargetInventoryName,
+                    weapon, 1, 0, character.PlayerID);
             }
-
-            if (character.PlayerID == "Player3")
-            {
-                _player3Inventory = character.GetComponent<CharacterInventory>();
-                _player3Energy = character.GetComponent<Energy>();
-            }
-
-            if (character.PlayerID == "Player4")
-            {
-                _player4Inventory = character.GetComponent<CharacterInventory>();
-                _player4Energy = character.GetComponent<Energy>();
-            }
-
-            MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, Weapon1.TargetInventoryName,
-                Weapon1, 1, 0, character.PlayerID);
-            MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, Weapon2.TargetInventoryName,
-                Weapon2, 1, 0, character.PlayerID);
-            MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, Weapon3.TargetInventoryName,
-                Weapon3, 1, 0, character.PlayerID);
-            MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, Weapon4.TargetInventoryName,
-                Weapon4, 1, 0, character.PlayerID);
-            MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, Weapon5.TargetInventoryName,
-                Weapon5, 1, 0, character.PlayerID);
-            MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, Weapon6.TargetInventoryName,
-                Weapon6, 1, 0, character.PlayerID);
-            MMInventoryEvent.Trigger(MMInventoryEventType.Pick, null, Weapon7.TargetInventoryName,
-                Weapon7, 1, 0, character.PlayerID);
         }
     }
 
@@ -83,6 +73,7 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
 
     public void OnMMEvent(EnergyChangeEvent eventType)
     {
+        Debug.Log(eventType.PlayerId + ": " + eventType.NewEnergy);
         var index = (int)eventType.NewEnergy - 1;
         switch (eventType.PlayerId)
         {
@@ -91,14 +82,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player1Inventory.WeaponInventory.name,
-                        _player1Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player1Inventory.WeaponInventory.name, _player1Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player1Inventory.MainInventory.name, _player1Inventory.MainInventory.Content[index], 0, index,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player1Inventory.MainInventory.name,
+                    Weapons[index], 0, 0, eventType.PlayerId);
                 break;
             }
             case "Player2":
@@ -106,14 +96,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player2Inventory.WeaponInventory.name,
-                        _player2Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player2Inventory.WeaponInventory.name, _player2Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player2Inventory.MainInventory.name, _player2Inventory.MainInventory.Content[index], 0, index,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player2Inventory.MainInventory.name,
+                    Weapons[index], 0, 0, eventType.PlayerId);
                 break;
             }
             case "Player3":
@@ -121,15 +110,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player3Inventory.WeaponInventory.name,
-                        _player3Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player3Inventory.WeaponInventory.name, _player3Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player3Inventory.MainInventory.name, _player3Inventory.MainInventory.Content[index], 0,
-                    (int)eventType.NewEnergy - 1,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player3Inventory.MainInventory.name,
+                    Weapons[index], 0, 0, eventType.PlayerId);
                 break;
             }
             case "Player4":
@@ -137,14 +124,13 @@ public class InventoryManager : MonoBehaviour, MMEventListener<EnergyChangeEvent
                 if (index < 0)
                 {
                     MMInventoryEvent.Trigger(MMInventoryEventType.UnEquipRequest, null,
-                        _player4Inventory.WeaponInventory.name,
-                        _player4Inventory.WeaponInventory.Content[0], 0, 0, eventType.PlayerId);
+                        _player4Inventory.WeaponInventory.name, _player4Inventory.WeaponInventory.Content[0], 0, 0,
+                        eventType.PlayerId);
                     break;
                 }
 
-                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null,
-                    _player4Inventory.MainInventory.name, _player4Inventory.MainInventory.Content[index], 0, index,
-                    eventType.PlayerId);
+                MMInventoryEvent.Trigger(MMInventoryEventType.EquipRequest, null, _player4Inventory.MainInventory.name,
+                    Weapons[index], 0, 0, eventType.PlayerId);
                 break;
             }
         }
