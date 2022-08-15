@@ -7,6 +7,7 @@ public class StartMenuController : MonoBehaviour
 {
     // Manually assign all Game Objects under the UI components 
     GameObject WaitText;
+    GameObject CircleButton;
 
     GameObject Player1ReadyIcon;
     GameObject Player2ReadyIcon;
@@ -56,7 +57,10 @@ public class StartMenuController : MonoBehaviour
             else if (eachChild.name == "WaitText")
             {
                 WaitText = eachChild.gameObject;
-                WaitText.GetComponent<Text>().text = "Waiting for players ... \n Press 'Jump' to ready up";
+            }
+            else if(eachChild.name == "CircleButton")
+            {
+                CircleButton = eachChild.gameObject;
             }
             Debug.Log(eachChild.name);
         }
@@ -71,7 +75,7 @@ public class StartMenuController : MonoBehaviour
     void Update()
     {
         // constant checking for inputs 
-        if (Input.GetButtonDown("Player1_Jump"))
+        if (Input.GetButtonDown("Player1_Run"))
         {
             if (!player1ReadyState)
             {
@@ -87,7 +91,7 @@ public class StartMenuController : MonoBehaviour
             }
             
         }
-        else if (Input.GetButtonDown("Player2_Jump"))
+        else if (Input.GetButtonDown("Player2_Run"))
         {
             if (!player2ReadyState)
             {
@@ -102,7 +106,7 @@ public class StartMenuController : MonoBehaviour
                 player2ReadyState = false;
             }
         }
-        else if (Input.GetButtonDown("Player3_Jump"))
+        else if (Input.GetButtonDown("Player3_Run"))
         {
             if (!player3ReadyState)
             {
@@ -117,7 +121,7 @@ public class StartMenuController : MonoBehaviour
                 player3ReadyState = false;
             }
         }
-        else if (Input.GetButtonDown("Player4_Jump"))
+        else if (Input.GetButtonDown("Player4_Run"))
         {
             if (!player4ReadyState)
             {
@@ -143,14 +147,15 @@ public class StartMenuController : MonoBehaviour
     {
         WaitForSecondsRT wait = new WaitForSecondsRT(1);
         int counter = 3;
-        WaitText.GetComponent<Text>().text = $"Players ready, game starting in \n {counter}";
+        CircleButton.SetActive(false);
+        WaitText.GetComponent<Text>().text = $"Players ready, game starting in {counter}";
         while (counter > 0){
             // if not then wait for the remaining number of seconds while updating the message
             yield return wait.NewTime(1);
             counter --;
-            WaitText.GetComponent<Text>().text = $"Players ready, game starting in \n {counter}";
+            WaitText.GetComponent<Text>().text = $"Players ready, game starting in {counter}";
         }
-        WaitText.GetComponent<Text>().text = $"Players ready, game starting in \n {counter}";
+        WaitText.GetComponent<Text>().text = $"Players ready, game starting in {counter}";
         yield return wait.NewTime(1);
         Time.timeScale = 1.0f; // start game after 
         this.gameObject.SetActive(false);

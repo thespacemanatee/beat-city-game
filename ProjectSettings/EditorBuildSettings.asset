@@ -96,9 +96,6 @@ EditorBuildSettings:
     path: Assets/ThirdParty/TopDownEngine/Demos/Colonel/Colonel.unity
     guid: 7a42340ee81c11b40a381cee4cacf3c9
   - enabled: 0
-    path: Assets/ThirdParty/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreenBigText.unity
-    guid: dedb2bed56a01c241be42c5c5b5748ca
-  - enabled: 0
     path: Assets/ThirdParty/TopDownEngine/ThirdParty/MoreMountains/MMTools/Tools/MMSceneLoading/LoadingScreens/MMAdditiveLoadingScreenSimple.unity
     guid: 945e5b97212e8e74ebcd35bddde3970c
   - enabled: 0
@@ -140,7 +137,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Summary.unity
     guid: 4dd736b22b1d040f0938e1bf261b71f3
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/StartMenu.unity
     guid: cc5ab1e5f96c843728a304954f3e52e6
   m_configObjects:
