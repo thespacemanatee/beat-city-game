@@ -1220,6 +1220,9 @@ PrefabInstance:
         Laser beam can pass through all other obstacles and projectiles
 
         -
+        Attack button can be held down for a slightly longer activation period
+
+        -
         Requires 6 Energy to cast
 
 '
@@ -2104,7 +2107,7 @@ PrefabInstance:
       value: '- Long range attack consisting of a single bouncing bullet
 
         -
-        Projectile bounces off of walls up to 2 times
+        Projectile bounces off of walls up to 8 times
 
         - Player who casts
         the attack will not get damaged by the projectile
