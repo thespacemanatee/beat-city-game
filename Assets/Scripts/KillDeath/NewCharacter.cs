@@ -69,23 +69,37 @@ public class NewCharacter : Character
         var killer = "null";
         try
         {
-            killer = instigator.GetComponent<Projectile>().Owner.GetComponent<Character>().PlayerID;
+            killer = instigator.GetComponent<MeleeWeapon>().Owner.GetComponent<Character>().PlayerID;
         }
         catch (NullReferenceException)
         {
             try
             {
-                killer = instigator.GetComponent<HitscanWeapon>().Owner.GetComponent<Character>().PlayerID;
+                killer = instigator.GetComponent<Projectile>().Owner.GetComponent<Character>().PlayerID;
             }
-            catch
+            catch (NullReferenceException)
             {
                 try
                 {
-                    killer = GetComponent<Character>().PlayerID;
+                    killer = instigator.GetComponent<HitscanWeapon>().Owner.GetComponent<Character>().PlayerID;
                 }
                 catch (NullReferenceException)
                 {
-                    Debug.Log("WRONG INSTIGATOR RECEIVED");
+                    try
+                    {
+                        killer = instigator.transform.parent.gameObject.GetComponent<PhysicsProjectile>().Owner.GetComponent<Character>().PlayerID;
+                    }
+                    catch(NullReferenceException)
+                    {
+                        try
+                        {
+                            killer = GetComponent<Character>().PlayerID;
+                        }
+                        catch (NullReferenceException)
+                        {
+                            Debug.Log("WRONG INSTIGATOR RECEIVED");
+                        }
+                    }
                 }
             }
         }
