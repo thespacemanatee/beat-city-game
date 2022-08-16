@@ -9,4 +9,7 @@ Beat the crap out of your adversaries.
 - then install latest unity editor version (2022.1.6f)
 - then pull whichever branch you want 
 
-(https://youtu.be/y-xPzkeJv4k)
+
+## Video
+
+https://www.youtube.com/watch?v=y-xPzkeJv4k
